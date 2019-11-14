@@ -4,80 +4,72 @@ namespace App\Http\Controllers\backend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\File;
+use Image;
 class kategoricontroller extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
     }
+
+    //===============================================================
     public function index()
     {
-        //
+        $data = DB::table('kategori')->get();
+        return view('kategori.index',['data'=>$data]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //===============================================================
     public function store(Request $request)
     {
-        //
+        $image = $request->file('foto');
+        $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+     
+        $destinationPath = public_path('image/kategori/thumbnail');
+        $img = Image::make($image->getRealPath());
+        $img->resize(100,null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath.'/'.$input['imagename']);
+   
+        $destinationPath = public_path('image/kategori');
+        $image->move($destinationPath, $input['imagename']);
+        DB::table('kategori')
+        ->insert([
+            'nama'=>$request->nama,
+            'status'=>$request->status,
+            'gambar'=>$input['imagename']
+        ]);
+        return redirect('kategori')->with('msg','Data Berhasil Disimpan');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    //===============================================================
+    public function update(Request $request, $kode)
     {
-        //
+        $id = Crypt::decrypt($kode);
+        DB::table('kategori')
+        ->where('id',$id)
+        ->update([
+            'nama'=>$request->nama,
+            'status'=>$request->status
+        ]);
+        return redirect('kategori')->with('msg','Perubahan Data Berhasil Disimpan');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    //===============================================================
+    public function destroy($kode)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+      $id = Crypt::decrypt($kode);
+      $data = DB::table('kategori')->where('id',$id)->get();
+      foreach ($data as $row) {
+         if($row->gambar!=''){
+            File::delete('image/kategori/'.$row->gambar);
+            File::delete('image/kategori/thumbnail/'.$row->gambar);
+         } 
+      }
+      DB::table('kategori')->where('id',$id)->delete();
+      return redirect('kategori')->with('msg','Data Berhasil Dihapus');
     }
 }

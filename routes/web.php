@@ -12,6 +12,12 @@ Route::resource('admin','backend\admincontroller');
 //kategori
 Route::resource('kategori','backend\kategoricontroller');
 
+//kategori
+Route::resource('sub-kategori','backend\subkategoricontroller');
+
+//kategori
+Route::resource('pengguna','backend\penggunacontroller');
+
 //dashboard
 Route::get('/dashboard', 'backend\dashboardcontroller@index');
 
