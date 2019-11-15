@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\File;
+use Image;
 class admincontroller extends Controller
 {
     public function __construct()
@@ -30,6 +32,19 @@ class admincontroller extends Controller
     //===============================================================
     public function store(Request $request)
     {
+        if ($request->hasFile('foto')) {
+            $image = $request->file('foto');
+        $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+     
+        $destinationPath = public_path('image/admin/thumbnail');
+        $img = Image::make($image->getRealPath());
+        $img->resize(100,null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath.'/'.$input['imagename']);
+   
+        $destinationPath = public_path('image/admin');
+        $image->move($destinationPath, $input['imagename']);
+        }
         DB::table('users')
         ->insert([
             'name'=>$request->nama,

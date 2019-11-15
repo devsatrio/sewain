@@ -82,14 +82,16 @@
                                 <option value="Tidak Aktif">Tidak Aktif</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="grubfoto">
                             <label for="exampleInputEmail1">Gambar</label>
-                            <input type="file" class="form-control" name="foto" required>
+                            <input type="file" class="form-control" accept="image/*" id="photo" name="foto" required>
+                            <span class="help-block" id="errorfoto"></span>
                         </div>
                     </div>
                     <div class="box-footer text-center">
-                        <button type="reset" class="btn btn-danger">Reset</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                        
                     </div>
                 </form>
             </div>
@@ -111,13 +113,14 @@ $newkode = Crypt::encrypt($row2->id);
             <h4 class="modal-title">Edit Data</h4>
         </div>
         <div class="modal-body">
-            <form role="form" method="post" action="{{url('kategori/'.$newkode)}}">
+            <form role="form" method="post" action="{{url('kategori/'.$newkode)}}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="_method" value="put">
                 <div class="box-body">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Nama Kategori</label>
                         <input type="text" value="{{$row2->nama}}" class="form-control" name="nama" required>
+                        <input type="hidden" value="{{$row2->gambar}}" name="gambarlama" required>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Status</label>
@@ -126,9 +129,15 @@ $newkode = Crypt::encrypt($row2->id);
                             <option value="Tidak Aktif" @if($row2->status=='Tidak Aktif') selected @endif>Tidak Aktif</option>
                         </select>
                     </div>
+                    <div class="form-group" id="grubfotodua{{$row2->id}}">
+                        <label for="exampleInputEmail1">Gambar (opsional)</label><br>
+                        <img src="{{asset('image/kategori/thumbnail/'.$row2->gambar)}}" alt="">
+                        <input type="file" class="form-control" id="fotonya{{$row2->id}}" onchange="validimage(<?php echo $row2->id?>)" accept="image/*" name="foto">
+                        <span class="help-block" id="errorfotodua{{$row2->id}}"></span>
+                    </div>
                 </div>
                 <div class="box-footer text-center">
-                    <button type="submit" class="btn btn-primary">Submit</button>s
+                    <button type="submit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     
                 </div>
@@ -146,5 +155,5 @@ $newkode = Crypt::encrypt($row2->id);
 <script src="{{asset('admin_assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
 @endsection
 @section('customjs')
-<script src="{{asset('admin_assets/custom/admin_view.js')}}"></script>
+<script src="{{asset('admin_assets/custom/kategori.js')}}"></script>
 @endsection

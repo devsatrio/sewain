@@ -11,7 +11,7 @@
             <div class="box-header with-border">
                 <h3 class="box-title">Tambah Data Admin</h3>
             </div>
-            <form class="form-horizontal" method="post" action="{{url('admin')}}" onsubmit="return validasiform()">
+            <form class="form-horizontal" method="post" action="{{url('admin')}}" onsubmit="return validasiform()" enctype="multipart/form-data">
                 <div class="box-body">
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-2 control-label">Nama</label>
@@ -53,13 +53,13 @@
                             </select>
                         </div>
                     </div>
-                    <!-- <div class="form-group" id="grubfoto">
+                    <div class="form-group" id="grubfoto">
                         <label for="inputEmail3" class="col-sm-2 control-label">Foto</label>
                         <div class="col-sm-10">
                             <input type="file" class="form-control" name="foto" accept="image/*" id="photo" required>
                             <span class="help-block" id="errorfoto"></span>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-2 control-label">Password</label>
                         <div class="col-sm-10">
@@ -89,7 +89,6 @@
                     <button type="button" onclick="history.go(-1)" class="btn btn-danger">Kembali</button>
                     <button type="submit" class="btn btn-primary pull-right">Simpan</button>
                 </div>
-                <!-- /.box-footer -->
             </form>
         </div>
     </section>

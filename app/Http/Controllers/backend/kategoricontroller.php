@@ -25,6 +25,7 @@ class kategoricontroller extends Controller
     //===============================================================
     public function store(Request $request)
     {
+        if ($request->hasFile('foto')) {
         $image = $request->file('foto');
         $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
      
@@ -36,12 +37,13 @@ class kategoricontroller extends Controller
    
         $destinationPath = public_path('image/kategori');
         $image->move($destinationPath, $input['imagename']);
+
         DB::table('kategori')
         ->insert([
             'nama'=>$request->nama,
             'status'=>$request->status,
             'gambar'=>$input['imagename']
-        ]);
+        ]); }
         return redirect('kategori')->with('msg','Data Berhasil Disimpan');
     }
 
@@ -49,12 +51,37 @@ class kategoricontroller extends Controller
     public function update(Request $request, $kode)
     {
         $id = Crypt::decrypt($kode);
-        DB::table('kategori')
-        ->where('id',$id)
-        ->update([
-            'nama'=>$request->nama,
-            'status'=>$request->status
-        ]);
+        if ($request->hasFile('foto')) {
+            File::delete('image/kategori/'.$request->gambarlama);
+            File::delete('image/kategori/thumbnail/'.$request->gambarlama);
+            $image = $request->file('foto');
+            $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+         
+            $destinationPath = public_path('image/kategori/thumbnail');
+            $img = Image::make($image->getRealPath());
+            $img->resize(100,null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.'/'.$input['imagename']);
+       
+            $destinationPath = public_path('image/kategori');
+            $image->move($destinationPath, $input['imagename']);
+
+            DB::table('kategori')
+            ->where('id',$id)
+            ->update([
+                'nama'=>$request->nama,
+                'status'=>$request->status,
+                'gambar'=>$input['imagename']
+            ]);
+        }else{
+            DB::table('kategori')
+            ->where('id',$id)
+            ->update([
+                'nama'=>$request->nama,
+                'status'=>$request->status
+            ]); 
+        }
+        
         return redirect('kategori')->with('msg','Perubahan Data Berhasil Disimpan');
     }
 
