@@ -21,7 +21,9 @@
             <div class="box-header">
                 <h3 class="box-title">List Data Pengguna</h3>
                 <div class="box-tools">
-                    <a href="#" class="btn btn-info">Cari Dari Semua Data</a>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-cari">
+                    Cari Dari Semua Data
+                    </button>
                     <a href="{{url('pengguna/create')}}" class="btn btn-success">Tambah Data</a>
                 </div></div>
                 <div class="box-body"><table id="example1" class="table table-bordered table-striped">
@@ -68,36 +70,26 @@
         </div>
     </section>
 </div>
-<div class="modal fade" id="modal-detail" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="box box-widget widget-user-2">
-                    
-                    <div class="widget-user-header bg-red">
-                        <div class="widget-user-image">
-                            <img id="fotonya" class="img-circle" src="{{asset('admin_assets/dist/img/user7-128x128.jpg')}}" alt="User Avatar">
-                        </div>
-                        <h3 class="widget-user-username" id="tampil_username"></h3>
-                        <h5 class="widget-user-desc" id="tampil_nama"></h5>
-                    </div>
-                    <div class="box-footer no-padding">
-                        <ul class="nav nav-stacked">
-                            <li id="tampil_level"></li>
-                            <li id="tampil_email"></li>
-                            <li id="tampil_telp"></li>
-                            <li id="tampil_alamat"></li>
-                        </ul>
-                    </div>
-                </div>
-                
+<div class="modal fade" id="modal-cari" style="display: none;">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Cari Dari Semua Data </h4>
+              </div>
+              <div class="modal-body">
+                <p>One fine body…</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Cari</button>
+              </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
         </div>
-    </div>
-</div>
 @endsection
 @section('js')
 <script src="{{asset('admin_assets/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>

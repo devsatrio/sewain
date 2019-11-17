@@ -25,13 +25,14 @@ CREATE TABLE IF NOT EXISTS `kategori` (
   `status` enum('Aktif','Tidak Aktif') NOT NULL DEFAULT 'Aktif',
   `gambar` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.kategori: ~4 rows (approximately)
+-- Dumping data for table db_sewa.kategori: ~2 rows (approximately)
 DELETE FROM `kategori`;
 /*!40000 ALTER TABLE `kategori` DISABLE KEYS */;
 INSERT INTO `kategori` (`id`, `nama`, `status`, `gambar`) VALUES
-	(3, 'elektronik', 'Aktif', NULL);
+	(9, 'elektronik', 'Aktif', '1573777132.jpg'),
+	(10, 'sepatu', 'Aktif', '1573778967.png');
 /*!40000 ALTER TABLE `kategori` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.migrations
@@ -70,21 +71,28 @@ DELETE FROM `password_resets`;
 DROP TABLE IF EXISTS `pengguna`;
 CREATE TABLE IF NOT EXISTS `pengguna` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `alamat` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `telp` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tgl_lahir` date DEFAULT NULL,
+  `gender` enum('Pria','Wanita') COLLATE utf8mb4_unicode_ci DEFAULT 'Pria',
+  `foto` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `foto_ktp` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `status` enum('Aktif','Tidak Aktif') COLLATE utf8mb4_unicode_ci DEFAULT 'Aktif',
+  `keterangan_status` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table db_sewa.pengguna: ~2 rows (approximately)
+-- Dumping data for table db_sewa.pengguna: ~1 rows (approximately)
 DELETE FROM `pengguna`;
 /*!40000 ALTER TABLE `pengguna` DISABLE KEYS */;
-INSERT INTO `pengguna` (`id`, `name`, `username`, `email`, `password`, `created_at`, `updated_at`) VALUES
-	(1, 'deva', 'deva', 'satriosuklun@gmai.com', '$2y$10$x0ogNXlrXpY0cW.9MMUvPe4FBJLf3Lzq4leBwxeEUhGkXBjgeOZ4e', '2019-11-12 09:10:51', '2019-11-12 09:10:51'),
-	(3, 'satrio', 'satrio', 'satriosuklun1@gmail.com', '$2y$10$8/oZvkfBZBaeZPIORjqp1.jxX5YPAHJlN5B4WGdYQXqrVa/ua3I9m', '2019-11-12 10:18:09', '2019-11-12 10:18:09');
+INSERT INTO `pengguna` (`id`, `name`, `username`, `email`, `alamat`, `telp`, `tgl_lahir`, `gender`, `foto`, `foto_ktp`, `password`, `created_at`, `updated_at`, `status`, `keterangan_status`) VALUES
+	(4, 'jina sukarti', 'jinasukarti', 'satriosuklun@gmail.com', 'bandung', '14045', '1998-12-12', 'Wanita', '17563715581573996970.jpg', '596509124.1573910977.jpg', '$2y$10$.13N3Hob/jHiHGYx.y7xWeav2Y.CrbsSBL03Ye.COu7H4rL6n/lHK', NULL, NULL, 'Aktif', NULL);
 /*!40000 ALTER TABLE `pengguna` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.subkategori
@@ -99,11 +107,9 @@ CREATE TABLE IF NOT EXISTS `subkategori` (
   CONSTRAINT `FK_subkategori_kategori` FOREIGN KEY (`id_kategori`) REFERENCES `kategori` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.subkategori: ~2 rows (approximately)
+-- Dumping data for table db_sewa.subkategori: ~1 rows (approximately)
 DELETE FROM `subkategori`;
 /*!40000 ALTER TABLE `subkategori` DISABLE KEYS */;
-INSERT INTO `subkategori` (`id`, `id_kategori`, `nama`, `status`) VALUES
-	(2, 3, 'hp', 'Aktif');
 /*!40000 ALTER TABLE `subkategori` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.users
@@ -116,18 +122,19 @@ CREATE TABLE IF NOT EXISTS `users` (
   `telp` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
   `level` enum('Admin','Super Admin','Programmer') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Admin',
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `foto` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table db_sewa.users: ~2 rows (approximately)
+-- Dumping data for table db_sewa.users: ~3 rows (approximately)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `name`, `username`, `alamat`, `telp`, `level`, `email`, `password`, `remember_token`) VALUES
-	(1, 'deva', 'deva', 'asdf', '9273894', 'Programmer', 'satriosuklun@gmail.com', '$2y$10$3WctH0m2YvIAG/iq48coke8Fdc7q8bZNwQLjP4W4JOAF3I2ScSVj2', NULL),
-	(2, 'damara', 'damara', 'asdfsdf', '234234', 'Admin', 'damara@gmail.com', '$2y$10$OV21uiQTBpw.TDtP9Lo1N.MMbUtSTceFHnzQOzECdtnvSbHekPhze', NULL),
-	(3, 'hendi suherman', 'hendisulastri', 'gurah, magersari', '14045', 'Super Admin', 'satriosuklun@gmail.com', '$2y$10$gKMs.awfKgr3biUS3j8vV.OLBeKjDphs3Wx1zDV0H6ENKvkHP6Xs2', NULL);
+INSERT INTO `users` (`id`, `name`, `username`, `alamat`, `telp`, `level`, `email`, `foto`, `password`, `remember_token`) VALUES
+	(1, 'deva', 'deva', 'asdf', '9273894', 'Programmer', 'satriosuklun@gmail.com', '1573878422.jpg', '$2y$10$3WctH0m2YvIAG/iq48coke8Fdc7q8bZNwQLjP4W4JOAF3I2ScSVj2', NULL),
+	(5, 'heru adi', 'heruadi', 'gurah, kediri', '209348920', 'Admin', 'satriosuklun1@gmail.com', '1573878044.jpg', '$2y$10$lFKc6dPH97anoZYGUZTReOIVmgNeF3yvlsDZRlyM7Uk3YwpwOKZzy', NULL),
+	(6, 'heri sumartio', 'hersumar', 'gurah', '2039489', 'Super Admin', 'satriosuklun1@gmail.com', '1573878759.jpg', '$2y$10$O41tDu5PYs5l7SF4LfHUnOEEhJlW49PZVAPpMJhnmSFNgycyOMq/y', NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
