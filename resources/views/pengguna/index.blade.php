@@ -6,7 +6,7 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-        Admin
+        Pengguna
         </h1>
     </section>
     <section class="content">
@@ -19,18 +19,19 @@
         @endif
         <div class="box box-primary">
             <div class="box-header">
-                <h3 class="box-title">List Data Admin</h3>
+                <h3 class="box-title">List Data Pengguna</h3>
                 <div class="box-tools">
-                    <a href="{{url('admin/create')}}" class="btn btn-success">Tambah Data</a>
+                    <a href="#" class="btn btn-info">Cari Dari Semua Data</a>
+                    <a href="{{url('pengguna/create')}}" class="btn btn-success">Tambah Data</a>
                 </div></div>
                 <div class="box-body"><table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Username</th>
-                            <th>No.Telp</th>
-                            <th>Email</th>
-                            <th>Level</th>
+                            <th>Nama</th>
+                            <th>No.Telpon</th>
+                            <th>Gender</th>
+                            <th>Status</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -41,30 +42,17 @@
                         @foreach($data as $row)
                         <tr>
                             <td>{{$i++}}</td>
-                            <td>
-                                <button
-                                type="button"
-                                class="btn btn-default btn-xs tampil-modal"
-                                data-nama="{{$row->name}}"
-                                data-username="{{$row->username}}"
-                                data-telp="{{$row->telp}}"
-                                data-email="{{$row->email}}"
-                                data-alamat="{{$row->alamat}}"
-                                data-level="{{$row->level}}"
-                                data-foto="{{$row->foto}}">
-                                {{$row->username}}
-                                </button>
-                            </td>
+                            <td>{{$row->name}}</td>
                             <td>{{$row->telp}}</td>
-                            <td>{{$row->email}}</td>
-                            <td>{{$row->level}}</td>
+                            <td>{{$row->gender}}</td>
+                            <td>{{$row->status}}</td>
                             <td class="text-center">
                                 @php
                                 $kode = Crypt::encrypt($row->id);
                                 @endphp
                                 
-                                <form action="{{url('/admin/'.$kode)}}" method="post">
-                                    <a href="{{url('admin/'.$kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
+                                <form action="{{url('/pengguna/'.$kode)}}" method="post">
+                                    <a href="{{url('pengguna/'.$kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
                                     
                                     {{csrf_field()}}
                                     <input type="hidden" name="_method" value="delete">
@@ -75,6 +63,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{ $data->links() }}
             </div>
         </div>
     </section>
@@ -115,5 +104,5 @@
 <script src="{{asset('admin_assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
 @endsection
 @section('customjs')
-<script src="{{asset('admin_assets/custom/admin_view.js')}}"></script>
+<script src="{{asset('admin_assets/custom/pengguna_view.js')}}"></script>
 @endsection

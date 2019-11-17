@@ -7,7 +7,9 @@ $('.tampil-modal').on('click', function(){
     var email = $(this).data('email');
     var alamat = $(this).data('alamat');
     var level = $(this).data('level');
+    var foto = $(this).data('foto');
 
+    $('#fotonya').attr('src','image/admin/thumbnail/'+foto);
     $('#tampil_nama').html(nama);
     $('#tampil_username').html(username);
     $('#tampil_telp').html('<a>No. Telp <span class="pull-right">'+telp+'</span></a>');

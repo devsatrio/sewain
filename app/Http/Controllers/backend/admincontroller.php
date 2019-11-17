@@ -33,7 +33,7 @@ class admincontroller extends Controller
     public function store(Request $request)
     {
         if ($request->hasFile('foto')) {
-            $image = $request->file('foto');
+        $image = $request->file('foto');
         $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
      
         $destinationPath = public_path('image/admin/thumbnail');
@@ -53,7 +53,8 @@ class admincontroller extends Controller
             'telp'=>$request->telp,
             'level'=>$request->level,
             'email'=>$request->email,
-            'password'=>Hash::make($request->pass)
+            'password'=>Hash::make($request->pass),
+            'foto'=>$input['imagename']
         ]);
 
         return redirect('admin')->with('msg','Data Berhasil Disimpan');
@@ -71,7 +72,50 @@ class admincontroller extends Controller
     public function update(Request $request, $kode)
     {
         $id = Crypt::decrypt($kode);
-        if($request->pass!=''){
+        if ($request->hasFile('foto')) {
+            File::delete('image/admin/'.$request->gambarlama);
+            File::delete('image/admin/thumbnail/'.$request->gambarlama);
+            $image = $request->file('foto');
+            $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+         
+            $destinationPath = public_path('image/admin/thumbnail');
+            $img = Image::make($image->getRealPath());
+            $img->resize(100,null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.'/'.$input['imagename']);
+       
+            $destinationPath = public_path('image/admin');
+            $image->move($destinationPath, $input['imagename']);
+            if($request->pass!=''){
+            DB::table('users')
+            ->where('id',$id)
+            ->update([
+                'name'=>$request->nama,
+                'username'=>$request->usern,
+                'alamat'=>$request->alamat,
+                'telp'=>$request->telp,
+                'level'=>$request->level,
+                'email'=>$request->email,
+                'password'=>Hash::make($request->pass),
+                'foto'=>$input['imagename']
+            ]);
+            return redirect('admin')->with('msg','Perubahan Data Berhasil Disimpan'); 
+        }else{
+            DB::table('users')
+            ->where('id',$id)
+            ->update([
+                'name'=>$request->nama,
+                'username'=>$request->usern,
+                'alamat'=>$request->alamat,
+                'telp'=>$request->telp,
+                'level'=>$request->level,
+                'email'=>$request->email,
+                'foto'=>$input['imagename']
+            ]);
+            return redirect('admin')->with('msg','Perubahan Data Berhasil Disimpan'); 
+        }
+        }else{
+           if($request->pass!=''){
             DB::table('users')
             ->where('id',$id)
             ->update([
@@ -96,13 +140,22 @@ class admincontroller extends Controller
                 'email'=>$request->email,
             ]);
             return redirect('admin')->with('msg','Perubahan Data Berhasil Disimpan'); 
+        } 
         }
+        
     }
 
     //===============================================================
     public function destroy($kode)
     {
       $id = Crypt::decrypt($kode);
+      $data = DB::table('users')->where('id',$id)->get();
+      foreach ($data as $row) {
+         if($row->foto!=''){
+            File::delete('image/admin/'.$row->foto);
+            File::delete('image/admin/thumbnail/'.$row->foto);
+         } 
+      }
       DB::table('users')->where('id',$id)->delete();
       return redirect('admin')->with('msg','Data Berhasil Dihapus');
     }
