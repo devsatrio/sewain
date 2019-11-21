@@ -3,6 +3,7 @@ namespace App\Http\Controllers\backend;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 class dashboardcontroller extends Controller
 {
     public function __construct()
@@ -10,8 +11,10 @@ class dashboardcontroller extends Controller
         $this->middleware('auth');
     }
 
+    //===============================================================
     public function index()
     {
-        return view('dashboard.index');
+    	$websetting = DB::table('setting')->limit(1)->get();
+        return view('dashboard.index',['websetting'=>$websetting]);
     }
 }

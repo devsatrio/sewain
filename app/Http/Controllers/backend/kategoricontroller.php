@@ -19,7 +19,8 @@ class kategoricontroller extends Controller
     public function index()
     {
         $data = DB::table('kategori')->get();
-        return view('kategori.index',['data'=>$data]);
+        $websetting = DB::table('setting')->limit(1)->get();
+        return view('kategori.index',['data'=>$data,'websetting'=>$websetting]);
     }
 
     //===============================================================

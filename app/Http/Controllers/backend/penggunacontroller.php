@@ -17,13 +17,15 @@ class penggunacontroller extends Controller {
 
 	//===============================================================
 	public function index() {
+        $websetting = DB::table('setting')->limit(1)->get();
 		$data = DB::table('pengguna')->paginate(40);
-		return view('pengguna.index', ['data' => $data]);
+		return view('pengguna.index', ['data' => $data,'websetting'=>$websetting]);
 	}
 
 	//===============================================================
 	public function create() {
-		return view('pengguna.create');
+        $websetting = DB::table('setting')->limit(1)->get();
+		return view('pengguna.create',['websetting'=>$websetting]);
 	}
 
 	//===============================================================
@@ -95,15 +97,19 @@ class penggunacontroller extends Controller {
 	}
 
 	//===============================================================
-	public function show($id) {
-		//
+	public function show($kode) {
+        $websetting = DB::table('setting')->limit(1)->get();
+		$id = Crypt::decrypt($kode);
+        $data = DB::table('pengguna')->where('id', $id)->get();
+        return view('pengguna.show', ['data' => $data,'websetting'=>$websetting]);
 	}
 
 	//===============================================================
 	public function edit($kode) {
+        $websetting = DB::table('setting')->limit(1)->get();
 		$id = Crypt::decrypt($kode);
 		$data = DB::table('pengguna')->where('id', $id)->get();
-		return view('pengguna.edit', ['data' => $data]);
+		return view('pengguna.edit', ['data' => $data,'websetting'=>$websetting]);
 	}
 
 	//===============================================================
@@ -367,4 +373,14 @@ class penggunacontroller extends Controller {
 		DB::table('pengguna')->where('id', $id)->delete();
 		return redirect('pengguna')->with('msg', 'Data Berhasil Dihapus');
 	}
+    
+    //===============================================================
+    public function caridata(Request $request){
+        $websetting = DB::table('setting')->limit(1)->get();
+        $data = DB::table('pengguna')
+        ->where('name','like','%'.$request->cari.'%')
+        ->orwhere('username','like','%'.$request->cari.'%')
+        ->get();
+        return view('pengguna.cari',['data'=>$data,'datacari'=>$request->cari,'websetting'=>$websetting]);
+    }
 }

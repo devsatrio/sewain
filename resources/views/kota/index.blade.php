@@ -1,25 +1,25 @@
 @extends('layouts.app_admin')
 @section('header')
-    @foreach($websetting as $ws)
-        <title>{{$ws->nama}}</title>
-        <link href="{{asset('image/setting/thumbnail/'.$ws->icon)}}" rel="icon" type="image/png">
-    @endforeach
+@foreach($websetting as $ws)
+<title>{{$ws->nama}}</title>
+<link href="{{asset('image/setting/thumbnail/'.$ws->icon)}}" rel="icon" type="image/png">
+@endforeach
 @endsection
-
 @section('nameapps')
-    @foreach($websetting as $wss)
-    <span class="logo-mini">{{$wss->singkatan}}</span>
-    <span class="logo-lg">{{$wss->nama}}</span>
-    @endforeach
+@foreach($websetting as $wss)
+<span class="logo-mini">{{$wss->singkatan}}</span>
+<span class="logo-lg">{{$wss->nama}}</span>
+@endforeach
 @endsection
 @section('css')
 <link rel="stylesheet" href="{{asset('admin_assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
+<link rel="stylesheet" href="{{asset('admin_assets/bower_components/select2/dist/css/select2.min.css')}}">
 @endsection
 @section('content')
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-        Kategori
+        Kota
         </h1>
     </section>
     <section class="content">
@@ -34,14 +34,13 @@
                 @endif
                 <div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title">List Data Kategori</h3>
+                        <h3 class="box-title">List Data Kota</h3>
                     </div>
                     <div class="box-body"><table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
                                 <th>Nama</th>
-                                <th>Status</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -53,14 +52,11 @@
                             <tr>
                                 <td class="text-center">{{$i++}}</td>
                                 <td>{{$row->nama}}</td>
-                                <td>{{$row->status}}</td>
                                 <td class="text-center">
                                     @php
                                     $kode = Crypt::encrypt($row->id);
                                     @endphp
-                                    
-                                    <form action="{{url('/kategori/'.$kode)}}" method="post">
-                                        
+                                    <form action="{{url('/kota/'.$kode)}}" method="post">
                                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-default{{$row->id}}">
                                         <i class="fa fa-wrench"></i>
                                         </button>
@@ -79,32 +75,29 @@
         <div class="col-md-4">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Tambah Data Kategori</h3>
+                    <h3 class="box-title">Tambah Data Kota</h3>
                 </div>
-                <form role="form" method="post" action="{{url('kategori')}}" enctype="multipart/form-data">
+                <form role="form" method="post" action="{{url('kota')}}">
                     @csrf
                     <div class="box-body">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Nama Kategori</label>
-                            <input type="text" class="form-control" name="nama" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Status</label>
-                            <select name="status" class="form-control">
-                                <option value="Aktif">Aktif</option>
-                                <option value="Tidak Aktif">Tidak Aktif</option>
+                            <label for="exampleInputEmail1">Provinsi</label>
+                            <select name="provinsi" class="form-control select2">
+                                @foreach($dataprovinsi as $dtp)
+                                <option value="{{$dtp->id}}">{{$dtp->nama}}</option>
+                                @endforeach
                             </select>
                         </div>
-                        <div class="form-group" id="grubfoto">
-                            <label for="exampleInputEmail1">Gambar</label>
-                            <input type="file" class="form-control" accept="image/*" id="photo" name="foto" required>
-                            <span class="help-block" id="errorfoto"></span>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Nama Kota</label>
+                            <input type="text" class="form-control" name="nama" required>
                         </div>
                     </div>
                     <div class="box-footer text-center">
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <button type="reset" class="btn btn-danger">Reset</button>
-                        
                     </div>
                 </form>
             </div>
@@ -126,27 +119,22 @@ $newkode = Crypt::encrypt($row2->id);
             <h4 class="modal-title">Edit Data</h4>
         </div>
         <div class="modal-body">
-            <form role="form" method="post" action="{{url('kategori/'.$newkode)}}" enctype="multipart/form-data">
+            <form role="form" method="post" action="{{url('kota/'.$newkode)}}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="_method" value="put">
+                
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Nama Kategori</label>
-                        <input type="text" value="{{$row2->nama}}" class="form-control" name="nama" required>
-                        <input type="hidden" value="{{$row2->gambar}}" name="gambarlama" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Status</label>
-                        <select name="status" class="form-control">
-                            <option value="Aktif" @if($row2->status=='Aktif') selected @endif>Aktif</option>
-                            <option value="Tidak Aktif" @if($row2->status=='Tidak Aktif') selected @endif>Tidak Aktif</option>
+                        <label>Provinsi</label>
+                        <select name="provinsi" class="form-control select2" style="width: 100%;">
+                            @foreach($dataprovinsi as $dtps)
+                            <option value="{{$dtps->id}}" @if($row2->id_provinsi==$dtps->id) selected @endif >{{$dtps->nama}}</option>
+                            @endforeach
                         </select>
                     </div>
-                    <div class="form-group" id="grubfotodua{{$row2->id}}">
-                        <label for="exampleInputEmail1">Gambar (opsional)</label><br>
-                        <img src="{{asset('image/kategori/thumbnail/'.$row2->gambar)}}" alt="">
-                        <input type="file" class="form-control" id="fotonya{{$row2->id}}" onchange="validimage(<?php echo $row2->id?>)" accept="image/*" name="foto">
-                        <span class="help-block" id="errorfotodua{{$row2->id}}"></span>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Nama Kota</label>
+                        <input type="text" value="{{$row2->nama}}" class="form-control" name="nama" required>
                     </div>
                 </div>
                 <div class="box-footer text-center">
@@ -166,7 +154,8 @@ $newkode = Crypt::encrypt($row2->id);
 @section('js')
 <script src="{{asset('admin_assets/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('admin_assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{asset('admin_assets/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
 @endsection
 @section('customjs')
-<script src="{{asset('admin_assets/custom/kategori.js')}}"></script>
+<script src="{{asset('admin_assets/custom/kota.js')}}"></script>
 @endsection

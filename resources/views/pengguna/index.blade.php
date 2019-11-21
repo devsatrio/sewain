@@ -1,4 +1,17 @@
 @extends('layouts.app_admin')
+@section('header')
+    @foreach($websetting as $ws)
+        <title>{{$ws->nama}}</title>
+        <link href="{{asset('image/setting/thumbnail/'.$ws->icon)}}" rel="icon" type="image/png">
+    @endforeach
+@endsection
+
+@section('nameapps')
+    @foreach($websetting as $wss)
+    <span class="logo-mini">{{$wss->singkatan}}</span>
+    <span class="logo-lg">{{$wss->nama}}</span>
+    @endforeach
+@endsection
 @section('css')
 <link rel="stylesheet" href="{{asset('admin_assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 @endsection
@@ -42,16 +55,31 @@
                         $i=1;
                         @endphp
                         @foreach($data as $row)
+                        @php
+                        $kode = Crypt::encrypt($row->id);
+                        @endphp
                         <tr>
                             <td>{{$i++}}</td>
-                            <td>{{$row->name}}</td>
+                            <td>
+                                 <a href="{{url('pengguna/'.$kode)}}" class="btn btn-default btn-xs">
+                                   <i class="fa fa-eye"></i> {{$row->name}}  
+                                 </a></td>
                             <td>{{$row->telp}}</td>
                             <td>{{$row->gender}}</td>
-                            <td>{{$row->status}}</td>
+                            <td>
+                                @if($row->status=='Aktif')
+                                 <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal-status{{$row->id}}">
+                                {{$row->status}}
+                                </button>
+                                @else
+                                <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal-status{{$row->id}}">
+                                {{$row->status}}
+                                </button>
+                                @endif
+                                 - @if($row->verivikasi=='ya') Terverivikasi @else Belum Verivikasi @endif 
+                            </td>
                             <td class="text-center">
-                                @php
-                                $kode = Crypt::encrypt($row->id);
-                                @endphp
+                                
                                 
                                 <form action="{{url('/pengguna/'.$kode)}}" method="post">
                                     <a href="{{url('pengguna/'.$kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
@@ -71,25 +99,67 @@
     </section>
 </div>
 <div class="modal fade" id="modal-cari" style="display: none;">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Cari Dari Semua Data </h4>
-              </div>
-              <div class="modal-body">
-                <p>One fine body…</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Cari</button>
-              </div>
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" method="post" action="{{Route('cari-data-pengguna')}}" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Cari Dari Semua Data </h4>
+                </div>
+                <div class="modal-body">
+                    @csrf
+                    <div class="box-body">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="cari" required placeholder="cari berdasarkan nama" id="fieldcari">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                </div>
+            </form>
         </div>
+    </div>
+</div>
+@foreach($data as $row2)
+<div class="modal fade" id="modal-status{{$row2->id}}" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" method="post" action="{{Route('cari-data-pengguna')}}" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Edit Status User</h4>
+                </div>
+                <div class="modal-body">
+                    @csrf
+                    <div class="box-body">
+                        <label>Status</label>
+                        <div class="form-group">
+                            <select name="status" class="form-control">
+                                <option value="Aktif">Aktif</option>
+                                <option value="Tidak Aktif">Tidak Aktif</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <label>Keterangan</label>
+                        <div class="form-group">
+                            <textarea name="keterangan" class="form-control" cols="30"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
 @endsection
 @section('js')
 <script src="{{asset('admin_assets/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>

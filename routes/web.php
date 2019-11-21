@@ -9,14 +9,35 @@ Auth::routes();
 //admin
 Route::resource('admin','backend\admincontroller');
 
+//barang
+Route::resource('barang','backend\barangcontroller');
+Route::get('carisubkategori/{id}','backend\barangcontroller@carisubkategori');
+
+//kota
+Route::resource('kota','backend\kotacontroller');
+
+//provinsi
+Route::resource('provinsi','backend\provinsicontroller');
+
 //kategori
 Route::resource('kategori','backend\kategoricontroller');
 
 //sub kategori
 Route::resource('sub-kategori','backend\subkategoricontroller');
 
+//setting
+Route::resource('setting','backend\settingcontroller');
+
+//toko
+Route::resource('toko','backend\tokocontroller');
+Route::post('toko/caridata','backend\tokocontroller@caridata')
+->name('cari-data-toko');
+Route::get('carikota/{id}','backend\tokocontroller@caridatakota');
+
 //pengguna
 Route::resource('pengguna','backend\penggunacontroller');
+Route::post('pengguna/caridata','backend\penggunacontroller@caridata')
+->name('cari-data-pengguna');
 
 //dashboard
 Route::get('/dashboard', 'backend\dashboardcontroller@index');

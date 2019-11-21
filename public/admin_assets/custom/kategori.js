@@ -1,3 +1,7 @@
+$(function () {
+$('#example1').DataTable()
+
+})
 $('#photo').change(function(){
 var imageSizeArr = 0;
      var imageSize = document.getElementById('photo');

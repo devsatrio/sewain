@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\backend;
 
 use Illuminate\Http\Request;
@@ -8,7 +7,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 class subkategoricontroller extends Controller
 {
-   
+   public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $data = DB::table('subkategori')
@@ -16,7 +19,8 @@ class subkategoricontroller extends Controller
         ->leftjoin('kategori','kategori.id','=','subkategori.id_kategori')
         ->get();
         $datakategori = DB::table('kategori')->get();
-        return view('subkategori.index',['data'=>$data,'datakategori'=>$datakategori]);
+        $websetting = DB::table('setting')->limit(1)->get();
+        return view('subkategori.index',['data'=>$data,'datakategori'=>$datakategori,'websetting'=>$websetting]);
     }
 
     //===============================================================

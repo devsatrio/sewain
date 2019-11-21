@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Sewain Apps</title>
+        @yield('header')
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.7 -->
         <link rel="stylesheet" href="{{asset('admin_assets/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
@@ -21,9 +21,9 @@
         <!-- Site wrapper -->
         <div class="wrapper">
             <header class="main-header">
-                <a href="#" class="logo">
-                    <span class="logo-mini"><b>S</b>A</span>
-                    <span class="logo-lg"><b>Sewain</b>Apps</span>
+                <a href="{{url('/dashboard')}}" class="logo">
+                    @yield('nameapps')
+                    
                 </a>
                 <nav class="navbar navbar-static-top">
                     <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
@@ -140,7 +140,33 @@
                                 <li><a href="{{url('/pengguna')}}"><i class="fa fa-users"></i> Pengguna</a></li>
                                 <li><a href="{{url('kategori')}}"><i class="fa fa-th-large"></i> Kategori</a></li>
                                 <li><a href="{{url('sub-kategori')}}"><i class="fa fa-th"></i> Sub Kategori</a></li>
+                                <li class="treeview">
+                                    <a href="#"><i class="fa fa-map"></i> Provinsi & Kab/Kota
+                                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
+                                    </a>
+                                    <ul class="treeview-menu">
+                                        <li><a href="{{url('provinsi')}}"><i class="fa fa-circle-o"></i> Provinsi</a></li>
+                                        <li><a href="{{url('kota')}}"><i class="fa fa-circle-o"></i> Kota</a></li>
+                                    </ul>
+                                </li>
                             </ul>
+                        </li>
+                        <li>
+                            <a href="{{url('/toko')}}">
+                                <i class="fa fa-building"></i> <span>Toko</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{url('/barang')}}">
+                                <i class="fa fa-archive"></i> <span>Barang</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{url('/setting')}}">
+                                <i class="fa fa-cog"></i> <span>Setting</span>
+                            </a>
                         </li>
                     </ul>
                 </section>

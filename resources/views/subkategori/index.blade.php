@@ -1,4 +1,17 @@
 @extends('layouts.app_admin')
+@section('header')
+    @foreach($websetting as $ws)
+        <title>{{$ws->nama}}</title>
+        <link href="{{asset('image/setting/thumbnail/'.$ws->icon)}}" rel="icon" type="image/png">
+    @endforeach
+@endsection
+
+@section('nameapps')
+    @foreach($websetting as $wss)
+    <span class="logo-mini">{{$wss->singkatan}}</span>
+    <span class="logo-lg">{{$wss->nama}}</span>
+    @endforeach
+@endsection
 @section('css')
 <link rel="stylesheet" href="{{asset('admin_assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
 @endsection
@@ -149,9 +162,7 @@ $newkode = Crypt::encrypt($row2->id);
             </form>
         </div>
     </div>
-    <!-- /.modal-content -->
 </div>
-<!-- /.modal-dialog -->
 </div>
 @endforeach
 @endsection
@@ -160,5 +171,5 @@ $newkode = Crypt::encrypt($row2->id);
 <script src="{{asset('admin_assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
 @endsection
 @section('customjs')
-<script src="{{asset('admin_assets/custom/admin_view.js')}}"></script>
+<script src="{{asset('admin_assets/custom/subkategori.js')}}"></script>
 @endsection
