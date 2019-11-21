@@ -29,7 +29,7 @@
                 <h3 class="box-title">Tambah Data Barang</h3>
             </div>
             <div class="loading-div" id="panelnya">
-                <form class="form-horizontal" method="post" action="{{url('toko')}}" onsubmit="return validasiform()" enctype="multipart/form-data">
+                <form class="form-horizontal" method="post" action="{{url('barang')}}" enctype="multipart/form-data">
                     <div class="box-body">
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-2 control-label">Kode Barang</label>
@@ -50,7 +50,7 @@
                         <div class="form-group">
                             <label for="inputEmail3" class="col-sm-2 control-label">Nama Barang</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="nama">
+                                <input type="text" class="form-control" name="nama" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -77,49 +77,67 @@
                                 <textarea name="deskripsi" class="form-control"></textarea>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Jaminan</label>
+                            <div class="col-sm-10">
+                                <textarea name="jaminan" class="form-control"></textarea>
+                            </div>
+                        </div>
                         @csrf
                     </div>
                     <div class="box-body" id="listpaket">
                         <div>
                             <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">Nama Paket</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="namapaket[]">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Nama Paket</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="namapaket[]" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Durasi</label>
+                                <div class="col-sm-6">
+                                    <input type="number" min="0" class="form-control" name="durasipaket[]" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select name="satuanpaket[]" class="form-control">
+                                        <option value="Jam">Jam</option>
+                                        <option value="Hari">Hari</option>
+                                        <option value="Bulan">Bulan</option>
+                                        <option value="Tahun">Tahun</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Harga</label>
+                                <div class="col-sm-10">
+                                    <input type="number" min="0" class="form-control" name="hargapaket[]" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Diskon</label>
+                                <div class="col-sm-10">
+                                    <input type="number" min="0" max="99" class="form-control" name="diskonpaket[]" required>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">Durasi</label>
-                            <div class="col-sm-6">
-                                <input type="number" min="0" class="form-control" name="durasipaket[]">
-                            </div>
-                            <div class="col-sm-4">
-                                <select name="satuanpaket[]" class="form-control"><option value="Jam">Jam</option>
-                                    <option value="Hari">Hari</option>
-                                    <option value="Bulan">Bulan</option>
-                                    <option value="Tahun">Tahun</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">Harga</label>
-                            <div class="col-sm-10">
-                                <input type="number" min="0" class="form-control" name="hargapaket[]">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">Diskon</label>
-                            <div class="col-sm-10">
-                                <input type="number" min="0" max="99" class="form-control" name="diskonpaket[]">
-                            </div>
-                        </div>
-                        </div>
-                        
                     </div>
                     <div class="box-body text-right">
                         <button type="button" class="btn btn-xs btn-success" onclick="addInput('listpaket');"><i class="fa fa-plus"></i> Tambah Paket</button>
                     </div>
-                    <div class="box-body">
+                    <div class="box-body" id="listfoto">
+                        <div>
+                            <div class="form-group" id="grubfoto1">
+                                <label for="inputEmail3" class="col-sm-2 control-label">Foto Utama</label>
+                                <div class="col-sm-10">
+                                    <div id="tempatfoto1"></div>
+                                    <input type="file" id="foto1" class="form-control" onchange="imgToDatabarang(this,1)" accept="image/*" name="fotoutama" required>
+                                    <span class="help-block" id="errorfoto1"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body text-right">
+                        <button type="button" class="btn btn-xs btn-success" onclick="addInputfoto('listfoto');"><i class="fa fa-plus"></i> Tambah Foto Lain</button>
                     </div>
                     <div class="box-footer">
                         <button type="button" onclick="history.go(-1)" class="btn btn-danger">Kembali</button>

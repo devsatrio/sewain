@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\backend;
-
+ini_set('max_execution_time', 180);
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
