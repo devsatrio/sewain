@@ -86,10 +86,10 @@ function addInput(divName){
                             '</div>'+
                             '<div class="col-sm-4">'+
                                 '<select name="satuanpaket[]" class="form-control">'+
-                                    '<option value="">Jam</option>'+
-                                    '<option value="">Hari</option>'+
-                                    '<option value="">Bulan</option>'+
-                                    '<option value="">Tahun</option>'+
+                                    '<option value="Jam">Jam</option>'+
+                                    '<option value="Hari">Hari</option>'+
+                                    '<option value="Bulan">Bulan</option>'+
+                                    '<option value="Tahun">Tahun</option>'+
                                 '</select>'+
                             '</div>'+
                         '</div>'+

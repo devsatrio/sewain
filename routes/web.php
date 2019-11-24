@@ -11,6 +11,12 @@ Route::resource('admin','backend\admincontroller');
 
 //barang
 Route::resource('barang','backend\barangcontroller');
+Route::post('barang/cari','backend\barangcontroller@caridata')
+->name('cari-data-barang');
+Route::post('barang/editdetail','backend\barangcontroller@updatedetail')
+->name('edit-detail-barang');
+Route::post('barang/updatefoto','backend\barangcontroller@updatedetailfoto');
+Route::get('barang/hapusdetail/{id}','backend\barangcontroller@destroydetail');
 Route::get('carisubkategori/{id}','backend\barangcontroller@carisubkategori');
 
 //kota
