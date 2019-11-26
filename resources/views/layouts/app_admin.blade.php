@@ -163,6 +163,18 @@
                                 <i class="fa fa-archive"></i> <span>Barang</span>
                             </a>
                         </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-newspaper-o"></i> <span>Artikel</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="{{url('/kategori-artikel')}}"><i class="fa fa-thumb-tack"></i> Kategori</a></li>
+                                <li><a href="{{url('/artikel')}}"><i class="fa fa-file-text-o"></i> Artikel</a></li>
+                            </ul>
+                        </li>
                         <li>
                             <a href="{{url('/slider')}}">
                                 <i class="fa fa-image"></i> <span>Slider</span>

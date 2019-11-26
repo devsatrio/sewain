@@ -17,6 +17,24 @@ DROP DATABASE IF EXISTS `db_sewa`;
 CREATE DATABASE IF NOT EXISTS `db_sewa` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `db_sewa`;
 
+-- Dumping structure for table db_sewa.artikel
+DROP TABLE IF EXISTS `artikel`;
+CREATE TABLE IF NOT EXISTS `artikel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_kategori` int(11) DEFAULT NULL,
+  `judul` varchar(300) DEFAULT NULL,
+  `isi` text DEFAULT NULL,
+  `penulis` int(11) DEFAULT NULL,
+  `tgl` date DEFAULT NULL,
+  `gambar` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table db_sewa.artikel: ~0 rows (approximately)
+DELETE FROM `artikel`;
+/*!40000 ALTER TABLE `artikel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `artikel` ENABLE KEYS */;
+
 -- Dumping structure for table db_sewa.barang
 DROP TABLE IF EXISTS `barang`;
 CREATE TABLE IF NOT EXISTS `barang` (
@@ -28,32 +46,47 @@ CREATE TABLE IF NOT EXISTS `barang` (
   `sub_kategori` int(11) DEFAULT NULL,
   `tgl_post` date DEFAULT NULL,
   `deskripsi` text DEFAULT NULL,
+  `jaminan` text DEFAULT NULL,
   `status` enum('Aktif','Tidak Aktif') DEFAULT 'Aktif',
   `deskripsi_status` text DEFAULT NULL,
-  `jaminan` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.barang: ~0 rows (approximately)
+-- Dumping data for table db_sewa.barang: ~4 rows (approximately)
 DELETE FROM `barang`;
 /*!40000 ALTER TABLE `barang` DISABLE KEYS */;
+INSERT INTO `barang` (`id`, `id_toko`, `kode`, `nama`, `kategori`, `sub_kategori`, `tgl_post`, `deskripsi`, `jaminan`, `status`, `deskripsi_status`) VALUES
+	(2, 3, 'BRG231119-01-0001', 'cannon d123', 9, 6, '2019-11-23', 'barang bagus', 'ktp,sim sama uang', 'Tidak Aktif', 'barang bohong'),
+	(3, 3, 'BRG231119-01-0002', 'Supra x 125', 10, 7, '2019-11-23', 'enak narik', 'ktp atau KTA', 'Aktif', NULL),
+	(4, 3, 'BRG231119-01-0003', 'honda jazz 2019', 10, 8, '2019-11-23', 'halo halo halo', 'KTP', 'Aktif', NULL),
+	(5, 3, 'BRG231119-01-0004', 'revo at 2015', 10, 7, '2019-11-23', 'askldj', 'klajsdklf', 'Aktif', NULL);
 /*!40000 ALTER TABLE `barang` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.detail_barang
 DROP TABLE IF EXISTS `detail_barang`;
 CREATE TABLE IF NOT EXISTS `detail_barang` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `kode_barang` text DEFAULT NULL,
   `nama` text DEFAULT NULL,
-  `durasi` text DEFAULT NULL,
+  `durasi` int(11) DEFAULT NULL,
+  `satuan` enum('Jam','Hari','Bulan','Tahun') DEFAULT 'Jam',
   `harga` int(11) DEFAULT 0,
   `diskon` int(11) DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.detail_barang: ~0 rows (approximately)
+-- Dumping data for table db_sewa.detail_barang: ~8 rows (approximately)
 DELETE FROM `detail_barang`;
 /*!40000 ALTER TABLE `detail_barang` DISABLE KEYS */;
+INSERT INTO `detail_barang` (`id`, `kode_barang`, `nama`, `durasi`, `satuan`, `harga`, `diskon`) VALUES
+	(2, 'BRG231119-01-0001', 'paket hemat kaum kismin', 5, 'Jam', 35000, 0),
+	(4, 'BRG231119-01-0002', 'harian', 1, 'Hari', 100000, 0),
+	(5, 'BRG231119-01-0002', 'jam', 1, 'Hari', 100000, 0),
+	(6, 'BRG231119-01-0003', 'paket hemat', 1, 'Hari', 50000, 0),
+	(7, 'BRG231119-01-0003', 'paket mantab', 5, 'Hari', 200000, 10),
+	(8, 'BRG231119-01-0004', 'jam', 1, 'Jam', 2000, 0),
+	(9, 'BRG231119-01-0004', 'hari', 1, 'Hari', 5000, 0),
+	(10, 'BRG231119-01-0001', 'paket mahal banget', 2, 'Jam', 100000, 20);
 /*!40000 ALTER TABLE `detail_barang` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.fotobarang
@@ -64,11 +97,18 @@ CREATE TABLE IF NOT EXISTS `fotobarang` (
   `nama` text DEFAULT NULL,
   `default` enum('Y','N') DEFAULT 'N',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.fotobarang: ~0 rows (approximately)
+-- Dumping data for table db_sewa.fotobarang: ~7 rows (approximately)
 DELETE FROM `fotobarang`;
 /*!40000 ALTER TABLE `fotobarang` DISABLE KEYS */;
+INSERT INTO `fotobarang` (`id`, `kode_barang`, `nama`, `default`) VALUES
+	(2, 'BRG231119-01-0001', '1574652478.jpg', 'Y'),
+	(4, 'BRG231119-01-0002', '1574481511.jpg', 'Y'),
+	(5, 'BRG231119-01-0002', '1574481511.jpg', 'N'),
+	(6, 'BRG231119-01-0003', '1574481636.jpg', 'Y'),
+	(7, 'BRG231119-01-0004', '1574482073.jpg', 'Y'),
+	(9, 'BRG231119-01-0001', '1574648634.jpg', 'N');
 /*!40000 ALTER TABLE `fotobarang` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.kategori
@@ -85,9 +125,26 @@ CREATE TABLE IF NOT EXISTS `kategori` (
 DELETE FROM `kategori`;
 /*!40000 ALTER TABLE `kategori` DISABLE KEYS */;
 INSERT INTO `kategori` (`id`, `nama`, `status`, `gambar`) VALUES
-	(9, 'elektronik', 'Aktif', '1573777132.jpg'),
-	(10, 'sepatu', 'Aktif', '1573778967.png');
+	(9, 'elektronik', 'Tidak Aktif', '1573777132.jpg');
 /*!40000 ALTER TABLE `kategori` ENABLE KEYS */;
+
+-- Dumping structure for table db_sewa.kategori_artikel
+DROP TABLE IF EXISTS `kategori_artikel`;
+CREATE TABLE IF NOT EXISTS `kategori_artikel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama` varchar(50) DEFAULT NULL,
+  `status` enum('Aktif','Tidak Aktif') DEFAULT 'Aktif',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table db_sewa.kategori_artikel: ~0 rows (approximately)
+DELETE FROM `kategori_artikel`;
+/*!40000 ALTER TABLE `kategori_artikel` DISABLE KEYS */;
+INSERT INTO `kategori_artikel` (`id`, `nama`, `status`) VALUES
+	(1, 'berita', 'Aktif'),
+	(2, 'kabara baru', 'Aktif'),
+	(3, 'hal halo', 'Tidak Aktif');
+/*!40000 ALTER TABLE `kategori_artikel` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.kota
 DROP TABLE IF EXISTS `kota`;
@@ -163,8 +220,8 @@ CREATE TABLE IF NOT EXISTS `pengguna` (
 DELETE FROM `pengguna`;
 /*!40000 ALTER TABLE `pengguna` DISABLE KEYS */;
 INSERT INTO `pengguna` (`id`, `name`, `username`, `email`, `alamat`, `telp`, `tgl_lahir`, `gender`, `foto`, `foto_ktp`, `password`, `status`, `verivikasi`, `keterangan_status`) VALUES
-	(4, 'jina sukarti', 'jinasukarti', 'satriosuklun@gmail.com', 'bandung', '14045', '1998-12-12', 'Wanita', '17563715581573996970.jpg', '596509124.1573910977.jpg', '$2y$10$.13N3Hob/jHiHGYx.y7xWeav2Y.CrbsSBL03Ye.COu7H4rL6n/lHK', 'Aktif', 'belum', NULL),
-	(6, 'heru adi satrio', 'heruadi', 'snackymart@gmail.com', 'gurah', '209348920', '1998-09-09', 'Wanita', '4816952641574216244.jpg', '20009885841574216247.jpg', '$2y$10$R6JqwAbd8k.q/2rFYswZ.Oek4X92aT7wtDhsnuWM69ICpqJ1T5l9W', 'Aktif', 'belum', NULL);
+	(4, 'jina sukarti', 'jinasukarti', 'satriosuklun@gmail.com', 'bandung', '14045', '1998-12-12', 'Wanita', '17563715581573996970.jpg', '596509124.1573910977.jpg', '$2y$10$.13N3Hob/jHiHGYx.y7xWeav2Y.CrbsSBL03Ye.COu7H4rL6n/lHK', 'Aktif', 'ya', NULL),
+	(6, 'heru adi satrio', 'heruadi', 'snackymart@gmail.com', 'gurah', '209348920', '1998-09-09', 'Wanita', '4816952641574216244.jpg', '20009885841574216247.jpg', '$2y$10$R6JqwAbd8k.q/2rFYswZ.Oek4X92aT7wtDhsnuWM69ICpqJ1T5l9W', 'Aktif', 'ya', NULL);
 /*!40000 ALTER TABLE `pengguna` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.provinsi
@@ -203,6 +260,22 @@ INSERT INTO `setting` (`id`, `nama`, `singkatan`, `logo`, `icon`, `deskripsi`) V
 	(1, 'SewainAja', 'SA', '11589253081574049787.png', '9813304121574050075.png', '<p>deskripsi sewain apps</p>');
 /*!40000 ALTER TABLE `setting` ENABLE KEYS */;
 
+-- Dumping structure for table db_sewa.slider
+DROP TABLE IF EXISTS `slider`;
+CREATE TABLE IF NOT EXISTS `slider` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama` text DEFAULT NULL,
+  `header` text DEFAULT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `status` enum('Aktif','Tidak Aktif') DEFAULT 'Aktif',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table db_sewa.slider: ~0 rows (approximately)
+DELETE FROM `slider`;
+/*!40000 ALTER TABLE `slider` DISABLE KEYS */;
+/*!40000 ALTER TABLE `slider` ENABLE KEYS */;
+
 -- Dumping structure for table db_sewa.subkategori
 DROP TABLE IF EXISTS `subkategori`;
 CREATE TABLE IF NOT EXISTS `subkategori` (
@@ -213,17 +286,15 @@ CREATE TABLE IF NOT EXISTS `subkategori` (
   PRIMARY KEY (`id`),
   KEY `FK_subkategori_kategori` (`id_kategori`),
   CONSTRAINT `FK_subkategori_kategori` FOREIGN KEY (`id_kategori`) REFERENCES `kategori` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.subkategori: ~4 rows (approximately)
+-- Dumping data for table db_sewa.subkategori: ~6 rows (approximately)
 DELETE FROM `subkategori`;
 /*!40000 ALTER TABLE `subkategori` DISABLE KEYS */;
 INSERT INTO `subkategori` (`id`, `id_kategori`, `nama`, `status`) VALUES
-	(4, 9, 'handphone', 'Aktif'),
+	(4, 9, 'handphone', 'Tidak Aktif'),
 	(5, 9, 'HT', 'Aktif'),
-	(6, 9, 'camera', 'Aktif'),
-	(7, 10, 'sepatu boot', 'Aktif'),
-	(8, 10, 'sepatu manten', 'Aktif');
+	(6, 9, 'camera', 'Aktif');
 /*!40000 ALTER TABLE `subkategori` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.toko
@@ -244,13 +315,14 @@ CREATE TABLE IF NOT EXISTS `toko` (
   `kota` varchar(60) DEFAULT NULL,
   `logo` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- Dumping data for table db_sewa.toko: ~2 rows (approximately)
 DELETE FROM `toko`;
 /*!40000 ALTER TABLE `toko` DISABLE KEYS */;
 INSERT INTO `toko` (`id`, `id_pengguna`, `nama`, `deskripsi`, `alamat`, `status`, `verivikasi_status`, `deskripsi_status`, `hari_buka`, `jam_buka`, `jam_tutup`, `provinsi`, `kota`, `logo`) VALUES
-	(3, 6, 'maju jaya sejahtera', 'persewaan kamera dan tukang foto juga dekor', 'jln penuh liku no 212 rt 01 rw 01', 'Aktif', 'Ya', NULL, 'senin,selasa,rabu,kamis,jumat,', '9:15 AM', '8:15 PM', '1', '3', '1574232921.jpg');
+	(3, 6, 'maju jaya sejahtera', 'persewaan kamera dan tukang foto juga dekor', 'jln penuh liku no 212 rt 01 rw 01', 'Aktif', 'Ya', 'Keterangan maju jaya sejahtera', 'senin,selasa,rabu,kamis,jumat,', '9:15 AM', '8:15 PM', '1', '1', '1574232921.jpg'),
+	(4, 6, 'sumber mas', 'tsajklsad', 'asdfasf', 'Aktif', 'Ya', 'deskripsi sumber mas', 'senin,selasa,rabu,', '4:45 PM', '4:45 PM', '3', '3', '1574674737.jpg');
 /*!40000 ALTER TABLE `toko` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.users

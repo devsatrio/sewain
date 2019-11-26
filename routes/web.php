@@ -6,6 +6,12 @@ Route::get('/','frontend\homecontroller@index');
 //auth
 Auth::routes();
 
+//artikel
+Route::resource('artikel','backend\artikelcontroller');
+
+//kategori artikel
+Route::resource('kategori-artikel','backend\kategoriartikelcontroller');
+
 //admin
 Route::resource('admin','backend\admincontroller');
 

@@ -89,7 +89,8 @@
 @endsection
 
 @section('js')
-<script src="{{asset('admin_assets/bower_components/ckeditor/ckeditor.js')}}"></script>
+<!-- <script src="{{asset('admin_assets/bower_components/ckeditor/ckeditor.js')}}"></script> -->
+<script src="https://cdn.ckeditor.com/4.13.0/basic/ckeditor.js"></script>
 @endsection
 @section('customjs')
 <script src="{{asset('admin_assets/custom/setting.js')}}"></script>
