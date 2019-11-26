@@ -129,6 +129,30 @@
                                 <input type="text" name="jamtutup" class="form-control timepicker" required>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Verivikasi</label>
+                            <div class="col-sm-10">
+                                <select name="verivikasi" class="form-control">
+                                    <option value="Ya">Ya</option>
+                                    <option value="Tidak">Tidak</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Status</label>
+                            <div class="col-sm-10">
+                                <select name="status" class="form-control">
+                                    <option value="Aktif">Aktif</option>
+                                    <option value="Tidak Aktif">Tidak Aktif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Keterangan Status</label>
+                            <div class="col-sm-10">
+                                <textarea name="keterangan_status" class="form-control"></textarea>
+                            </div>
+                        </div>
                         <div class="form-group" id="grubfoto">
                             <label for="inputEmail3" class="col-sm-2 control-label">Logo Toko</label>
                             <div class="col-sm-10">

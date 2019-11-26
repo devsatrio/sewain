@@ -127,7 +127,7 @@
 <div class="modal fade" id="modal-status{{$row2->id}}" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form role="form" method="post" action="{{Route('cari-data-pengguna')}}" enctype="multipart/form-data">
+            <form role="form" method="post" action="{{Route('edit-status-pengguna')}}" enctype="multipart/form-data">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span></button>
@@ -135,25 +135,35 @@
                 </div>
                 <div class="modal-body">
                     @csrf
+                    <input type="hidden" name="kode" value="{{$row2->id}}">
+                    <div class="box-body">
+                        <label>Verivikasi</label>
+                        <div class="form-group">
+                            <select name="verivikasi" class="form-control">
+                                <option value="ya" @if($row2->verivikasi=='ya') selected @endif>Ya</option>
+                                <option value="belum" @if($row2->verivikasi=='belum') selected @endif>Tidak</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="box-body">
                         <label>Status</label>
                         <div class="form-group">
                             <select name="status" class="form-control">
-                                <option value="Aktif">Aktif</option>
-                                <option value="Tidak Aktif">Tidak Aktif</option>
+                                <option value="Aktif" @if($row2->status=='Aktif') selected @endif>Aktif</option>
+                                <option value="Tidak Aktif" @if($row2->status=='Tidak Aktif') selected @endif>Tidak Aktif</option>
                             </select>
                         </div>
                     </div>
                     <div class="box-body">
                         <label>Keterangan</label>
                         <div class="form-group">
-                            <textarea name="keterangan" class="form-control" cols="30"></textarea>
+                            <textarea name="keterangan" class="form-control" cols="30">{{$row2->keterangan_status}}</textarea>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Cari</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>

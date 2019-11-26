@@ -216,6 +216,32 @@
                                 <input type="text" value="{{$row->jam_tutup}}" name="jamtutup" class="form-control timepicker" required>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Verivikasi</label>
+                            <div class="col-sm-10">
+                                <select name="verivikasi" class="form-control">
+                                    <option value="Ya" @if($row->verivikasi_status=='Ya') selected @endif>Ya</option>
+                                    <option value="Tidak" @if($row->verivikasi_status=='Tidak') selected @endif>Tidak</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Status</label>
+                            <div class="col-sm-10">
+                                <select name="status" class="form-control">
+                                    <option value="Aktif" @if($row->status=='Aktif') selected @endif>Aktif</option>
+                                    <option value="Tidak Aktif" @if($row->status=='Tidak Aktif') selected @endif>
+                                    Tidak Aktif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Keterangan Status</label>
+                            <div class="col-sm-10">
+                                <textarea name="keterangan_status" class="form-control">{{$row->deskripsi_status}}</textarea>
+                            </div>
+                        </div>
                         <div class="form-group" id="grubfoto">
                             <label for="inputEmail3" class="col-sm-2 control-label">Logo Toko</label>
                             <div class="col-sm-10">

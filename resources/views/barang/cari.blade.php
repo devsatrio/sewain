@@ -64,7 +64,7 @@
                             </td>
                             <td class="text-center">
                                 <form action="{{url('/barang/'.$kode)}}" method="post">
-                                    <a href="{{url('barang/'.$kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
+                                    <a href="{{url('barang/'.$row->kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
                                     {{csrf_field()}}
                                     <input type="hidden" name="_method" value="delete">
                                     <button type="submit" onclick="return confirm('Hapus Data ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
@@ -88,9 +88,8 @@
 @endsection
 @section('customjs')
 <script>
-    $(function () {
+$(function () {
 $('#example1').DataTable()
-
 })
 </script>
 @endsection

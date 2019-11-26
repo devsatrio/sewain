@@ -164,7 +164,8 @@ class barangcontroller extends Controller
         $websetting = DB::table('setting')->limit(1)->get();
         $datadetail = DB::table('detail_barang')->where('kode_barang',$kode)->get();
         $datafoto = DB::table('fotobarang')->where('kode_barang',$kode)->get();
-        return view('barang.edit',['websetting'=>$websetting,'kategori'=>$kategori,'toko'=>$toko,'databarang'=>$databarang,'datasubkategori'=>$datasubkategori,'datadetail'=>$datadetail,'datafoto'=>$datafoto]);
+        $jumlahfoto = DB::table('fotobarang')->where('kode_barang',$kode)->count();
+        return view('barang.edit',['websetting'=>$websetting,'kategori'=>$kategori,'toko'=>$toko,'databarang'=>$databarang,'datasubkategori'=>$datasubkategori,'datadetail'=>$datadetail,'datafoto'=>$datafoto,'jumlahfoto'=>$jumlahfoto]);
     }
 
     //===============================================================
@@ -180,7 +181,7 @@ class barangcontroller extends Controller
             'deskripsi'=>$request->deskripsi,
             'jaminan'=>$request->jaminan
         ]);
-        return back()->with('msg','Data Berhasil Disimpan');
+        return back()->with('msgbarang','Perubahan Data Berhasil Disimpan');
     }
 
     //===============================================================
@@ -240,14 +241,29 @@ class barangcontroller extends Controller
             'diskon'=>$request->diskon
         ]);
 
-        return back()->with('status','Data Berhasil Di Update');
+        return back()->with('msgdetailbarang','Perubahan Data Berhasil Disimpan');
+    }
+
+    //================================================================
+    public function tambahdetail(Request $request){
+        DB::table('detail_barang')
+        ->insert([
+            'kode_barang'=>$request->kodeb,
+            'nama'=>$request->nama,
+            'durasi'=>$request->durasi,
+            'satuan'=>$request->satuanpaket,
+            'harga'=>$request->harga,
+            'diskon'=>$request->diskon
+        ]);
+
+        return back()->with('msgdetailbarang','Perubahan Data Berhasil Disimpan');
     }
 
     //================================================================
     public function destroydetail($kode){
         $id = Crypt::decrypt($kode);
         DB::table('detail_barang')->where('id',$id)->delete();
-        return back()->with('msg','Data Berhasil Dihapus');
+        return back()->with('msgdetailbarang','Data Berhasil Dihapus');
     }
 
     //================================================================
@@ -271,5 +287,54 @@ class barangcontroller extends Controller
             'nama'=>$input['imagename']
         ]); }
         return back()->with('msgfoto','Foto Berhasil Disimpan');
+    }
+
+    //================================================================
+    public function perbaruidetailfoto(Request $request){
+        
+            File::delete('image/barang/'.$request->gambarlama);
+            File::delete('image/barang/thumbnail/'.$request->gambarlama);
+            $image = $request->file('foto');
+            $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+         
+            $destinationPath = public_path('image/barang/thumbnail');
+            $img = Image::make($image->getRealPath());
+            $img->resize(100,null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.'/'.$input['imagename']);
+       
+            $destinationPath = public_path('image/barang');
+            $image->move($destinationPath, $input['imagename']);
+
+            DB::table('fotobarang')
+            ->where('id',$request->kode)
+            ->update([
+                'nama'=>$input['imagename']
+            ]);
+        return back()->with('msgfoto','Perubahan Foto Berhasil Disimpan');
+    }
+
+    //================================================================
+    public function destroyfoto($id){
+    $data = DB::table('fotobarang')->where('id',$id)->get();
+      foreach ($data as $row) {
+         if($row->nama!=''){
+            File::delete('image/barang/'.$row->nama);
+            File::delete('image/barang/thumbnail/'.$row->nama);
+         } 
+      }
+      DB::table('fotobarang')->where('id',$id)->delete();
+      return back()->with('msgfoto','Foto Berhasil Dihapus');
+    }
+
+    //=================================================================
+    public function updatestatus(Request $request){
+        DB::table('barang')
+        ->where('id',$request->kode)
+        ->update([
+            'status'=>$request->status,
+            'deskripsi_status'=>$request->keterangan
+        ]);
+        return redirect('barang')->with('msg','Perubahan Data Berhasil Disimpan');
     }
 }

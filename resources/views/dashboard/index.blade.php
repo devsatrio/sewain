@@ -21,6 +21,25 @@
         </h1>
     </section>
     <section class="content">
+    	<div class="box box-primary">
+            <div class="box-header ui-sortable-handle" style="cursor: move;">
+              <i class="ion ion-clipboard"></i>
+			  <h3 class="box-title">To Do List</h3>
+			</div>
+            <div class="box-body">
+              <ul class="todo-list ui-sortable">
+                <li>
+                  <span class="text">Update profile admin</span>
+                </li>
+                <li>
+                  <span class="text">CRUD Artikel</span>
+                </li>
+                <li>
+                  <span class="text">About Us</span>
+                </li>
+              </ul>
+            </div>
+          </div>
     </section>
 </div>
 @endsection

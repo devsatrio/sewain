@@ -164,6 +164,11 @@
                             </a>
                         </li>
                         <li>
+                            <a href="{{url('/slider')}}">
+                                <i class="fa fa-image"></i> <span>Slider</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{url('/setting')}}">
                                 <i class="fa fa-cog"></i> <span>Setting</span>
                             </a>

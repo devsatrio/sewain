@@ -383,4 +383,16 @@ class penggunacontroller extends Controller {
         ->get();
         return view('pengguna.cari',['data'=>$data,'datacari'=>$request->cari,'websetting'=>$websetting]);
     }
+
+    //===============================================================
+    public function editstatus(Request $request){
+        DB::table('pengguna')
+        ->where('id',$request->kode)
+        ->update([
+            'status'=>$request->status,
+            'verivikasi'=>$request->verivikasi,
+            'keterangan_status'=>$request->keterangan
+        ]);
+        return redirect('pengguna')->with('msg', 'Perubahan Data Berhasil Disimpan');
+    }
 }

@@ -33,6 +33,13 @@
                 @php
                 $kodebarangnya = $row->kode;
                 @endphp
+                @if(session('msgbarang'))
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4>Info!</h4>
+                    {{ session('msgbarang') }}
+                </div>
+                @endif
                 <form class="form-horizontal" method="post" action="{{url('barang/'.$row->kode)}}">
                     <div class="box-body">
                         <h4>Detail Barang</h4>
@@ -107,6 +114,13 @@
                 <h3 class="box-title">List Paket Harga</h3>
             </div>
             <div class="box-body">
+                @if(session('msgdetailbarang'))
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4>Info!</h4>
+                    {{ session('msgdetailbarang') }}
+                </div>
+                @endif
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -149,6 +163,10 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="box-footer">
+                <button type="button" onclick="history.go(-1)" class="btn btn-danger">Kembali</button>
+                <button type="button" class="btn btn-default pull-right"  data-toggle="modal" data-target="#modal-paket"><i class="fa fa-plus"></i> Tambah Paket</button>
             </div>
             @foreach($datadetail as $row3)
             <div class="modal fade" id="modal-edit{{$row3->id}}" style="display: none;">
@@ -214,7 +232,7 @@
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <h4>Info!</h4>
-                    {{ session('msg') }}
+                    {{ session('msgfoto') }}
                 </div>
                 @endif
                 <ul class="todo-list ui-sortable">
@@ -226,17 +244,54 @@
                         <small class="label label-success">Foto Utama</small>
                         @endif
                         <div class="tools">
-                            <i class="fa fa-edit"></i>
-                            <i class="fa fa-trash-o"></i>
+                            <button class="btn btn-success" type="button" data-toggle="modal" data-target="#modal-editfoto{{$foto->id}}"><i class="fa fa-wrench"></i>
+                            </button>
+                            @if($foto->default!='Y')
+                            <a href="{{url('barang/hapusfoto/'.$foto->id)}}" type="button" onclick="return confirm('Hapus Foto?')"class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                            @endif
                         </div>
                     </li>
                     @endforeach
                 </ul>
             </div>
-            <div class="box-footer clearfix no-border">
+            <div class="box-footer">
+                <button type="button" onclick="history.go(-1)" class="btn btn-danger">Kembali</button>
+                @if($jumlahfoto < 4)
                 <button type="button" class="btn btn-default pull-right"  data-toggle="modal" data-target="#modal-tambahfoto"><i class="fa fa-plus"></i> Tambah Foto</button>
+                @endif
             </div>
         </div>
+        @foreach($datafoto as $fotodua)
+        <div class="modal fade" id="modal-editfoto{{$fotodua->id}}" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form role="form" method="post" action="{{Route('edit-foto-barang')}}" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">Edit Data Foto</h4>
+                        </div>
+                        <div class="modal-body">
+                            @csrf
+                            <div class="box-body">
+                                <img src="{{asset('image/barang/thumbnail/'.$fotodua->nama)}}" alt="">
+                                <div class="form-group">
+                                    <label>Foto</label>
+                                    <input type="file" class="form-control" name="foto" accept="image/*" required>
+                                </div>
+                                <input type="hidden" value="{{$fotodua->nama}}" name="gambarlama">
+                                <input type="hidden" value="{{$fotodua->id}}" name="kode">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endforeach
         <div class="modal fade" id="modal-tambahfoto" style="display: none;">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -244,7 +299,7 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span></button>
-                            <h4 class="modal-title">Tambah foto</h4>
+                            <h4 class="modal-title">Tambah Foto</h4>
                         </div>
                         <div class="modal-body">
                             @csrf
@@ -252,6 +307,58 @@
                                 <div class="form-group">
                                     <label>Foto</label>
                                     <input type="file" class="form-control" name="foto" accept="image/*" required>
+                                </div>
+                                <input type="hidden" value="{{$kodebarangnya}}" name="kodeb">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modal-paket" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form role="form" method="post" action="{{Route('tambah-detail-barang')}}">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">Tambah Data Paket</h4>
+                        </div>
+                        <div class="modal-body">
+                            @csrf
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label>Nama Paket</label>
+                                    <input type="text" class="form-control" name="nama" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Durasi</label>
+                                    <div class="row">
+                                        <div class="col-xs-7">
+                                            <input type="text" class="form-control" name="durasi" required>
+                                        </div>
+                                        <div class="col-xs-5">
+                                            <select name="satuanpaket" class="form-control">
+                                                <option value="Jam">Jam
+                                                </option>
+                                                <option value="Hari">Hari</option>
+                                                <option value="Bulan">Bulan</option>
+                                                <option value="Tahun">Tahun</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Harga</label>
+                                    <input type="number" class="form-control" name="harga" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Diskon</label>
+                                    <input type="number" class="form-control" name="diskon" required>
                                 </div>
                                 <input type="hidden" value="{{$kodebarangnya}}" name="kodeb">
                             </div>
