@@ -121,7 +121,7 @@ $newkode = Crypt::encrypt($row2->id);
             <h4 class="modal-title">Edit Data</h4>
         </div>
         <div class="modal-body">
-            <form role="form" method="post" action="{{url('kategori/'.$newkode)}}" enctype="multipart/form-data">
+            <form role="form" method="post" action="{{url('kategori-artikel/'.$newkode)}}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="_method" value="put">
                 <div class="box-body">

@@ -28,11 +28,13 @@ CREATE TABLE IF NOT EXISTS `artikel` (
   `tgl` date DEFAULT NULL,
   `gambar` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.artikel: ~0 rows (approximately)
+-- Dumping data for table db_sewa.artikel: ~1 rows (approximately)
 DELETE FROM `artikel`;
 /*!40000 ALTER TABLE `artikel` DISABLE KEYS */;
+INSERT INTO `artikel` (`id`, `id_kategori`, `judul`, `isi`, `penulis`, `tgl`, `gambar`) VALUES
+	(1, 1, 'artikel pertama', '<p>isi artikel pertama baru</p>', 1, '2019-11-27', '1574857675.jpg');
 /*!40000 ALTER TABLE `artikel` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.barang
@@ -135,15 +137,14 @@ CREATE TABLE IF NOT EXISTS `kategori_artikel` (
   `nama` varchar(50) DEFAULT NULL,
   `status` enum('Aktif','Tidak Aktif') DEFAULT 'Aktif',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.kategori_artikel: ~0 rows (approximately)
+-- Dumping data for table db_sewa.kategori_artikel: ~2 rows (approximately)
 DELETE FROM `kategori_artikel`;
 /*!40000 ALTER TABLE `kategori_artikel` DISABLE KEYS */;
 INSERT INTO `kategori_artikel` (`id`, `nama`, `status`) VALUES
 	(1, 'berita', 'Aktif'),
-	(2, 'kabara baru', 'Aktif'),
-	(3, 'hal halo', 'Tidak Aktif');
+	(2, 'kabara baru ljjklj', 'Aktif');
 /*!40000 ALTER TABLE `kategori_artikel` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.kota
@@ -212,16 +213,17 @@ CREATE TABLE IF NOT EXISTS `pengguna` (
   `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` enum('Aktif','Tidak Aktif') COLLATE utf8mb4_unicode_ci DEFAULT 'Aktif',
   `verivikasi` enum('ya','belum') COLLATE utf8mb4_unicode_ci DEFAULT 'belum',
+  `premium` enum('ya','belum') COLLATE utf8mb4_unicode_ci DEFAULT 'belum',
   `keterangan_status` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table db_sewa.pengguna: ~1 rows (approximately)
+-- Dumping data for table db_sewa.pengguna: ~2 rows (approximately)
 DELETE FROM `pengguna`;
 /*!40000 ALTER TABLE `pengguna` DISABLE KEYS */;
-INSERT INTO `pengguna` (`id`, `name`, `username`, `email`, `alamat`, `telp`, `tgl_lahir`, `gender`, `foto`, `foto_ktp`, `password`, `status`, `verivikasi`, `keterangan_status`) VALUES
-	(4, 'jina sukarti', 'jinasukarti', 'satriosuklun@gmail.com', 'bandung', '14045', '1998-12-12', 'Wanita', '17563715581573996970.jpg', '596509124.1573910977.jpg', '$2y$10$.13N3Hob/jHiHGYx.y7xWeav2Y.CrbsSBL03Ye.COu7H4rL6n/lHK', 'Aktif', 'ya', NULL),
-	(6, 'heru adi satrio', 'heruadi', 'snackymart@gmail.com', 'gurah', '209348920', '1998-09-09', 'Wanita', '4816952641574216244.jpg', '20009885841574216247.jpg', '$2y$10$R6JqwAbd8k.q/2rFYswZ.Oek4X92aT7wtDhsnuWM69ICpqJ1T5l9W', 'Aktif', 'ya', NULL);
+INSERT INTO `pengguna` (`id`, `name`, `username`, `email`, `alamat`, `telp`, `tgl_lahir`, `gender`, `foto`, `foto_ktp`, `password`, `status`, `verivikasi`, `premium`, `keterangan_status`) VALUES
+	(4, 'jina sukarti', 'jinasukarti', 'satriosuklun@gmail.com', 'bandung', '14045', '1998-12-12', 'Wanita', '17563715581573996970.jpg', '596509124.1573910977.jpg', '$2y$10$.13N3Hob/jHiHGYx.y7xWeav2Y.CrbsSBL03Ye.COu7H4rL6n/lHK', 'Aktif', 'ya', 'belum', NULL),
+	(6, 'heru adi satrio', 'heruadi', 'snackymart@gmail.com', 'gurah', '209348920', '1998-09-09', 'Wanita', '4816952641574216244.jpg', '20009885841574216247.jpg', '$2y$10$R6JqwAbd8k.q/2rFYswZ.Oek4X92aT7wtDhsnuWM69ICpqJ1T5l9W', 'Aktif', 'ya', 'belum', NULL);
 /*!40000 ALTER TABLE `pengguna` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.provinsi
@@ -288,7 +290,7 @@ CREATE TABLE IF NOT EXISTS `subkategori` (
   CONSTRAINT `FK_subkategori_kategori` FOREIGN KEY (`id_kategori`) REFERENCES `kategori` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.subkategori: ~6 rows (approximately)
+-- Dumping data for table db_sewa.subkategori: ~3 rows (approximately)
 DELETE FROM `subkategori`;
 /*!40000 ALTER TABLE `subkategori` DISABLE KEYS */;
 INSERT INTO `subkategori` (`id`, `id_kategori`, `nama`, `status`) VALUES
@@ -306,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `toko` (
   `deskripsi` text DEFAULT NULL,
   `alamat` text DEFAULT NULL,
   `status` enum('Aktif','Tidak Aktif') DEFAULT 'Aktif',
-  `verivikasi_status` enum('Ya','Tidak') DEFAULT 'Ya',
+  `verivikasi_status` enum('Ya','Tidak') DEFAULT 'Tidak',
   `deskripsi_status` text DEFAULT NULL,
   `hari_buka` varchar(150) DEFAULT NULL,
   `jam_buka` varchar(20) DEFAULT NULL,

@@ -35,7 +35,7 @@ class kategoriartikelcontroller extends Controller
     }
 
     //===============================================================
-    public function update(Request $request, $id)
+    public function update(Request $request, $kode)
     {
         $id = Crypt::decrypt($kode);
         DB::table('kategori_artikel')

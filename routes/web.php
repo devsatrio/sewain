@@ -8,6 +8,8 @@ Auth::routes();
 
 //artikel
 Route::resource('artikel','backend\artikelcontroller');
+Route::post('artikel/caridata','backend\artikelcontroller@caridata')
+->name('cari-data-artikel');
 
 //kategori artikel
 Route::resource('kategori-artikel','backend\kategoriartikelcontroller');
