@@ -66,14 +66,17 @@
                         <td>{{$row->namakategori}}</td>
                         <td>{{$row->tgl}}</td>
                         <td class="text-center">
-                            <form action="{{url('/artikel/'.$kode)}}" method="post">
-                                <a href="{{url('artikel/'.$kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
-                                
-                                {{csrf_field()}}
-                                <input type="hidden" name="_method" value="delete">
-                                <button type="submit" onclick="return confirm('Hapus Data ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
-                            </form>
-                        </td>
+                                <form action="{{url('/artikel/'.$kode)}}" method="post">
+                                    @if($aksesedit>0)
+                                    <a href="{{url('artikel/'.$kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
+                                    @endif
+                                    {{csrf_field()}}
+                                    <input type="hidden" name="_method" value="delete">
+                                    @if($aksesdelete>0)
+                                    <button type="submit" onclick="return confirm('Hapus Data ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                    @endif
+                                </form>
+                            </td>
                     </tr>
                     @endforeach
                 </tbody>

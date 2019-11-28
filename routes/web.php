@@ -14,6 +14,12 @@ Route::post('artikel/caridata','backend\artikelcontroller@caridata')
 //kategori artikel
 Route::resource('kategori-artikel','backend\kategoriartikelcontroller');
 
+//akses
+Route::resource('akses','backend\aksescontroller');
+
+//roles
+Route::resource('permission','backend\permissionscontroller');
+
 //roles
 Route::resource('roles','backend\rolescontroller');
 

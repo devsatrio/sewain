@@ -21,14 +21,21 @@ USE `db_sewa`;
 DROP TABLE IF EXISTS `akses`;
 CREATE TABLE IF NOT EXISTS `akses` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(50) DEFAULT NULL,
-  `aksi` varchar(50) DEFAULT NULL,
+  `id_roles` int(11) DEFAULT NULL,
+  `id_permission` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.akses: ~0 rows (approximately)
+-- Dumping data for table db_sewa.akses: ~3 rows (approximately)
 DELETE FROM `akses`;
 /*!40000 ALTER TABLE `akses` DISABLE KEYS */;
+INSERT INTO `akses` (`id`, `id_roles`, `id_permission`) VALUES
+	(2, 2, 2),
+	(3, 2, 6),
+	(4, 1, 1),
+	(5, 1, 2),
+	(6, 1, 3),
+	(7, 1, 4);
 /*!40000 ALTER TABLE `akses` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.artikel
@@ -244,14 +251,20 @@ INSERT INTO `pengguna` (`id`, `name`, `username`, `email`, `alamat`, `telp`, `tg
 DROP TABLE IF EXISTS `permission`;
 CREATE TABLE IF NOT EXISTS `permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_roles` int(11) DEFAULT NULL,
-  `id_akses` int(11) DEFAULT NULL,
+  `modul` varchar(50) DEFAULT NULL,
+  `aksi` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.permission: ~0 rows (approximately)
+-- Dumping data for table db_sewa.permission: ~5 rows (approximately)
 DELETE FROM `permission`;
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
+INSERT INTO `permission` (`id`, `modul`, `aksi`) VALUES
+	(1, 'Artikel', 'Tambah Data'),
+	(2, 'Artikel', 'View Data'),
+	(3, 'Artikel', 'Edit Data'),
+	(4, 'Artikel', 'Hapus Data'),
+	(6, 'Kategori Artikel', 'View Data');
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.provinsi
@@ -277,17 +290,15 @@ CREATE TABLE IF NOT EXISTS `roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nama` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.roles: ~5 rows (approximately)
+-- Dumping data for table db_sewa.roles: ~3 rows (approximately)
 DELETE FROM `roles`;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
 INSERT INTO `roles` (`id`, `nama`) VALUES
 	(1, 'Programmer'),
 	(2, 'Super Admin'),
-	(3, 'Admin'),
-	(5, 'Costumer Service'),
-	(6, 'penulis artikel');
+	(7, 'admin');
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.setting
@@ -390,14 +401,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table db_sewa.users: ~4 rows (approximately)
+-- Dumping data for table db_sewa.users: ~3 rows (approximately)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `username`, `alamat`, `telp`, `level`, `email`, `foto`, `password`, `remember_token`) VALUES
 	(1, 'deva satrio damara', 'deva', 'asdf', '9273894', 1, 'satriosuklun@gmail.com', '1573878422.jpg', '$2y$10$3WctH0m2YvIAG/iq48coke8Fdc7q8bZNwQLjP4W4JOAF3I2ScSVj2', NULL),
-	(5, 'heru adi', 'heruadi', 'gurah, kediri magersari', '209348920', 2, 'satriosuklun1@gmail.com', '1573878044.jpg', '$2y$10$lFKc6dPH97anoZYGUZTReOIVmgNeF3yvlsDZRlyM7Uk3YwpwOKZzy', NULL),
-	(6, 'heri sumartio', 'hersumar', 'gurah', '2039489', 2, 'satriosuklun1@gmail.com', '1573878759.jpg', '$2y$10$O41tDu5PYs5l7SF4LfHUnOEEhJlW49PZVAPpMJhnmSFNgycyOMq/y', NULL),
-	(7, 'haha', 'hahahahaha', 'aklsdfjkasdjf', '203948290', 6, 'sa@gmail.com', '1574917456.jpg', '$2y$10$b3IWqtM4w0Pc4NmJPfF6PuKif.tJPHG9vgxYrwqhvQ6499TWV1E9y', NULL);
+	(5, 'jian fitri aprilia', 'jianfitri', 'gurah, kediri magersari', '209348920', 2, 'satriosuklun1@gmail.com', '1574947664.png', '$2y$10$lFKc6dPH97anoZYGUZTReOIVmgNeF3yvlsDZRlyM7Uk3YwpwOKZzy', NULL),
+	(6, 'heri sumartio', 'hersumar', 'gurah', '2039489', 2, 'satriosuklun1@gmail.com', '1573878759.jpg', '$2y$10$O41tDu5PYs5l7SF4LfHUnOEEhJlW49PZVAPpMJhnmSFNgycyOMq/y', NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

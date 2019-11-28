@@ -96,7 +96,7 @@
                                             {{ Auth::user()->name }} - 
                                             <?php
                                             $level = DB::table('roles')
-                                            ->where('id',Auth::user()->id)
+                                            ->where('id',Auth::user()->level)
                                             ->get();
                                             foreach ($level as $lv) {
                                                 echo $lv->nama;
@@ -197,8 +197,8 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li><a href="{{url('roles')}}"><i class="fa fa-black-tie"></i> Roles</a></li>
-                                <li><a href="#"><i class="fa fa-key"></i> Permissions</a></li>
-                                <li><a href="#"><i class="fa fa-tags"></i> Akses</a></li>
+                                <li><a href="{{url('permission')}}"><i class="fa fa-key"></i> Permissions</a></li>
+                                <li><a href="{{url('akses')}}"><i class="fa fa-tags"></i> Akses</a></li>
                             </ul>
                         </li>
                         <li>

@@ -39,7 +39,9 @@
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-cari">
                     Cari Dari Semua Data
                     </button>
+                    @if($aksescreate>0)
                     <a href="{{url('artikel/create')}}" class="btn btn-success">Tambah Data</a>
+                    @endif
                 </div></div>
                 <div class="box-body"><table id="example1" class="table table-bordered table-striped">
                     <thead>
@@ -72,11 +74,14 @@
                             <td>{{$row->tgl}}</td>
                             <td class="text-center">
                                 <form action="{{url('/artikel/'.$kode)}}" method="post">
+                                    @if($aksesedit>0)
                                     <a href="{{url('artikel/'.$kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
-                                    
+                                    @endif
                                     {{csrf_field()}}
                                     <input type="hidden" name="_method" value="delete">
+                                    @if($aksesdelete>0)
                                     <button type="submit" onclick="return confirm('Hapus Data ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                    @endif
                                 </form>
                             </td>
                         </tr>

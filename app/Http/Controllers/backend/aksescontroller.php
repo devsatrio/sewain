@@ -1,84 +1,64 @@
 <?php
-
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\backend;
+ini_set('max_execution_time', 180);
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 class aksescontroller extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    //===============================================================
     public function index()
     {
-        //
+        $data = DB::table('roles')->get();
+        $websetting = DB::table('setting')->limit(1)->get();
+        return view('akses.index',['data'=>$data,'websetting'=>$websetting]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //===============================================================
     public function create()
     {
-        //
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //===============================================================
     public function store(Request $request)
     {
-        //
+         DB::table('akses')
+        ->insert([
+            'id_roles'=>$request->roles,
+            'id_permission'=>$request->permission
+        ]);
+        return back()->with('msg','Data Berhasil Disimpan');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    //===============================================================
+    public function show($kode)
     {
-        //
+        $id = Crypt::decrypt($kode);
+        $dataroles = DB::table('roles')->where('id',$id)->get();
+        $permission = DB::table('permission')->get();
+        $datapermission = DB::table('akses')
+        ->select(DB::raw('akses.*,roles.nama as namarole,permission.modul,permission.aksi'))
+        ->leftjoin('roles','roles.id','=','akses.id_roles')
+        ->leftjoin('permission','permission.id','=','akses.id_permission')
+        ->where('id_roles',$id)
+        ->get();
+        $websetting = DB::table('setting')->limit(1)->get();
+        return view('akses.show',['permission'=>$permission,'data'=>$datapermission,'dataroles'=>$dataroles,'websetting'=>$websetting]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    //===============================================================
+    public function destroy($kode)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $id = Crypt::decrypt($kode);
+        DB::table('akses')->where('id',$id)->delete();
+        return back()->with('msg','Data Berhasil Dihapus');
     }
 }
