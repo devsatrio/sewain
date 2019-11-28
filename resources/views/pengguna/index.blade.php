@@ -61,9 +61,16 @@
                         <tr>
                             <td>{{$i++}}</td>
                             <td>
+                                @if($row->premium=='belum')
                                  <a href="{{url('pengguna/'.$kode)}}" class="btn btn-default btn-xs">
                                    <i class="fa fa-eye"></i> {{$row->name}}  
-                                 </a></td>
+                                 </a>
+                                @else
+                                <a href="{{url('pengguna/'.$kode)}}" class="btn btn-primary btn-xs">
+                                   <i class="fa fa-eye"></i> {{$row->name}}  
+                                 </a>
+                                @endif
+                             </td>
                             <td>{{$row->telp}}</td>
                             <td>{{$row->gender}}</td>
                             <td>
@@ -79,8 +86,6 @@
                                  - @if($row->verivikasi=='ya') Terverivikasi @else Belum Verivikasi @endif 
                             </td>
                             <td class="text-center">
-                                
-                                
                                 <form action="{{url('/pengguna/'.$kode)}}" method="post">
                                     <a href="{{url('pengguna/'.$kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
                                     
@@ -142,6 +147,15 @@
                             <select name="verivikasi" class="form-control">
                                 <option value="ya" @if($row2->verivikasi=='ya') selected @endif>Ya</option>
                                 <option value="belum" @if($row2->verivikasi=='belum') selected @endif>Tidak</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <label>Premium</label>
+                        <div class="form-group">
+                            <select name="premium" class="form-control">
+                                <option value="ya" @if($row2->premium=='ya') selected @endif>Ya</option>
+                                <option value="belum" @if($row2->premium=='belum') selected @endif>Tidak</option>
                             </select>
                         </div>
                     </div>

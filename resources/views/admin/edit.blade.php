@@ -22,7 +22,7 @@
     <section class="content">
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">Tambah Data Admin</h3>
+                <h3 class="box-title">Edit Data Admin</h3>
             </div>
             @foreach($data as $row)
              @php
@@ -65,9 +65,9 @@
                         <label for="inputEmail3" class="col-sm-2 control-label">Level</label>
                         <div class="col-sm-10">
                             <select name="level" class="form-control">
-                                <option value="Admin" @if($row->level=='Admin') selected @endif>Admin</option>
-                                <option value="Super Admin" @if($row->level=='Super Admin') selected @endif>Super Admin</option>
-                                <option value="Programmer" @if($row->level=='Programmer') selected @endif>Programmer</option>
+                                @foreach($dataroles as $dr)
+                                <option value="{{$dr->id}}" @if($row->level==$dr->id) selected @endif>{{$dr->nama}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

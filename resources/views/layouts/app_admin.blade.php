@@ -93,13 +93,21 @@
                                     <li class="user-header">
                                         <img src="{{asset('image/admin/'.Auth::user()->foto)}}" class="img-circle" alt="User Image">
                                         <p>
-                                            {{ Auth::user()->name }} - {{ Auth::user()->level }}
+                                            {{ Auth::user()->name }} - 
+                                            <?php
+                                            $level = DB::table('roles')
+                                            ->where('id',Auth::user()->id)
+                                            ->get();
+                                            foreach ($level as $lv) {
+                                                echo $lv->nama;
+                                            }
+                                            ?>
                                             <small>{{ Auth::user()->email }}</small>
                                         </p>
                                     </li>
                                     <li class="user-footer">
                                         <div class="pull-left">
-                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                            <a href="{{route('edit-profile')}}" class="btn btn-default btn-flat">Profile</a>
                                         </div>
                                         <div class="pull-right">
                                             <a class="btn btn-default btn-flat" href="{{ route('admlogout') }}"
@@ -179,6 +187,19 @@
                             <a href="{{url('/slider')}}">
                                 <i class="fa fa-image"></i> <span>Slider</span>
                             </a>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-lock"></i> <span>Hak Akses</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="{{url('roles')}}"><i class="fa fa-black-tie"></i> Roles</a></li>
+                                <li><a href="#"><i class="fa fa-key"></i> Permissions</a></li>
+                                <li><a href="#"><i class="fa fa-tags"></i> Akses</a></li>
+                            </ul>
                         </li>
                         <li>
                             <a href="{{url('/setting')}}">

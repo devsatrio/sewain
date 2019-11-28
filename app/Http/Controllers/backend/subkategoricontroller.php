@@ -11,7 +11,7 @@ class subkategoricontroller extends Controller
     {
         $this->middleware('auth');
     }
-
+    //===============================================================
     public function index()
     {
         $data = DB::table('subkategori')

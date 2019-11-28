@@ -389,6 +389,7 @@ class penggunacontroller extends Controller {
         DB::table('pengguna')
         ->where('id',$request->kode)
         ->update([
+            'premium'=>$request->premium,
             'status'=>$request->status,
             'verivikasi'=>$request->verivikasi,
             'keterangan_status'=>$request->keterangan

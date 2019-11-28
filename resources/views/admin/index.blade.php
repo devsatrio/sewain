@@ -63,14 +63,14 @@
                                 data-telp="{{$row->telp}}"
                                 data-email="{{$row->email}}"
                                 data-alamat="{{$row->alamat}}"
-                                data-level="{{$row->level}}"
+                                data-level="{{$row->leveluser}}"
                                 data-foto="{{$row->foto}}">
                                 {{$row->username}}
                                 </button>
                             </td>
                             <td>{{$row->telp}}</td>
                             <td>{{$row->email}}</td>
-                            <td>{{$row->level}}</td>
+                            <td>{{$row->leveluser}}</td>
                             <td class="text-center">
                                 @php
                                 $kode = Crypt::encrypt($row->id);

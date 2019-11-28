@@ -20,7 +20,10 @@ class admincontroller extends Controller
     public function index()
     {
         $websetting = DB::table('setting')->limit(1)->get();
-        $data = DB::table('users')->get();
+        $data = DB::table('users')
+        ->select(DB::raw('users.*,roles.nama as leveluser'))
+        ->leftjoin('roles','roles.id','=','users.level')
+        ->get();
         return view('admin.index',['data'=>$data,'websetting'=>$websetting]);
     }
 
@@ -28,7 +31,8 @@ class admincontroller extends Controller
     public function create()
     {
         $websetting = DB::table('setting')->limit(1)->get();
-        return view('admin.create',['websetting'=>$websetting]);
+        $dataroles = DB::table('roles')->get();
+        return view('admin.create',['dataroles'=>$dataroles,'websetting'=>$websetting]);
     }
 
     //===============================================================
@@ -67,8 +71,9 @@ class admincontroller extends Controller
     {
         $id = Crypt::decrypt($kode);
         $data = DB::table('users')->where('id',$id)->get();
+        $dataroles = DB::table('roles')->get();
         $websetting = DB::table('setting')->limit(1)->get();
-        return view('admin.edit',['data'=>$data,'websetting'=>$websetting]);
+        return view('admin.edit',['dataroles'=>$dataroles,'data'=>$data,'websetting'=>$websetting]);
     }
 
     //===============================================================

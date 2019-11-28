@@ -14,6 +14,9 @@ Route::post('artikel/caridata','backend\artikelcontroller@caridata')
 //kategori artikel
 Route::resource('kategori-artikel','backend\kategoriartikelcontroller');
 
+//roles
+Route::resource('roles','backend\rolescontroller');
+
 //admin
 Route::resource('admin','backend\admincontroller');
 
@@ -67,6 +70,9 @@ Route::post('pengguna/editstatus','backend\penggunacontroller@editstatus')
 
 //dashboard
 Route::get('/dashboard', 'backend\dashboardcontroller@index');
+Route::get('/dashboard/editprofile','backend\dashboardcontroller@editprofile')
+->name('edit-profile');
+Route::post('editprofile/{id}','backend\dashboardcontroller@aksieditprofile');
 
 //home
 Route::get('/home', 'frontend\homecontroller@index');

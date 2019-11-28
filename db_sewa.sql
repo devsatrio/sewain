@@ -17,6 +17,20 @@ DROP DATABASE IF EXISTS `db_sewa`;
 CREATE DATABASE IF NOT EXISTS `db_sewa` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `db_sewa`;
 
+-- Dumping structure for table db_sewa.akses
+DROP TABLE IF EXISTS `akses`;
+CREATE TABLE IF NOT EXISTS `akses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama` varchar(50) DEFAULT NULL,
+  `aksi` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table db_sewa.akses: ~0 rows (approximately)
+DELETE FROM `akses`;
+/*!40000 ALTER TABLE `akses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `akses` ENABLE KEYS */;
+
 -- Dumping structure for table db_sewa.artikel
 DROP TABLE IF EXISTS `artikel`;
 CREATE TABLE IF NOT EXISTS `artikel` (
@@ -30,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `artikel` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Dumping data for table db_sewa.artikel: ~1 rows (approximately)
+-- Dumping data for table db_sewa.artikel: ~2 rows (approximately)
 DELETE FROM `artikel`;
 /*!40000 ALTER TABLE `artikel` DISABLE KEYS */;
 INSERT INTO `artikel` (`id`, `id_kategori`, `judul`, `isi`, `penulis`, `tgl`, `gambar`) VALUES
@@ -226,6 +240,20 @@ INSERT INTO `pengguna` (`id`, `name`, `username`, `email`, `alamat`, `telp`, `tg
 	(6, 'heru adi satrio', 'heruadi', 'snackymart@gmail.com', 'gurah', '209348920', '1998-09-09', 'Wanita', '4816952641574216244.jpg', '20009885841574216247.jpg', '$2y$10$R6JqwAbd8k.q/2rFYswZ.Oek4X92aT7wtDhsnuWM69ICpqJ1T5l9W', 'Aktif', 'ya', 'belum', NULL);
 /*!40000 ALTER TABLE `pengguna` ENABLE KEYS */;
 
+-- Dumping structure for table db_sewa.permission
+DROP TABLE IF EXISTS `permission`;
+CREATE TABLE IF NOT EXISTS `permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_roles` int(11) DEFAULT NULL,
+  `id_akses` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Dumping data for table db_sewa.permission: ~0 rows (approximately)
+DELETE FROM `permission`;
+/*!40000 ALTER TABLE `permission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `permission` ENABLE KEYS */;
+
 -- Dumping structure for table db_sewa.provinsi
 DROP TABLE IF EXISTS `provinsi`;
 CREATE TABLE IF NOT EXISTS `provinsi` (
@@ -242,6 +270,25 @@ INSERT INTO `provinsi` (`id`, `nama`, `aktif`) VALUES
 	(1, 'jawa timur', 'Y'),
 	(3, 'jawa barat', 'Y');
 /*!40000 ALTER TABLE `provinsi` ENABLE KEYS */;
+
+-- Dumping structure for table db_sewa.roles
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE IF NOT EXISTS `roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+-- Dumping data for table db_sewa.roles: ~5 rows (approximately)
+DELETE FROM `roles`;
+/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` (`id`, `nama`) VALUES
+	(1, 'Programmer'),
+	(2, 'Super Admin'),
+	(3, 'Admin'),
+	(5, 'Costumer Service'),
+	(6, 'penulis artikel');
+/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 
 -- Dumping structure for table db_sewa.setting
 DROP TABLE IF EXISTS `setting`;
@@ -335,21 +382,22 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alamat` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `telp` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `level` enum('Admin','Super Admin','Programmer') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Admin',
+  `level` int(11) DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `foto` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table db_sewa.users: ~3 rows (approximately)
+-- Dumping data for table db_sewa.users: ~4 rows (approximately)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `username`, `alamat`, `telp`, `level`, `email`, `foto`, `password`, `remember_token`) VALUES
-	(1, 'deva', 'deva', 'asdf', '9273894', 'Programmer', 'satriosuklun@gmail.com', '1573878422.jpg', '$2y$10$3WctH0m2YvIAG/iq48coke8Fdc7q8bZNwQLjP4W4JOAF3I2ScSVj2', NULL),
-	(5, 'heru adi', 'heruadi', 'gurah, kediri', '209348920', 'Admin', 'satriosuklun1@gmail.com', '1573878044.jpg', '$2y$10$lFKc6dPH97anoZYGUZTReOIVmgNeF3yvlsDZRlyM7Uk3YwpwOKZzy', NULL),
-	(6, 'heri sumartio', 'hersumar', 'gurah', '2039489', 'Super Admin', 'satriosuklun1@gmail.com', '1573878759.jpg', '$2y$10$O41tDu5PYs5l7SF4LfHUnOEEhJlW49PZVAPpMJhnmSFNgycyOMq/y', NULL);
+	(1, 'deva satrio damara', 'deva', 'asdf', '9273894', 1, 'satriosuklun@gmail.com', '1573878422.jpg', '$2y$10$3WctH0m2YvIAG/iq48coke8Fdc7q8bZNwQLjP4W4JOAF3I2ScSVj2', NULL),
+	(5, 'heru adi', 'heruadi', 'gurah, kediri magersari', '209348920', 2, 'satriosuklun1@gmail.com', '1573878044.jpg', '$2y$10$lFKc6dPH97anoZYGUZTReOIVmgNeF3yvlsDZRlyM7Uk3YwpwOKZzy', NULL),
+	(6, 'heri sumartio', 'hersumar', 'gurah', '2039489', 2, 'satriosuklun1@gmail.com', '1573878759.jpg', '$2y$10$O41tDu5PYs5l7SF4LfHUnOEEhJlW49PZVAPpMJhnmSFNgycyOMq/y', NULL),
+	(7, 'haha', 'hahahahaha', 'aklsdfjkasdjf', '203948290', 6, 'sa@gmail.com', '1574917456.jpg', '$2y$10$b3IWqtM4w0Pc4NmJPfF6PuKif.tJPHG9vgxYrwqhvQ6499TWV1E9y', NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

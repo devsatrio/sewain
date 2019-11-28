@@ -81,6 +81,12 @@
                             <p>&nbsp;:&nbsp;{{$row->verivikasi}}</p>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">User Premium</label>
+                        <div class="col-sm-10">
+                            <p>&nbsp;:&nbsp;{{$row->premium}}</p>
+                        </div>
+                    </div>
                     <div class="form-group" id="grubfoto">
                         <label for="inputEmail3" class="col-sm-2 control-label">Foto</label>
                         <div class="col-sm-10">

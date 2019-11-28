@@ -21,6 +21,13 @@
         </h1>
     </section>
     <section class="content">
+       @if (session('msg'))
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4>Info!</h4>
+            {{ session('msg') }}
+        </div>
+        @endif
     	<div class="box box-primary">
             <div class="box-header ui-sortable-handle" style="cursor: move;">
               <i class="ion ion-clipboard"></i>
