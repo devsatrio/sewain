@@ -30,12 +30,19 @@ class aksescontroller extends Controller
     //===============================================================
     public function store(Request $request)
     {
-         DB::table('akses')
-        ->insert([
-            'id_roles'=>$request->roles,
-            'id_permission'=>$request->permission
-        ]);
-        return back()->with('msg','Data Berhasil Disimpan');
+        $jumlah = DB::table('akses')->where([['id_roles','=',$request->roles],['id_permission','=',$request->permission]])->count();
+        if($jumlah>0){
+            return back()->with('msgerror','Maaf Data Sama');
+        }else{
+            DB::table('akses')
+            ->insert([
+                'id_roles'=>$request->roles,
+                'id_permission'=>$request->permission
+            ]);
+            return back()->with('msg','Data Berhasil Disimpan'); 
+        }
+        
+       
     }
 
     //===============================================================
@@ -49,6 +56,7 @@ class aksescontroller extends Controller
         ->leftjoin('roles','roles.id','=','akses.id_roles')
         ->leftjoin('permission','permission.id','=','akses.id_permission')
         ->where('id_roles',$id)
+        ->orderby('akses.id','desc')
         ->get();
         $websetting = DB::table('setting')->limit(1)->get();
         return view('akses.show',['permission'=>$permission,'data'=>$datapermission,'dataroles'=>$dataroles,'websetting'=>$websetting]);

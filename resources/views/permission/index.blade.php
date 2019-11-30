@@ -32,6 +32,13 @@
                     {{ session('msg') }}
                 </div>
                 @endif
+                @if (session('msgerror'))
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4>Info!</h4>
+                    {{ session('msgerror') }}
+                </div>
+                @endif
                 <div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title">List Data Permission</h3>
@@ -58,9 +65,7 @@
                                     @php
                                     $kode = Crypt::encrypt($row->id);
                                     @endphp
-                                    
                                     <form action="{{url('/permission/'.$kode)}}" method="post">
-                                        
                                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-default{{$row->id}}">
                                         <i class="fa fa-wrench"></i>
                                         </button>
@@ -102,8 +107,17 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Permission</label>
-                            <input type="text" class="form-control" name="nama" required>
+                            <label for="exampleInputEmail1">Permission Utama</label>
+                            <select name="nama" class="form-control">
+                                <option value="View Data">View Data</option>
+                                <option value="Tambah Data">Tambah Data</option>
+                                <option value="Edit Data">Edit Data</option>
+                                <option value="Hapus Data">Hapus Data</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Custom Permission</label>
+                            <input type="text" class="form-control" name="namalain">
                         </div>
                         
                     </div>

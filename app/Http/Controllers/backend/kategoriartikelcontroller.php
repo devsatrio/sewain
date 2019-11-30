@@ -8,19 +8,29 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 use Image;
+use Aksespengguna;
 class kategoriartikelcontroller extends Controller
 {
+    private $halaman ='Kategori Artikel';
     public function __construct()
     {
         $this->middleware('auth');
     }
 
+    //===============================================================
     public function index()
     {
-        $data = DB::table('kategori_artikel')->get();
-        $websetting = DB::table('setting')->limit(1)->get();
-        return view('kategoriartikel.index',['data'=>$data,'websetting'=>$websetting]);
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
+        if($aksesnya['view']>0){
+            $data = DB::table('kategori_artikel')->get();
+            $websetting = DB::table('setting')->limit(1)->get();
+            return view('kategoriartikel.index',['data'=>$data,'websetting'=>$websetting,'aksescreate'=>$aksesnya['create'],'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit']]);
+        }else{
+            return view('error.404',['websetting'=>$websetting]);  
+        }
     }
 
     //===============================================================

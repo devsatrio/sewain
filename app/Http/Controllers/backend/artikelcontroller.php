@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\backend;
 ini_set('max_execution_time', 180);
 use Illuminate\Http\Request;
@@ -14,7 +13,6 @@ use Aksespengguna;
 class artikelcontroller extends Controller
 {
     private $halaman ='Artikel';
-    private $view,$edit,$create,$delete;
     public function __construct()
     {
         $this->middleware('auth');
@@ -23,29 +21,20 @@ class artikelcontroller extends Controller
     //===============================================================
     public function index()
     {
-        $akses = Aksespengguna::coba(Auth::user()->level,$this->halaman);
-            foreach ($akses as $aks) {
-                if($aks->aksi=='View Data'){
-                    $this->view=1;
-                }elseif($aks->aksi=='Tambah Data'){
-                    $this->create =1;
-                }elseif($aks->aksi=='Hapus Data'){
-                    $this->delete =1;
-                }elseif($aks->aksi=='Edit Data'){
-                    $this->edit =1;
-                }
-            }
-            if($this->view>0){
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['view']>0){
                 $data = DB::table('artikel')
                 ->select(DB::raw('artikel.*,kategori_artikel.nama as namakategori,users.name as namauser'))
                 ->leftjoin('kategori_artikel','kategori_artikel.id','=','artikel.id_kategori')
                 ->leftjoin('users','users.id','=','artikel.penulis')
                 ->paginate(40);
-                $websetting = DB::table('setting')->limit(1)->get();
+                
                 return view('artikel.index',
-                    ['data' => $data,'websetting'=>$websetting,'aksescreate'=>$this->create,'aksesdelete'=>$this->delete,'aksesedit'=>$this->edit]); 
+                    ['data' => $data,'websetting'=>$websetting,'aksescreate'=>$aksesnya['create'],'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit']]); 
             }else{
-               return view('error.404'); 
+               return view('error.404',['websetting'=>$websetting]); 
             }
         
     }
@@ -53,24 +42,18 @@ class artikelcontroller extends Controller
     //===============================================================
     public function create()
     {
-        $akses = Aksespengguna::coba(Auth::user()->level,$this->halaman);
-            foreach ($akses as $aks) {
-                if($aks->aksi=='View Data'){
-                    $this->view=1;
-                }elseif($aks->aksi=='Tambah Data'){
-                    $this->create =1;
-                }
-            }
-        if($this->view>0){
-            if($this->create>0){
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['view']>0){
+            if($aksesnya['create']>0){
             $datakategori = DB::table('kategori_artikel')->get();
-            $websetting = DB::table('setting')->limit(1)->get();
             return view('artikel.create', ['datakategori'=>$datakategori,'websetting'=>$websetting]);
             }else{
-            return view('error.404'); 
+            return view('error.404',['websetting'=>$websetting]); 
             }
         }else{
-            return view('error.404'); 
+            return view('error.404',['websetting'=>$websetting]);
         }
     }
 
@@ -106,15 +89,10 @@ class artikelcontroller extends Controller
     //===============================================================
     public function show($kode)
     {
-        $akses = Aksespengguna::coba(Auth::user()->level,$this->halaman);
-            foreach ($akses as $aks) {
-                if($aks->aksi=='View Data'){
-                    $this->view=1;
-                }elseif($aks->aksi=='Tambah Data'){
-                    $this->create =1;
-                }
-            }
-        if($this->view>0){
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['view']>0){
             $id = Crypt::decrypt($kode);
             $data = DB::table('artikel')
             ->select(DB::raw('artikel.*,kategori_artikel.nama as namakategori,users.name as namauser'))
@@ -122,26 +100,20 @@ class artikelcontroller extends Controller
             ->leftjoin('users','users.id','=','artikel.penulis')
             ->where('artikel.id',$id)
             ->get();
-            $websetting = DB::table('setting')->limit(1)->get();
             return view('artikel.show',['data'=>$data,'websetting'=>$websetting]);
         }else{
-            return view('error.404'); 
+            return view('error.404',['websetting'=>$websetting]); 
         }
     }
 
     //===============================================================
     public function edit($kode)
     {
-        $akses = Aksespengguna::coba(Auth::user()->level,$this->halaman);
-            foreach ($akses as $aks) {
-                if($aks->aksi=='View Data'){
-                    $this->view=1;
-                }elseif($aks->aksi=='Edit Data'){
-                    $this->edit =1;
-                }
-            }
-        if($this->view>0){
-            if($this->edit>0){
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['view']>0){
+            if($aksesnya['edit']>0){
                 $id = Crypt::decrypt($kode);
                 $datakategori = DB::table('kategori_artikel')->get();
                 $data = DB::table('artikel')
@@ -150,13 +122,12 @@ class artikelcontroller extends Controller
                 ->leftjoin('users','users.id','=','artikel.penulis')
                 ->where('artikel.id',$id)
                 ->get();
-                $websetting = DB::table('setting')->limit(1)->get();
                 return view('artikel.edit',['datakategori'=>$datakategori,'data'=>$data,'websetting'=>$websetting]);
             }else{
-                return view('error.404'); 
+                return view('error.404',['websetting'=>$websetting]); 
             }
         }else{
-            return view('error.404'); 
+            return view('error.404',['websetting'=>$websetting]); 
         }
     }
 
@@ -219,27 +190,19 @@ class artikelcontroller extends Controller
 
     //===============================================================
     public function caridata(Request $request){
-        $akses = Aksespengguna::coba(Auth::user()->level,$this->halaman);
-            foreach ($akses as $aks) {
-                if($aks->aksi=='View Data'){
-                    $this->view=1;
-                }elseif($aks->aksi=='Hapus Data'){
-                    $this->delete =1;
-                }elseif($aks->aksi=='Edit Data'){
-                    $this->edit =1;
-                }
-            }
-            if($this->view>0){
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+            if($aksesnya['view']>0){
                 $data = DB::table('artikel')
                 ->select(DB::raw('artikel.*,kategori_artikel.nama as namakategori,users.name as namauser'))
                 ->leftjoin('kategori_artikel','kategori_artikel.id','=','artikel.id_kategori')
                 ->leftjoin('users','users.id','=','artikel.penulis')
                 ->where('artikel.judul','like','%'.$request->cari.'%')
                 ->get();
-                $websetting = DB::table('setting')->limit(1)->get();
-                return view('artikel.cari',['cari'=>$request->cari,'data'=>$data,'websetting'=>$websetting,'aksesdelete'=>$this->delete,'aksesedit'=>$this->edit]);
+                return view('artikel.cari',['cari'=>$request->cari,'data'=>$data,'websetting'=>$websetting,'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit']]);
             }else{
-                return view('error.404'); 
+                return view('error.404',['websetting'=>$websetting]);  
             }
     }
 }

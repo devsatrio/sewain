@@ -5,8 +5,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
+use Aksespengguna;
 class kotacontroller extends Controller
 {
+    private $halaman ='Kota';
     public function __construct()
     {
         $this->middleware('auth');
@@ -15,10 +18,16 @@ class kotacontroller extends Controller
     //===============================================================
     public function index()
     {
-        $data = DB::table('kota')->get();
-        $dataprovinsi = DB::table('provinsi')->get();
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
         $websetting = DB::table('setting')->limit(1)->get();
-        return view('kota.index',['data'=>$data,'websetting'=>$websetting,'dataprovinsi'=>$dataprovinsi]);
+        if($aksesnya['view']>0){
+            $data = DB::table('kota')->get();
+            $dataprovinsi = DB::table('provinsi')->get();
+            return view('kota.index',['data'=>$data,'websetting'=>$websetting,'dataprovinsi'=>$dataprovinsi,'aksescreate'=>$aksesnya['create'],'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit']]);
+        }else{
+            return view('error.404',['websetting'=>$websetting]);
+        }
     }
 
     //===============================================================

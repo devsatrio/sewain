@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
+use Aksespengguna;
 class provinsicontroller extends Controller
 {
+    private $halaman ='Provinsi';
     public function __construct()
     {
         $this->middleware('auth');
@@ -16,9 +19,15 @@ class provinsicontroller extends Controller
     //===============================================================
     public function index()
     {
-        $data = DB::table('provinsi')->get();
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
         $websetting = DB::table('setting')->limit(1)->get();
-        return view('provinsi.index',['data'=>$data,'websetting'=>$websetting]);
+        if($aksesnya['view']>0){
+            $data = DB::table('provinsi')->get();
+            return view('provinsi.index',['data'=>$data,'websetting'=>$websetting,'aksescreate'=>$aksesnya['create'],'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit']]);
+        }else{
+            return view('error.404',['websetting'=>$websetting]);  
+        }
     }
 
     //===============================================================

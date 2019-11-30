@@ -16,7 +16,7 @@ class permissionscontroller extends Controller
     //===============================================================
     public function index()
     {
-        $data = DB::table('permission')->get();
+        $data = DB::table('permission')->orderby('id','desc')->get();
         $websetting = DB::table('setting')->limit(1)->get();
         return view('permission.index',['data'=>$data,'websetting'=>$websetting]);
     }
@@ -24,12 +24,24 @@ class permissionscontroller extends Controller
     //===============================================================
     public function store(Request $request)
     {
-        DB::table('permission')
-        ->insert([
-            'modul'=>$request->modul,
-            'aksi'=>$request->nama
-        ]);
+        $nama = '';
+        if ($request->namalain!=''){
+            $nama=$request->namalain;
+        }else{
+            $nama=$request->nama;
+        }
+        $jumlah = DB::table('permission')->where([['modul','=',$request->modul],['aksi','=',$nama]])->count();
+        if ($jumlah>0) {
+        return redirect('permission')->with('msgerror','Data Tidak Boleh Sama');
+        }else{
+            DB::table('permission')
+            ->insert([
+                'modul'=>$request->modul,
+                'aksi'=>$nama
+            ]);
         return redirect('permission')->with('msg','Data Berhasil Disimpan');
+        }
+        
     }
 
     //===============================================================
@@ -40,7 +52,7 @@ class permissionscontroller extends Controller
         ->where('id',$id)
         ->update([
             'modul'=>$request->modul,
-            'aksi'=>$request->nama
+            'aksi'=>$request->nama,
         ]);
         return redirect('permission')->with('msg','Perubahan Data Berhasil Disimpan');
     }

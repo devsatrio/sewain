@@ -24,7 +24,11 @@
     </section>
     <section class="content">
         <div class="row">
+            @if($aksescreate>0)
             <div class="col-md-8">
+            @else
+            <div class="col-md-12">
+            @endif
                 @if (session('msg'))
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -72,6 +76,7 @@
                 </div>
             </div>
         </div>
+        @if($aksescreate>0)
         <div class="col-md-4">
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -102,10 +107,11 @@
                 </form>
             </div>
         </div>
+        @endif
     </div>
-    
 </section>
 </div>
+@if($aksesedit>0)
 @foreach($data as $row2)
 @php
 $newkode = Crypt::encrypt($row2->id);
@@ -145,11 +151,10 @@ $newkode = Crypt::encrypt($row2->id);
             </form>
         </div>
     </div>
-    <!-- /.modal-content -->
 </div>
-<!-- /.modal-dialog -->
 </div>
 @endforeach
+@endif
 @endsection
 @section('js')
 <script src="{{asset('admin_assets/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>

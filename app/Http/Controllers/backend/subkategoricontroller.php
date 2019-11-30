@@ -5,22 +5,32 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
+use Aksespengguna;
 class subkategoricontroller extends Controller
 {
-   public function __construct()
+    private $halaman ='Sub Kategori';
+    public function __construct()
     {
         $this->middleware('auth');
     }
     //===============================================================
     public function index()
     {
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+
+        if($aksesnya['view']>0){
         $data = DB::table('subkategori')
         ->select(DB::raw('subkategori.*,kategori.nama as namakategori'))
         ->leftjoin('kategori','kategori.id','=','subkategori.id_kategori')
         ->get();
         $datakategori = DB::table('kategori')->get();
-        $websetting = DB::table('setting')->limit(1)->get();
-        return view('subkategori.index',['data'=>$data,'datakategori'=>$datakategori,'websetting'=>$websetting]);
+        return view('subkategori.index',['data'=>$data,'datakategori'=>$datakategori,'websetting'=>$websetting,'aksescreate'=>$aksesnya['create'],'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit']]);
+        }else{
+            return view('error.404',['websetting'=>$websetting]);
+        }
     }
 
     //===============================================================

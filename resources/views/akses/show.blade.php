@@ -33,6 +33,13 @@
                     {{ session('msg') }}
                 </div>
                 @endif
+                @if (session('msgerror'))
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4>Info!</h4>
+                    {{ session('msgerror') }}
+                </div>
+                @endif
                 <div class="box box-primary">
                     <div class="box-header">
                         @foreach($dataroles as $dr)
@@ -74,6 +81,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <a href="{{url('akses')}}" class="btn btn-danger">kembali</a>
                 </div>
             </div>
         </div>
