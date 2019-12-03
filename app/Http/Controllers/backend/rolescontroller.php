@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 class rolescontroller extends Controller
 {
     public function __construct()
@@ -15,9 +16,13 @@ class rolescontroller extends Controller
     //===============================================================
     public function index()
     {
-        $data = DB::table('roles')->get();
         $websetting = DB::table('setting')->limit(1)->get();
+        if(Auth::user()->level=='1'){
+        $data = DB::table('roles')->get();
         return view('roles.index',['data'=>$data,'websetting'=>$websetting]);
+        }else{
+            return view('error.404',['websetting'=>$websetting]);  
+        }
     }
 
     //===============================================================

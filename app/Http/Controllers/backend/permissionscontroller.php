@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 class permissionscontroller extends Controller
 {
     public function __construct()
@@ -16,9 +17,13 @@ class permissionscontroller extends Controller
     //===============================================================
     public function index()
     {
-        $data = DB::table('permission')->orderby('id','desc')->get();
         $websetting = DB::table('setting')->limit(1)->get();
+        if(Auth::user()->level=='1'){
+        $data = DB::table('permission')->orderby('id','desc')->get();
         return view('permission.index',['data'=>$data,'websetting'=>$websetting]);
+        }else{
+            return view('error.404',['websetting'=>$websetting]);  
+        }
     }
 
     //===============================================================

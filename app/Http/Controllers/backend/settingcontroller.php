@@ -7,9 +7,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
+use Aksespengguna;
 use Image;
 class settingcontroller extends Controller
 {
+    private $halaman ='Setting';
     public function __construct()
     {
         $this->middleware('auth');
@@ -18,12 +21,18 @@ class settingcontroller extends Controller
     //===============================================================
     public function index()
     {
-        $data = DB::table('setting')
-        ->orderby('id','desc')
-        ->limit(1)
-        ->get();
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
         $websetting = DB::table('setting')->limit(1)->get();
-        return view('setting.index',['data'=>$data,'websetting'=>$websetting]);
+        if($aksesnya['edit']>0){
+            $data = DB::table('setting')
+            ->orderby('id','desc')
+            ->limit(1)
+            ->get();
+            return view('setting.index',['data'=>$data,'websetting'=>$websetting]);
+        }else{
+           return view('error.404',['websetting'=>$websetting]); 
+        }
     }
 
     //===============================================================

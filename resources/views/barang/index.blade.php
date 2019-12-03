@@ -36,7 +36,9 @@
                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-cari">
                     Cari Dari Semua Data
                     </button>
+                    @if($aksescreate>0)
                     <a href="{{url('barang/create')}}" class="btn btn-success">Tambah Data</a>
+                    @endif
                 </div></div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
@@ -72,6 +74,7 @@
                                     {{$row->tgl_post}}
                                 </td>
                                 <td class="text-center">
+                                    @if($aksesstatus>0)
                                     @if($row->status=='Aktif')
                                     <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal-status{{$row->id}}">
                                     {{$row->status}}
@@ -81,13 +84,20 @@
                                     {{$row->status}}
                                     </button>
                                     @endif
+                                    @else
+                                    {{$row->status}}
+                                    @endif
                                 </td>
                                 <td class="text-center">
                                     <form action="{{url('/barang/'.$kode)}}" method="post">
+                                        @if($aksesedit>0)
                                         <a href="{{url('barang/'.$row->kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
+                                        @endif
                                         {{csrf_field()}}
                                         <input type="hidden" name="_method" value="delete">
+                                        @if($aksesdelete>0)
                                         <button type="submit" onclick="return confirm('Hapus Data ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                        @endif
                                     </form>
                                 </td>
                             </tr>
@@ -124,7 +134,8 @@
             </div>
         </div>
     </div>
-    @foreach($data as $row2)
+@if($aksesstatus>0)
+@foreach($data as $row2)
 <div class="modal fade" id="modal-status{{$row2->id}}" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -162,6 +173,7 @@
     </div>
 </div>
 @endforeach
+@endif
     @endsection
     @section('js')
     <script src="{{asset('admin_assets/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>

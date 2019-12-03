@@ -50,23 +50,51 @@
                         $i=1;
                         @endphp
                         @foreach($data as $row)
-                        <tr>
-                            <td>{{$i++}}</td>
-                            <td>{{$row->name}}</td>
-                            <td>{{$row->telp}}</td>
-                            <td>{{$row->gender}}</td>
-                            <td>{{$row->status}}</td>
-                            <td class="text-center">
-                                @php
+                         @php
                                 $kode = Crypt::encrypt($row->id);
                                 @endphp
+                        <tr>
+                            <td>{{$i++}}</td>
+                            <td>@if($row->premium=='belum')
+                                 <a href="{{url('pengguna/'.$kode)}}" class="btn btn-default btn-xs">
+                                   <i class="fa fa-eye"></i> {{$row->name}}  
+                                 </a>
+                                @else
+                                <a href="{{url('pengguna/'.$kode)}}" class="btn btn-primary btn-xs">
+                                   <i class="fa fa-eye"></i> {{$row->name}}  
+                                 </a>
+                                @endif</td>
+                            <td>{{$row->telp}}</td>
+                            <td>{{$row->gender}}</td>
+                            <td>
+                                @if($aksesstatus>0)
+                                @if($row->status=='Aktif')
+                                 <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal-status{{$row->id}}">
+                                {{$row->status}}
+                                </button>
+                                @else
+                                <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal-status{{$row->id}}">
+                                {{$row->status}}
+                                </button>
+                                @endif
+                                 
+                                 @else
+                                 {{$row->status}}
+                                 @endif
+                                 - @if($row->verivikasi=='ya') Terverivikasi @else Belum Verivikasi @endif 
+                            </td>
+                            <td class="text-center">
+                               
                                 
                                 <form action="{{url('/pengguna/'.$kode)}}" method="post">
+                                    @if($aksesedit>0)
                                     <a href="{{url('pengguna/'.$kode.'/edit')}}" class="btn btn-primary btn-xs"><i class="fa fa-wrench"></i></a>
-                                    
+                                    @endif
                                     {{csrf_field()}}
                                     <input type="hidden" name="_method" value="delete">
+                                    @if($aksesdelete>0)
                                     <button type="submit" onclick="return confirm('Hapus Data ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                    @endif
                                 </form>
                             </td>
                         </tr>
@@ -78,6 +106,62 @@
         </div>
     </section>
 </div>
+@foreach($data as $row2)
+<div class="modal fade" id="modal-status{{$row2->id}}" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" method="post" action="{{Route('edit-status-pengguna')}}" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Edit Status User</h4>
+                </div>
+                <div class="modal-body">
+                    @csrf
+                    <input type="hidden" name="kode" value="{{$row2->id}}">
+                    <div class="box-body">
+                        <label>Verivikasi</label>
+                        <div class="form-group">
+                            <select name="verivikasi" class="form-control">
+                                <option value="ya" @if($row2->verivikasi=='ya') selected @endif>Ya</option>
+                                <option value="belum" @if($row2->verivikasi=='belum') selected @endif>Tidak</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <label>Premium</label>
+                        <div class="form-group">
+                            <select name="premium" class="form-control">
+                                <option value="ya" @if($row2->premium=='ya') selected @endif>Ya</option>
+                                <option value="belum" @if($row2->premium=='belum') selected @endif>Tidak</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <label>Status</label>
+                        <div class="form-group">
+                            <select name="status" class="form-control">
+                                <option value="Aktif" @if($row2->status=='Aktif') selected @endif>Aktif</option>
+                                <option value="Tidak Aktif" @if($row2->status=='Tidak Aktif') selected @endif>Tidak Aktif</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <label>Keterangan</label>
+                        <div class="form-group">
+                            <textarea name="keterangan" class="form-control" cols="30">{{$row2->keterangan_status}}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
 @endsection
 @section('js')
 <script src="{{asset('admin_assets/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>

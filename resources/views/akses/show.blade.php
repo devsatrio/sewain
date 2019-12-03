@@ -50,7 +50,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center">No</th>
-                                <th>Roles</th>
+                                
                                 <th>Modul</th>
                                 <th>Permission</th>
                                 <th class="text-center">Aksi</th>
@@ -63,7 +63,6 @@
                             @foreach($data as $row)
                             <tr>
                                 <td class="text-center">{{$i++}}</td>
-                                <td>{{$row->namarole}}</td>
                                 <td>{{$row->modul}}</td>
                                 <td>{{$row->aksi}}</td>
                                 <td class="text-center">

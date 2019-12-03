@@ -80,8 +80,12 @@ Route::get('/dashboard/editprofile','backend\dashboardcontroller@editprofile')
 ->name('edit-profile');
 Route::post('editprofile/{id}','backend\dashboardcontroller@aksieditprofile');
 
+//============================================================================
 //home
 Route::get('/home', 'frontend\homecontroller@index');
+
+//
+Route::get('/semua-produk', 'frontend\semuaprodukcontroller@index');
 
 //login user
 Route::get('pengguna-login','Auth\PenggunaLoginController@showLoginForm');

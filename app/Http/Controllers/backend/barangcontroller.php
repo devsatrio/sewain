@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
+use Aksespengguna;
 use Image;
 class barangcontroller extends Controller
 {
+    private $halaman ='Barang';
     public function __construct()
     {
         $this->middleware('auth');
@@ -18,43 +20,60 @@ class barangcontroller extends Controller
     //===============================================================
     public function index()
     {
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setaksesbarang($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['view']>0){
         $data = DB::table('barang')
         ->select(DB::raw('barang.*,kategori.nama as namakategori, subkategori.nama as namasubkategori,toko.nama as namatoko'))
         ->leftjoin('kategori','kategori.id','=','barang.kategori')
         ->leftjoin('subkategori','subkategori.id','=','barang.sub_kategori')
         ->leftjoin('toko','toko.id','=','barang.id_toko')
         ->paginate(40);
-        $websetting = DB::table('setting')->limit(1)->get();
-        return view('barang.index',['data'=>$data,'websetting'=>$websetting]);
+        return view('barang.index',['data'=>$data,'websetting'=>$websetting,'aksescreate'=>$aksesnya['create'],'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit'],'aksesstatus'=>$aksesnya['status']]);
+        }else{
+          return view('error.404',['websetting'=>$websetting]);   
+        }
     }
 
     //===============================================================
     public function create()
     {
-        $kodeuser = sprintf("%02s",Auth::user()->id);
-        $tgl = date('dmy');
-        $finalkode ='';
-
-        $kode = DB::table('barang')
-        ->where('kode','like','%'.$tgl.'-'.$kodeuser.'%')
-        ->max('kode');
-
-        if($kode==''){
-            $finalkode = "BRG".$tgl."-".$kodeuser."-0001";
-        }else{
-             $caridata = DB::table('barang')
-            ->where('kode',$kode)->get();
-            foreach ($caridata as $row) {
-                $newkode    = explode("-", $kode);
-                $nomer      = sprintf("%04s",$newkode[2]+1);
-                $finalkode  = "BRG".$tgl."-".$kodeuser."-".$nomer; 
-            }
-           
-        }
-        $toko = DB::table('toko')->get();
-        $kategori = DB::table('kategori')->get();
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setaksesbarang($akses);
         $websetting = DB::table('setting')->limit(1)->get();
-        return view('barang.create',['websetting'=>$websetting,'kategori'=>$kategori,'toko'=>$toko,'kode'=>$finalkode]);
+        
+        if($aksesnya['view']>0){
+            if($aksesnya['create']>0){
+                $kodeuser = sprintf("%02s",Auth::user()->id);
+                $tgl = date('dmy');
+                $finalkode ='';
+
+                $kode = DB::table('barang')
+                ->where('kode','like','%'.$tgl.'-'.$kodeuser.'%')
+                ->max('kode');
+
+                if($kode==''){
+                    $finalkode = "BRG".$tgl."-".$kodeuser."-0001";
+                }else{
+                     $caridata = DB::table('barang')
+                    ->where('kode',$kode)->get();
+                    foreach ($caridata as $row) {
+                        $newkode    = explode("-", $kode);
+                        $nomer      = sprintf("%04s",$newkode[2]+1);
+                        $finalkode  = "BRG".$tgl."-".$kodeuser."-".$nomer; 
+                    }
+                   
+                }
+                $toko = DB::table('toko')->get();
+                $kategori = DB::table('kategori')->get();
+                return view('barang.create',['websetting'=>$websetting,'kategori'=>$kategori,'toko'=>$toko,'kode'=>$finalkode]);
+            }else{
+               return view('error.404',['websetting'=>$websetting]); 
+            }
+        }else{
+            return view('error.404',['websetting'=>$websetting]); 
+        }
     }
 
     //===============================================================
@@ -137,6 +156,10 @@ class barangcontroller extends Controller
     //===============================================================
     public function show($kode)
     {
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setaksesbarang($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['view']>0){
         $data = DB::table('barang')
         ->select(DB::raw('barang.*,kategori.nama as namakategori,subkategori.nama as namasubkategori,toko.nama as namatoko'))
         ->leftjoin('kategori','kategori.id','=','barang.kategori')
@@ -146,13 +169,20 @@ class barangcontroller extends Controller
         ->get();
         $datadetail = DB::table('detail_barang')->where('kode_barang',$kode)->get();
         $datafoto = DB::table('fotobarang')->where('kode_barang',$kode)->get();
-        $websetting = DB::table('setting')->limit(1)->get();
         return view('barang.show',['datadetail'=>$datadetail,'datafoto'=>$datafoto,'data'=>$data,'websetting'=>$websetting]);
+        }else{
+            return view('error.404',['websetting'=>$websetting]); 
+        }
     }
 
     //===============================================================
     public function edit($kode)
     {
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setaksesbarang($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['view']>0){
+            if($aksesnya['create']>0){
         $idkat ='';
         $databarang = DB::table('barang')->where('kode',$kode)->get();
         foreach ($databarang as $dbarang) {
@@ -161,11 +191,16 @@ class barangcontroller extends Controller
         $datasubkategori = DB::table('subkategori')->where('id_kategori',$idkat)->get();
         $toko = DB::table('toko')->get();
         $kategori = DB::table('kategori')->get();
-        $websetting = DB::table('setting')->limit(1)->get();
         $datadetail = DB::table('detail_barang')->where('kode_barang',$kode)->get();
         $datafoto = DB::table('fotobarang')->where('kode_barang',$kode)->get();
         $jumlahfoto = DB::table('fotobarang')->where('kode_barang',$kode)->count();
         return view('barang.edit',['websetting'=>$websetting,'kategori'=>$kategori,'toko'=>$toko,'databarang'=>$databarang,'datasubkategori'=>$datasubkategori,'datadetail'=>$datadetail,'datafoto'=>$datafoto,'jumlahfoto'=>$jumlahfoto]);
+        }else{
+               return view('error.404',['websetting'=>$websetting]); 
+            }
+        }else{
+            return view('error.404',['websetting'=>$websetting]); 
+        }
     }
 
     //===============================================================
@@ -218,6 +253,10 @@ class barangcontroller extends Controller
 
     //================================================================
     public function caridata(Request $request){
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setaksesbarang($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['view']>0){
         $data = DB::table('barang')
         ->select(DB::raw('barang.*,kategori.nama as namakategori, subkategori.nama as namasubkategori,toko.nama as namatoko'))
         ->leftjoin('kategori','kategori.id','=','barang.kategori')
@@ -225,8 +264,10 @@ class barangcontroller extends Controller
         ->leftjoin('toko','toko.id','=','barang.id_toko')
         ->where('barang.nama','like','%'.$request->cari.'%')
         ->get();
-        $websetting = DB::table('setting')->limit(1)->get();
-        return view('barang.cari',['data'=>$data,'websetting'=>$websetting,'datacari'=>$request->cari]);
+        return view('barang.cari',['data'=>$data,'websetting'=>$websetting,'datacari'=>$request->cari,'aksescreate'=>$aksesnya['create'],'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit'],'aksesstatus'=>$aksesnya['status']]);
+        }else{
+          return view('error.404',['websetting'=>$websetting]);   
+        }
     }
 
     //================================================================

@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
+use Aksespengguna;
 use Image;
 class admincontroller extends Controller
 {
+    private $halaman ='Admin';
     public function __construct()
     {
         $this->middleware('auth');
@@ -19,20 +22,32 @@ class admincontroller extends Controller
     //===============================================================
     public function index()
     {
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
         $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['view']>0){
         $data = DB::table('users')
         ->select(DB::raw('users.*,roles.nama as leveluser'))
         ->leftjoin('roles','roles.id','=','users.level')
         ->get();
-        return view('admin.index',['data'=>$data,'websetting'=>$websetting]);
+        return view('admin.index',['data'=>$data,'websetting'=>$websetting,'aksescreate'=>$aksesnya['create'],'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit']]);
+         }else{
+          return view('error.404',['websetting'=>$websetting]);   
+        }
     }
 
     //===============================================================
     public function create()
     {
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
         $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['create']>0){
         $dataroles = DB::table('roles')->get();
         return view('admin.create',['dataroles'=>$dataroles,'websetting'=>$websetting]);
+        }else{
+               return view('error.404',['websetting'=>$websetting]); 
+            }
     }
 
     //===============================================================
@@ -69,11 +84,17 @@ class admincontroller extends Controller
     //===============================================================
     public function edit($kode)
     {
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setakses($akses);
+        $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['edit']>0){
         $id = Crypt::decrypt($kode);
         $data = DB::table('users')->where('id',$id)->get();
         $dataroles = DB::table('roles')->get();
-        $websetting = DB::table('setting')->limit(1)->get();
         return view('admin.edit',['dataroles'=>$dataroles,'data'=>$data,'websetting'=>$websetting]);
+        }else{
+               return view('error.404',['websetting'=>$websetting]); 
+            }
     }
 
     //===============================================================

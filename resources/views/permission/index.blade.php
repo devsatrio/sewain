@@ -113,6 +113,7 @@
                                 <option value="Tambah Data">Tambah Data</option>
                                 <option value="Edit Data">Edit Data</option>
                                 <option value="Hapus Data">Hapus Data</option>
+                                <option value="Update Status">Update Status</option>
                             </select>
                         </div>
                         <div class="form-group">

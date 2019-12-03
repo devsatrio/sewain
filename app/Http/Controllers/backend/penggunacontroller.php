@@ -8,18 +8,27 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Aksespengguna;
 use Image;
 
 class penggunacontroller extends Controller {
+    private $halaman ='Pengguna';
 	public function __construct() {
 		$this->middleware('auth');
 	}
 
 	//===============================================================
 	public function index() {
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setaksesbarang($akses);
         $websetting = DB::table('setting')->limit(1)->get();
-		$data = DB::table('pengguna')->paginate(40);
-		return view('pengguna.index', ['data' => $data,'websetting'=>$websetting]);
+        if($aksesnya['view']>0){
+		$data = DB::table('pengguna')->orderby('id','desc')->paginate(40);
+		return view('pengguna.index', ['data' => $data,'websetting'=>$websetting,'aksescreate'=>$aksesnya['create'],'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit'],'aksesstatus'=>$aksesnya['status']]);
+        }else{
+          return view('error.404',['websetting'=>$websetting]);   
+        }
 	}
 
 	//===============================================================
@@ -376,12 +385,18 @@ class penggunacontroller extends Controller {
     
     //===============================================================
     public function caridata(Request $request){
+        $akses = Aksespengguna::cariakses(Auth::user()->level,$this->halaman);
+        $aksesnya = Aksespengguna::setaksesbarang($akses);
         $websetting = DB::table('setting')->limit(1)->get();
+        if($aksesnya['view']>0){
         $data = DB::table('pengguna')
         ->where('name','like','%'.$request->cari.'%')
         ->orwhere('username','like','%'.$request->cari.'%')
         ->get();
-        return view('pengguna.cari',['data'=>$data,'datacari'=>$request->cari,'websetting'=>$websetting]);
+        return view('pengguna.cari',['data'=>$data,'datacari'=>$request->cari,'websetting'=>$websetting,'aksesdelete'=>$aksesnya['delete'],'aksesedit'=>$aksesnya['edit'],'aksesstatus'=>$aksesnya['status']]);
+        }else{
+          return view('error.404',['websetting'=>$websetting]);   
+        }
     }
 
     //===============================================================

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
+use Aksespengguna;
 use Image;
 class dashboardcontroller extends Controller
 {
@@ -20,8 +21,11 @@ class dashboardcontroller extends Controller
     //===============================================================
     public function index()
     {
-    	$websetting = DB::table('setting')->limit(1)->get();
-        return view('dashboard.index',['websetting'=>$websetting]);
+        $jumlahuser = DB::table('pengguna')->count();
+        $websetting = DB::table('setting')->limit(1)->get();
+        $jumlahtoko = DB::table('toko')->count();
+        $jumlahadmin = DB::table('users')->count();
+        return view('dashboard.index',['websetting'=>$websetting,'jumlahuser'=>$jumlahuser,'jumlahtoko'=>$jumlahtoko,'jumlahadmin'=>$jumlahadmin]);
     }
 
     //===============================================================

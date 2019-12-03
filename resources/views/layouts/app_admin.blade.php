@@ -18,6 +18,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
+
         <!-- Site wrapper -->
         <div class="wrapper">
             <header class="main-header">
@@ -127,6 +128,9 @@
                 </nav>
             </header>
             <!-- =============================================== -->
+            @php
+        $listakses = Aksespengguna::daftarakses(Auth::user()->level);
+        @endphp
             <aside class="main-sidebar">
                 <section class="sidebar">
                     <ul class="sidebar-menu" data-widget="tree">
@@ -136,6 +140,7 @@
                                 <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                             </a>
                         </li>
+                        @if($listakses['Admin']>0 || $listakses['Pengguna']>0 || $listakses['Kategori']>0 || $listakses['Sub Kategori']>0 || $listakses['Provinsi']>0 || $listakses['Kota']>0)
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-file"></i> <span>Master Data</span>
@@ -144,10 +149,19 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
+                                @if($listakses['Admin']>0)
                                 <li><a href="{{url('/admin')}}"><i class="fa fa-child"></i> Admin</a></li>
+                                @endif
+                                @if($listakses['Pengguna']>0)
                                 <li><a href="{{url('/pengguna')}}"><i class="fa fa-users"></i> Pengguna</a></li>
+                                @endif
+                                @if($listakses['Kategori']>0)
                                 <li><a href="{{url('kategori')}}"><i class="fa fa-th-large"></i> Kategori</a></li>
+                                @endif
+                                @if($listakses['Sub Kategori']>0)
                                 <li><a href="{{url('sub-kategori')}}"><i class="fa fa-th"></i> Sub Kategori</a></li>
+                                @endif
+                                @if($listakses['Provinsi']>0 || $listakses['Kota']>0)
                                 <li class="treeview">
                                     <a href="#"><i class="fa fa-map"></i> Provinsi & Kab/Kota
                                         <span class="pull-right-container">
@@ -155,22 +169,33 @@
                                         </span>
                                     </a>
                                     <ul class="treeview-menu">
+                                        @if($listakses['Provinsi']>0)
                                         <li><a href="{{url('provinsi')}}"><i class="fa fa-circle-o"></i> Provinsi</a></li>
+                                        @endif
+                                        @if($listakses['Kota']>0)
                                         <li><a href="{{url('kota')}}"><i class="fa fa-circle-o"></i> Kota</a></li>
+                                        @endif
                                     </ul>
                                 </li>
+                                @endif
                             </ul>
                         </li>
+                        @endif
+                        @if($listakses['Toko']>0)
                         <li>
                             <a href="{{url('/toko')}}">
                                 <i class="fa fa-building"></i> <span>Toko</span>
                             </a>
                         </li>
+                        @endif
+                        @if($listakses['Barang']>0)
                         <li>
                             <a href="{{url('/barang')}}">
                                 <i class="fa fa-archive"></i> <span>Barang</span>
                             </a>
                         </li>
+                        @endif
+                         @if($listakses['Kategori Artikel']>0 || $listakses['Artikel']>0)
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-newspaper-o"></i> <span>Artikel</span>
@@ -179,15 +204,23 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
+                                @if($listakses['Kategori Artikel']>0)
                                 <li><a href="{{url('/kategori-artikel')}}"><i class="fa fa-thumb-tack"></i> Kategori</a></li>
+                                @endif
+                                @if($listakses['Artikel']>0)
                                 <li><a href="{{url('/artikel')}}"><i class="fa fa-file-text-o"></i> Artikel</a></li>
+                                @endif
                             </ul>
                         </li>
+                        @endif
+                        @if($listakses['Slider']>0)
                         <li>
                             <a href="{{url('/slider')}}">
                                 <i class="fa fa-image"></i> <span>Slider</span>
                             </a>
                         </li>
+                        @endif
+                        @if(Auth::user()->level=='1')
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-lock"></i> <span>Hak Akses</span>
@@ -201,11 +234,14 @@
                                 <li><a href="{{url('akses')}}"><i class="fa fa-tags"></i> Akses</a></li>
                             </ul>
                         </li>
+                        @endif
+                        @if($listakses['Setting']>0)
                         <li>
                             <a href="{{url('/setting')}}">
                                 <i class="fa fa-cog"></i> <span>Setting</span>
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </section>
             </aside>
