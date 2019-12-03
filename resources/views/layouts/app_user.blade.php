@@ -163,6 +163,6 @@
         <script src="{{asset('user_assets/js/jquery.magnific-popup.min.js')}}"></script>
         <script src="{{asset('user_assets/js/aos.js')}}"></script>
         <script src="{{asset('user_assets/js/main.js')}}"></script>
-        
+        @yield('customjs')
     </body>
 </html>

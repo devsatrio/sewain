@@ -109,5 +109,5 @@
 @endsection
 
 @section('customjs')
- <script src="{{asset('admin_assets/custom/admin.js')}}"></script>
+ <script src="{{asset('user_assets/custom/register.js')}}"></script>
 @endsection
