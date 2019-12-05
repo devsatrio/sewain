@@ -55,7 +55,7 @@
                 </form>
             </div>
             <div class="col-md-7 ml-auto">
-                <h2 class="h3 mb-3 text-black">Buak Akun Baru</h2>
+                <h2 class="h3 mb-3 text-black">Buat Akun Baru</h2>
                 @if(session('successmsg'))
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>

@@ -17,7 +17,7 @@ Route::resource('kategori-artikel','backend\kategoriartikelcontroller');
 //akses
 Route::resource('akses','backend\aksescontroller');
 
-//roles
+//permission
 Route::resource('permission','backend\permissionscontroller');
 
 //roles
@@ -84,8 +84,22 @@ Route::post('editprofile/{id}','backend\dashboardcontroller@aksieditprofile');
 //home
 Route::get('/home', 'frontend\homecontroller@index');
 
-//
+//semua produk
 Route::get('/semua-produk', 'frontend\semuaprodukcontroller@index');
+
+//semua toko
+Route::get('/semua-toko', 'frontend\semuatokocontroller@index');
+
+//Tips menyewa
+Route::get('/tips-menyewa', 'frontend\halamanlaincontroller@tipssewa');
+
+//List Artikel
+Route::get('/list-artikel', 'frontend\halamanlaincontroller@artikel');
+
+//akun
+Route::get('/detail-akun', 'frontend\akuncontroller@index');
+Route::get('/edit-akun', 'frontend\akuncontroller@edit');
+Route::post('/edit-akun/{kode}', 'frontend\akuncontroller@update');
 
 //login user
 Route::get('pengguna-login','Auth\PenggunaLoginController@showLoginForm');

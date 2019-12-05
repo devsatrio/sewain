@@ -37,7 +37,15 @@
                                 <div class="site-top-icons">
                                     <ul>
                                         @if(Auth::guard('pengguna')->check())
-                                        <li><a href="#"><span class="icon icon-person"></span></a></li>
+                                        <li><a href="#"><span class="icon icon-heart-o"></span></a></li>
+                                        @if(Auth::guard('pengguna')->user()->alamat=='')
+                                        <li><a href="{{url('detail-akun')}}" class="site-cart"><span class="icon icon-person"></span>
+                                         <span class="count">1</span>
+                                        </a></li>
+                                        @else
+                                         <li><a href="{{url('detail-akun')}}"><span class="icon icon-person"></span>
+                                        </a></li>
+                                        @endif
                                         <li><a href="{{ url('logoutpengguna') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"><span class="icon icon-sign-out"></span></a>
@@ -48,13 +56,6 @@
                                         @else
                                         <li><a href="{{url('pengguna-login')}}"><span class="icon icon-sign-in"></span></a></li>
                                         @endif
-                                        <!-- <li><a href="#"><span class="icon icon-heart-o"></span></a></li> -->
-                                        <!-- <li>
-                                            <a href="cart.html" class="site-cart">
-                                                <span class="icon icon-shopping_cart"></span>
-                                                <span class="count">2</span>
-                                            </a>
-                                        </li>  -->
                                         <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
                                     </ul>
                                 </div>
@@ -67,11 +68,12 @@
                         <ul class="site-menu js-clone-nav d-none d-md-block">
                             <li><a href="{{url('/')}}">Home</a></li>
                             <li><a href="{{url('semua-produk')}}">Semua Produk</a></li>
-                            <li><a href="#">Artikel</a></li>
-                            <li><a href="#">Tips Menyewa</a></li>
+                            <li><a href="{{url('semua-toko')}}">Semua Toko</a></li>
+                            <li><a href="{{url('tips-menyewa')}}">Tips Menyewa</a></li>
+                            <li><a href="{{url('/list-artikel')}}">Artikel</a></li>
                             @if(Auth::guard('pengguna')->check())
                             <li class="has-children">
-                                <a href="about.html">Toko Saya</a>
+                                <a href="#">Toko Saya</a>
                                 <ul class="dropdown">
                                     <li><a href="#">List Produk</a></li>
                                     <li><a href="#">Menu Three</a></li>
