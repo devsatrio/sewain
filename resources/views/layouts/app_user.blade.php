@@ -25,7 +25,7 @@
                             <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
                                 <form action="" class="site-block-top-search">
                                     <span class="icon icon-search2"></span>
-                                    <input type="text" class="form-control border-0" placeholder="Search">
+                                    <input type="text" class="form-control border-0" placeholder="Cari Sesuatu">
                                 </form>
                             </div>
                             <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
@@ -72,6 +72,10 @@
                             <li><a href="{{url('tips-menyewa')}}">Tips Menyewa</a></li>
                             <li><a href="{{url('/list-artikel')}}">Artikel</a></li>
                             @if(Auth::guard('pengguna')->check())
+                            @php
+                            $tokosaya = DB::table('toko')->where('id_pengguna',Auth::guard('pengguna')->user()->id)->count();
+                            @endphp
+                            @if($tokosaya>0)
                             <li class="has-children">
                                 <a href="#">Toko Saya</a>
                                 <ul class="dropdown">
@@ -79,6 +83,7 @@
                                     <li><a href="#">Menu Three</a></li>
                                 </ul>
                             </li>
+                            @endif
                             @endif
                         </ul>
                     </div>

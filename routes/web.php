@@ -96,10 +96,15 @@ Route::get('/tips-menyewa', 'frontend\halamanlaincontroller@tipssewa');
 //List Artikel
 Route::get('/list-artikel', 'frontend\halamanlaincontroller@artikel');
 
+//Toko saya
+Route::get('/buat-toko', 'frontend\tokosayacontroller@buattoko');
+
 //akun
 Route::get('/detail-akun', 'frontend\akuncontroller@index');
 Route::get('/edit-akun', 'frontend\akuncontroller@edit');
+Route::get('/edit-password', 'frontend\akuncontroller@editpassword');
 Route::post('/edit-akun/{kode}', 'frontend\akuncontroller@update');
+Route::post('/edit-password/{kode}', 'frontend\akuncontroller@updatepassword');
 
 //login user
 Route::get('pengguna-login','Auth\PenggunaLoginController@showLoginForm');

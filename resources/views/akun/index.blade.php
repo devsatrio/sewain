@@ -17,6 +17,13 @@
             <div class="col-md-6 mb-5 mb-md-0">
                 <h2 class="h3 mb-3 text-black">Detail Akun</h2>
                 <div class="p-3 p-lg-5 border">
+                    @if (session('msg'))
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4>Info!</h4>
+                        {{ session('msg') }}
+                    </div>
+                    @endif
                     @if(Auth::guard('pengguna')->user()->alamat=='')
                     <div class="alert alert-warning alert-dismissible">
                         <h4><i class="icon fa fa-ban"></i> Peringatan!</h4>
@@ -34,10 +41,45 @@
                         <label for="c_country" class="text-black">Email</label>
                         <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->email}}" readonly>
                     </div>
+                    @else
+                    <div class="block-38 text-center">
+                    <div class="block-38-img">
+                        <div class="block-38-header">
+                            <img src="{{asset('image/pengguna/thumbnail/'.Auth::guard('pengguna')->user()->foto)}}" alt="Image placeholder" class="mb-4">
+                        </div>
+                    </div>
+                </div>
+                    <div class="form-group">
+                        <label for="c_country" class="text-black">Nama</label>
+                        <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->name}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="c_country" class="text-black">Username</label>
+                        <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->username}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="c_country" class="text-black">Email</label>
+                        <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->email}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="c_country" class="text-black">Alamat</label>
+                        <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->alamat}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="c_country" class="text-black">Tanggal Lahir</label>
+                        <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->tgl_lahir}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="c_country" class="text-black">Jenis Kelamin</label>
+                        <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->gender}}" readonly>
+                    </div>
                     @endif
                     <br>
                     <div class="form-group">
                         <a class="btn btn-primary btn-lg py-3 btn-block" href="{{url('edit-akun')}}">Edit Profile</a>
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-warning btn-lg py-3 btn-block" href="{{url('edit-password')}}">Ganti Password</a>
                     </div>
                 </div>
             </div>
@@ -48,11 +90,22 @@
                         <div class="p-3 p-lg-5 border">
                             @if(Auth::guard('pengguna')->user()->alamat=='')
                             <div class="alert alert-warning alert-dismissible">
-                        <h4><i class="icon fa fa-ban"></i> Peringatan!</h4>
-                        Silahkan melengkapi identitas terlebih dahulu.
-                    </div>
+                                <h4><i class="icon fa fa-ban"></i> Peringatan!</h4>
+                                Silahkan melengkapi identitas terlebih dahulu.
+                            </div>
                             @else
-                            <table class="table site-block-order-table mb-5">
+                            @if($jumlahtoko>0)
+
+                            @else
+                            <div class="alert alert-info alert-dismissible">
+                                <h4><i class="icon fa fa-ban"></i> Info!</h4>
+                                Anda belum memiliki toko, buat toko sekarang.
+                            </div>
+                            <div class="form-group">
+                                <a class="btn btn-primary btn-lg py-3 btn-block" href="{{url('buat-toko')}}">Buat Toko Sekarang!</a>
+                            </div>
+                            @endif
+                            <!-- <table class="table site-block-order-table mb-5">
                                 <thead>
                                     <th>Product</th>
                                     <th>Total</th>
@@ -102,7 +155,7 @@
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='thankyou.html'">Place Order</button>
-                            </div>
+                            </div> -->
                             @endif
                         </div>
                     </div>
