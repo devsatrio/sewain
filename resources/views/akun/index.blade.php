@@ -41,14 +41,20 @@
                         <label for="c_country" class="text-black">Email</label>
                         <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->email}}" readonly>
                     </div>
+                    <br>
+                    <div class="form-group">
+                        <a class="btn btn-primary btn-lg py-3 btn-block" href="{{url('edit-akun')}}">Edit Profile</a>
+                    </div>
                     @else
                     <div class="block-38 text-center">
-                    <div class="block-38-img">
-                        <div class="block-38-header">
-                            <img src="{{asset('image/pengguna/thumbnail/'.Auth::guard('pengguna')->user()->foto)}}" alt="Image placeholder" class="mb-4">
+                        <div class="block-38-img">
+                            <div class="block-38-header">
+                                @if(Auth::guard('pengguna')->user()->foto!='')
+                                <img src="{{asset('image/pengguna/thumbnail/'.Auth::guard('pengguna')->user()->foto)}}" alt="Image placeholder" class="mb-4">
+                                @endif
+                            </div>
                         </div>
                     </div>
-                </div>
                     <div class="form-group">
                         <label for="c_country" class="text-black">Nama</label>
                         <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->name}}" readonly>
@@ -62,6 +68,10 @@
                         <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->email}}" readonly>
                     </div>
                     <div class="form-group">
+                        <label for="c_country" class="text-black">No. Telfon</label>
+                        <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->telp}}" readonly>
+                    </div>
+                    <div class="form-group">
                         <label for="c_country" class="text-black">Alamat</label>
                         <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->alamat}}" readonly>
                     </div>
@@ -73,7 +83,6 @@
                         <label for="c_country" class="text-black">Jenis Kelamin</label>
                         <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->gender}}" readonly>
                     </div>
-                    @endif
                     <br>
                     <div class="form-group">
                         <a class="btn btn-primary btn-lg py-3 btn-block" href="{{url('edit-akun')}}">Edit Profile</a>
@@ -81,6 +90,8 @@
                     <div class="form-group">
                         <a class="btn btn-warning btn-lg py-3 btn-block" href="{{url('edit-password')}}">Ganti Password</a>
                     </div>
+                    @endif
+                    
                 </div>
             </div>
             <div class="col-md-6">
@@ -88,6 +99,13 @@
                     <div class="col-md-12">
                         <h2 class="h3 mb-3 text-black">Detail Toko</h2>
                         <div class="p-3 p-lg-5 border">
+                            @if (session('msgtoko'))
+                            <div class="alert alert-success alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4>Info!</h4>
+                                {{ session('msgtoko') }}
+                            </div>
+                            @endif
                             @if(Auth::guard('pengguna')->user()->alamat=='')
                             <div class="alert alert-warning alert-dismissible">
                                 <h4><i class="icon fa fa-ban"></i> Peringatan!</h4>
@@ -95,7 +113,88 @@
                             </div>
                             @else
                             @if($jumlahtoko>0)
-
+                            @php
+                            $tokonya = DB::table('toko')
+                            ->select(DB::raw('toko.*,provinsi.nama as namaprov,kota.nama as namakota'))
+                            ->leftjoin('provinsi','provinsi.id','=','toko.provinsi')
+                            ->leftjoin('kota','kota.id','=','toko.kota')
+                            ->where('toko.id_pengguna',Auth::guard('pengguna')->user()->id)
+                            ->get();
+                            @endphp
+                            @foreach($tokonya as $tky)
+                            @php
+                            $kodetoko = Crypt::encrypt($tky->id);
+                            @endphp
+                            <div class="block-38 text-center">
+                                <div class="block-38-img">
+                                    <div class="block-38-header">
+                                        @if($tky->logo!='')
+                                        <img src="{{asset('image/toko/thumbnail/'.$tky->logo)}}" alt="Image placeholder" class="mb-4">
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Nama Toko</label>
+                                <input type="text" class="form-control" value="{{$tky->nama}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Provinsi</label>
+                                <input type="text" class="form-control" value="{{$tky->namaprov}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Kota</label>
+                                <input type="text" class="form-control" value="{{$tky->namakota}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Alamat</label>
+                                <textarea class="form-control" readonly>{{$tky->alamat}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Hari Buka</label>
+                                <textarea class="form-control" readonly>{{substr($tky->hari_buka,0,-1)}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Jam Buka</label>
+                                <input type="text" class="form-control" value="{{$tky->jam_buka}} - {{$tky->jam_tutup}}" readonly>
+                            </div>
+                            <div class="border p-3 mb-3">
+                                <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">Deskripsi Toko</a></h3>
+                                <div class="collapse" id="collapsebank">
+                                    <div class="py-2">
+                                        <p class="mb-0">{{$tky->deskripsi}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <a class="btn btn-primary btn-lg py-3 btn-block" href="{{url('/edit-toko')}}">Edit Informasi Toko</a>
+                                <button class="btn btn-danger btn-lg py-3 btn-block" type="button" data-toggle="modal" data-target="#hapustoko">Hapus Toko</button>
+                            </div>
+                            <div class="modal fade" id="hapustoko" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <form action="{{url('hapus-toko')}}" method="post">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Hapus data ?</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Kami tidak dapat mengembalikan data toko, data barang atau kenangan toko anda, jadi yakin nih hapus toko ?
+                                                <input type="hidden" name="kode" value="{{$kodetoko}}">
+                                                @csrf
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-danger">Ya, Aku yakin</button>
+                                            </div>
+                                        </form>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
                             @else
                             <div class="alert alert-info alert-dismissible">
                                 <h4><i class="icon fa fa-ban"></i> Info!</h4>
@@ -105,64 +204,13 @@
                                 <a class="btn btn-primary btn-lg py-3 btn-block" href="{{url('buat-toko')}}">Buat Toko Sekarang!</a>
                             </div>
                             @endif
-                            <!-- <table class="table site-block-order-table mb-5">
-                                <thead>
-                                    <th>Product</th>
-                                    <th>Total</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Top Up T-Shirt <strong class="mx-2">x</strong> 1</td>
-                                        <td>$250.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Polo Shirt <strong class="mx-2">x</strong>   1</td>
-                                        <td>$100.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
-                                        <td class="text-black">$350.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-                                        <td class="text-black font-weight-bold"><strong>$350.00</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="border p-3 mb-3">
-                                <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">Direct Bank Transfer</a></h3>
-                                <div class="collapse" id="collapsebank">
-                                    <div class="py-2">
-                                        <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border p-3 mb-3">
-                                <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsecheque" role="button" aria-expanded="false" aria-controls="collapsecheque">Cheque Payment</a></h3>
-                                <div class="collapse" id="collapsecheque">
-                                    <div class="py-2">
-                                        <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border p-3 mb-5">
-                                <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsepaypal" role="button" aria-expanded="false" aria-controls="collapsepaypal">Paypal</a></h3>
-                                <div class="collapse" id="collapsepaypal">
-                                    <div class="py-2">
-                                        <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='thankyou.html'">Place Order</button>
-                            </div> -->
+                            
                             @endif
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- </form> -->
     </div>
 </div>
 @endsection

@@ -48,3 +48,9 @@ $('#ktpphoto').change(function(){
          }
      }
  });
+function checkform(form){
+    $('#panelnya').loading('toggle');
+    form.submitbutton.disabled = false;
+    $('#submitbutton').html('Loading...');
+    return true;
+}

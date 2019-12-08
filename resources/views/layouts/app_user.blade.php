@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="{{asset('user_assets/css/owl.theme.default.min.css')}}">
         <link rel="stylesheet" href="{{asset('user_assets/css/aos.css')}}">
         <link rel="stylesheet" href="{{asset('user_assets/css/style.css')}}">
-        
+        @yield('customcss')
     </head>
     <body>
         
@@ -79,8 +79,8 @@
                             <li class="has-children">
                                 <a href="#">Toko Saya</a>
                                 <ul class="dropdown">
-                                    <li><a href="#">List Produk</a></li>
-                                    <li><a href="#">Menu Three</a></li>
+                                    <li><a href="{{url('produk-saya')}}">Produk Saya</a></li>
+                                    <li><a href="#">Iklan</a></li>
                                 </ul>
                             </li>
                             @endif

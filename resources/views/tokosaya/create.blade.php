@@ -10,53 +10,58 @@
 <a href="{{url('/')}}" class="js-logo-clone">{{$ws->nama}}</a>
 @endforeach
 @endsection
+@section('customcss')
+<link rel="stylesheet" href="{{asset('admin_assets/bower_components/select2/dist/css/select2.min.css')}}">
+<link href="{{asset('admin_assets/custom/loading.css')}}" rel="stylesheet">
+@endsection
 @section('content')
 <div class="site-section">
     <div class="container">
         <div class="row">
             <div class="col-md-12 mb-5 mb-md-0">
-                <h2 class="h3 mb-3 text-black">Buat Toko</h2>
-                <div class="p-3 p-lg-5 border">
-                    @if (session('msg'))
-                    <div class="alert alert-danger alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <h4>Info!</h4>
-                        {{ session('msg') }}
-                    </div>
-                    @endif
-                    @php
-                    $kode = Crypt::encrypt(Auth::guard('pengguna')->user()->id);
-                    @endphp
-                    <form action="{{url('/edit-password/'.$kode)}}" method="post" onsubmit="return validasiform()">
-                        @csrf
-                        <div class="form-group">
-                            <label for="c_country" class="text-black">Nama</label>
-                            <input type="text" class="form-control" name="oldpass" required>
+                <div class="loading-div" id="panelnya">
+                    <h2 class="h3 mb-3 text-black">Buat Toko</h2>
+                    <div class="p-3 p-lg-5 border">
+                        @if (session('msg'))
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4>Info!</h4>
+                            {{ session('msg') }}
                         </div>
-                        <div class="form-group">
-                            <label for="c_country" class="text-black">Deskripsi</label>
-                            <textarea name="" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="c_country" class="text-black">Provinsi</label>
-                            <select name="provinsi" class="form-control" id="provinsi">
+                        @endif
+                        @php
+                        $kode = Crypt::encrypt(Auth::guard('pengguna')->user()->id);
+                        @endphp
+                        <form action="{{url('buat-toko')}}" method="post" enctype="multipart/form-data" onsubmit="return validasiform()">
+                            @csrf
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Nama</label>
+                                <input type="text" class="form-control" name="nama" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Deskripsi</label>
+                                <textarea name="deskripsi" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Provinsi</label>
+                                <select name="provinsi" class="form-control select2" style="width: 100%;" id="provinsi">
                                     <option selected disabled>pilih provinsi</option>
                                     @foreach($dataprovinsi as $dpv)
                                     <option value="{{$dpv->id}}">{{$dpv->nama}}</option>
                                     @endforeach
                                 </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="c_country" class="text-black">Kota</label>
-                            <select name="kota" class="form-control select2" style="width: 100%;" id="kota">
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Kota</label>
+                                <select name="kota" class="form-control select2" style="width: 100%;" id="kota">
                                 </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="c_country" class="text-black">Alamat Lengkap</label>
-                            <textarea name="alamat" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="c_country" class="text-black">Hari Buka</label>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Alamat Lengkap</label>
+                                <textarea name="alamat" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Hari Buka</label>
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="haribuka[]" value="senin"> Senin
@@ -92,26 +97,27 @@
                                         <input type="checkbox" name="haribuka[]" value="minggu"> Minggu
                                     </label>
                                 </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="c_country" class="text-black">Jam Buka</label>
-                            <input type="text" class="form-control" name="oldpass" required>
-                        </div>
-                       <div class="form-group">
-                            <label for="c_country" class="text-black">Jam Tutup</label>
-                            <input type="text" class="form-control" name="oldpass" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="c_country" class="text-black">Logo Toko</label>
-                            <input type="file" class="form-control" name="oldpass" required>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <button class="btn btn-primary" type="submit">Simpan Perubahan</button>
-                            <button class="btn btn-danger" type="button" onclick="history.go(-1)">Kembali</button>
-
-                        </div>
-                    </form>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Jam Buka</label>
+                                <input type="time" class="form-control" name="jambuka" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Jam Tutup</label>
+                                <input type="time" class="form-control" name="jamtutup" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">Logo Toko</label>
+                                <input type="file" class="form-control" name="foto" accept="image/*" id="photo" required>
+                                <span class="help-block text-danger" id="errorfoto"></span>
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <button class="btn btn-primary" type="submit" id="submitbutton">Simpan</button>
+                                <button class="btn btn-danger" type="button" onclick="history.go(-1)">Kembali</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -120,5 +126,7 @@
 </div>
 @endsection
 @section('customjs')
-<script src="{{asset('user_assets/custom/editpassword.js')}}"></script>
+<script src="{{asset('admin_assets/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
+<script src="{{asset('admin_assets/custom/loading.js')}}"></script>
+<script src="{{asset('user_assets/custom/usertoko.js')}}"></script>
 @endsection

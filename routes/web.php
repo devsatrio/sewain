@@ -96,8 +96,20 @@ Route::get('/tips-menyewa', 'frontend\halamanlaincontroller@tipssewa');
 //List Artikel
 Route::get('/list-artikel', 'frontend\halamanlaincontroller@artikel');
 
+//produk saya
+Route::get('/produk-saya', 'frontend\produksayacontroller@index');
+Route::get('/detail-produk/{kode}', 'frontend\produksayacontroller@show');
+Route::get('/buat-produk', 'frontend\produksayacontroller@create');
+Route::post('buat-produk', 'frontend\produksayacontroller@store');
+Route::get('carisubkategoriuser/{id}', 'frontend\produksayacontroller@carisubkategori');
+
 //Toko saya
+Route::get('/edit-toko', 'frontend\tokosayacontroller@edittoko');
 Route::get('/buat-toko', 'frontend\tokosayacontroller@buattoko');
+Route::get('carikotauser/{id}','frontend\tokosayacontroller@caridatakota');
+Route::post('/buat-toko', 'frontend\tokosayacontroller@store');
+Route::post('edit-toko/{kode}','frontend\tokosayacontroller@updatetoko');
+Route::post('hapus-toko','frontend\tokosayacontroller@destroy');
 
 //akun
 Route::get('/detail-akun', 'frontend\akuncontroller@index');

@@ -12,9 +12,58 @@ use Image;
 class tokosayacontroller extends Controller
 {
     //=================================================================
-    public function index()
+    public function updatetoko(Request $request, $kode)
     {
-        
+        $id = Crypt::decrypt($kode);
+        $hari = '';
+        foreach ($request->haribuka as $hr){
+            $hari = $hari.''.$hr.',';
+        }
+        if ($request->hasFile('foto')) {
+            File::delete('image/toko/'.$request->oldlogo);
+            File::delete('image/toko/thumbnail/'.$request->oldlogo);
+
+            $image = $request->file('foto');
+            $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+         
+            $destinationPath = public_path('image/toko/thumbnail');
+            $img = Image::make($image->getRealPath());
+            $img->resize(100,null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.'/'.$input['imagename']);
+       
+            $destinationPath = public_path('image/toko');
+            $image->move($destinationPath, $input['imagename']);
+            
+            DB::table('toko')
+            ->where('id',$id)
+            ->update([
+                'nama'=>$request->nama,
+                'deskripsi'=>$request->deskripsi,
+                'provinsi'=>$request->provinsi,
+                'kota'=>$request->kota,
+                'alamat'=>$request->alamat,
+                'jam_buka'=>$request->jambuka,
+                'jam_tutup'=>$request->jamtutup,
+                'logo'=>$input['imagename'],
+                'hari_buka'=>$hari,
+            ]);
+            return redirect('detail-akun')->with('msgtoko','Berhasil Mengedit Toko');
+        }else{
+            DB::table('toko')
+            ->where('id',$id)
+            ->update([
+                'nama'=>$request->nama,
+                'deskripsi'=>$request->deskripsi,
+                'provinsi'=>$request->provinsi,
+                'kota'=>$request->kota,
+                'alamat'=>$request->alamat,
+                'jam_buka'=>$request->jambuka,
+                'jam_tutup'=>$request->jamtutup,
+                'hari_buka'=>$hari,
+            ]);
+            return redirect('detail-akun')->with('msgtoko','Berhasil Mengedit Toko');
+        }
     }
 
     //=================================================================
@@ -30,59 +79,83 @@ class tokosayacontroller extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //=================================================================
     public function store(Request $request)
     {
-        //
+        $hari = '';
+        foreach ($request->haribuka as $hr){
+            $hari = $hari.''.$hr.',';
+        }
+        if ($request->hasFile('foto')) {
+            $image = $request->file('foto');
+            $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+         
+            $destinationPath = public_path('image/toko/thumbnail');
+            $img = Image::make($image->getRealPath());
+            $img->resize(100,null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.'/'.$input['imagename']);
+       
+            $destinationPath = public_path('image/toko');
+            $image->move($destinationPath, $input['imagename']);
+
+            DB::table('toko')
+            ->insert([
+                'id_pengguna'=>Auth::guard('pengguna')->user()->id,
+                'nama'=>$request->nama,
+                'deskripsi'=>$request->deskripsi,
+                'provinsi'=>$request->provinsi,
+                'kota'=>$request->kota,
+                'alamat'=>$request->alamat,
+                'jam_buka'=>$request->jambuka,
+                'jam_tutup'=>$request->jamtutup,
+                'logo'=>$input['imagename'],
+                'hari_buka'=>$hari,
+            ]);
+            
+        }
+        return redirect('detail-akun')->with('msgtoko','Berhasil Membuat Toko');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+   //=================================================================
+    public function caridatakota($id)
     {
-        //
+        $data = DB::table('kota')
+        ->where('id_provinsi',$id)
+        ->get();
+     return response()->json($data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    //=================================================================
+    public function edittoko()
     {
-        //
+        if(Auth::guard('pengguna')->check()){
+        $kodeprovinsi ='';
+        $websetting = DB::table('setting')->limit(1)->get();
+        $data = DB::table('toko')->where('id_pengguna',Auth::guard('pengguna')->user()->id)->get();
+        foreach ($data as $row){
+        $kodeprovinsi=$row->provinsi;
+        }
+        $datapengguna = DB::table('pengguna')->get();
+        $datakota = DB::table('kota')->where('id_provinsi',$kodeprovinsi)->get();
+        $dataprovinsi = DB::table('provinsi')->get();
+        return view('tokosaya.edit',['data'=>$data,'websetting'=>$websetting,'datapengguna'=>$datapengguna,'datakota'=>$datakota,'dataprovinsi'=>$dataprovinsi]);
+        }else{
+            return view('error.user404');
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //=================================================================
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    //=================================================================
+    public function destroy(Request $request)
     {
-        //
+        $id = Crypt::decrypt($request->kode);
+        DB::table('toko')->where('id',$id)->delete();
+        return redirect('detail-akun')->with('msgtoko','Berhasil Menghapus Toko');
     }
 }
