@@ -1,15 +1,14 @@
 @extends('layouts.app_user')
+
 @section('title')
-@foreach($websetting as $ws)
-<title>{{$ws->nama}}</title>
-<link href="{{asset('image/setting/thumbnail/'.$ws->icon)}}" rel="icon" type="image/png">
-@endforeach
+<title>{{$websetting->nama}}</title>
+<link href="{{asset('image/setting/thumbnail/'.$websetting->icon)}}" rel="icon" type="image/png">
 @endsection
+
 @section('head')
-@foreach($websetting as $ws)
-<a href="{{url('/')}}" class="js-logo-clone">{{$ws->nama}}</a>
-@endforeach
+<a href="{{url('/')}}" class="js-logo-clone">{{$websetting->nama}}</a>
 @endsection
+
 @section('content')
 <div class="site-section">
   <div class="container">
@@ -51,18 +50,51 @@
               <p>
                 <ul>
                   @foreach($detailbarang as $dbrg)
+                  @if($dbrg->diskon>0)
+                  <li>
+                    <strong class="text-primary h4">
+                    <strike class="text-muted">{{"Rp ".number_format($dbrg->harga,0,',','.')}}</strike> {{"Rp ".number_format($dbrg->harga-($dbrg->harga*$dbrg->diskon/100),0,',','.')}} / {{$dbrg->durasi." ".$dbrg->satuan}}
+                    </strong> <br>{{$dbrg->nama}} <span class="badge badge-pill badge-success">Diskon {{$dbrg->diskon}}%</span>
+                  </li>
+                  @else
                   <li>
                     <strong class="text-primary h4">
                     {{"Rp ".number_format($dbrg->harga,0,',','.')}} / {{$dbrg->durasi." ".$dbrg->satuan}}
-                    </strong> - {{$dbrg->nama}}
+                    </strong> <br>{{$dbrg->nama}}
                   </li>
+                  @endif
                   @endforeach
                 </ul>
               </p>
               <hr>
               <p class="text-center">
-                      <button type="button" onclick="history.go(-1)" class="btn btn-block btn-sm btn-danger">Kembali</button>
+                <a href="#" class="btn btn-sm btn-primary"><span class="icon-share-alt"></span></a>
+                <a href="#" class="btn btn-sm btn-primary text-white"><span class="icon-thumb_up"></span></a>
+                <a href="#" class="btn btn-sm btn-primary text-white"><span class="icon-bookmark"></span></a>
+                <a href="#" class="btn btn-sm btn-primary text-white"><span class="icon-chat"></span></a>
+              </p>
+            </div>
+          </div>
+          <br>
+          <div class="col-md-12">
+            <div class="p-3 p-lg-5 border">
+             <div class="block-38 text-center">
+              <div class="block-38-img">
+                <div class="block-38-header">
+                  <img src="{{asset('image/toko/'.$toko->logo)}}" alt="Image placeholder" class="mb-4">
+                  <h3 class="block-38-heading h4">{{$toko->nama}}</h3>
+                  <p class="block-38-subheading">{{$toko->namakota}}-{{$toko->namaprovinsi}}</p>
+                </div>
+                <div class="block-38-body">
+                  <p>{{$toko->deskripsi}}</p>
+                  <hr>
+                    <p class="text-center">
+                      <a href="#" class="btn btn-block btn-sm btn-primary">Lihat Toko</a>
+                      <button class="btn btn-block btn-danger btn-sm" type="button" onclick="history.go(-1)">Kembali</button>
                     </p>
+                </div>
+              </div>
+            </div>
             </div>
           </div>
         </div>

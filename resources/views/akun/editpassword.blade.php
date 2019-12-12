@@ -39,8 +39,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="c_country" class="text-black">Password Baru</label>
-                                <input type="password" class="form-control" name="newpass" id="pass" minlength="6" pattern="[a-zA-Z0-9]+" required>
-                                <span class="help-block">*minimal 6 karakter dan berupa huruf atau angka</span>
+                                <input type="password" class="form-control" name="newpass" id="pass" minlength="8" pattern="[a-zA-Z0-9]+" required>
+                                <span class="help-block">*minimal 8 karakter dan berupa huruf atau angka</span>
                             </div>
                             <div class="form-group">
                                 <label for="c_country" class="text-black">Konfirmasi Password Baru</label>

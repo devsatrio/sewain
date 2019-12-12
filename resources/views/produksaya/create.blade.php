@@ -87,17 +87,28 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="inputEmail3" class="text-black">Harga</label>
-                                        <input type="number" min="0" class="form-control" name="hargapaket[]" required>
+                                        <div class="input-group">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">Rp. </span>
+                                            </div>
+                                            <input type="number" min="0" class="form-control" name="hargapaket[]" required>
+                                        </div>
+                                        
                                     </div>
                                     <div class="form-group">
                                         <label for="inputEmail3" class="text-black">Diskon</label>
-                                        <input type="number" min="0" max="99" class="form-control" name="diskonpaket[]" required>
+                                        <div class="input-group">
+                                            <input type="number" min="0" max="99" class="form-control" value="0" name="diskonpaket[]" required>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <br>
                             <div class="form-group">
-                                <button type="button" class="btn btn-xs btn-success" onclick="addInput('listpaket');"><i class="fa fa-plus"></i> Tambah Paket</button>
+                                <button type="button" class="btn btn-xs btn-success" onclick="addInput('listpaket');"><i class="icon icon-plus"></i> Tambah Paket</button>
                             </div>
                             <br>
                             <h4>Gambar Produk</h4>
@@ -105,15 +116,20 @@
                             <div id="listfoto">
                                 <div>
                                     <div class="form-group">
-                                        <label for="inputEmail3">Foto Utama</label>
-                                        <div id="tempatfoto1"></div>
-                                        <input type="file" id="foto1" class="form-control" onchange="imgToDatabarang(this,1)" accept="image/*" name="fotoutama" required>
+                                        <label for="inputEmail3">Foto Utama (wajib diisi)</label>
+                                        <div id="tempatfoto1"></div><br>
+                                        <button type="button" class="btn btn-primary" onclick="carifoto(1)">
+                                        <i class="icon icon-upload"></i> Upload Gambar    
+                                        </button>
+                                        <input type="file" id="foto1" class="form-control" onchange="imgToDatabarang(this,1)" accept="image/*" name="fotoutama" required style="display: none;"><br>
                                         <span class="help-block text-danger" id="errorfoto1"></span>
                                     </div>
                                 </div>
                             </div>
+                            <br>
                             <div class="form-group">
-                                <button type="button" class="btn btn-xs btn-success" onclick="addInputfoto('listfoto');"><i class="fa fa-plus"></i> Tambah Foto Lain</button>
+                                <hr>
+                                <button type="button" class="btn btn-xs btn-success" onclick="addInputfoto('listfoto');"><i class="icon icon-plus"></i> Tambah Foto Lain</button>
                             </div>
                             <div class="form-group">
                                 <button class="btn btn-primary" type="submit" id="submitbutton">Simpan Perubahan</button>

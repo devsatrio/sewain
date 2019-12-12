@@ -3,12 +3,12 @@ namespace App\Http\Controllers\frontend;
 ini_set('max_execution_time', 180);
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Crypt;
+use Hash;
+use Auth;
+use DB;
 use Image;
+use File;
 class tokosayacontroller extends Controller
 {
     //=================================================================
@@ -40,6 +40,7 @@ class tokosayacontroller extends Controller
             ->update([
                 'nama'=>$request->nama,
                 'deskripsi'=>$request->deskripsi,
+                'telp'=>$request->telp,
                 'provinsi'=>$request->provinsi,
                 'kota'=>$request->kota,
                 'alamat'=>$request->alamat,
@@ -55,6 +56,7 @@ class tokosayacontroller extends Controller
             ->update([
                 'nama'=>$request->nama,
                 'deskripsi'=>$request->deskripsi,
+                'telp'=>$request->telp,
                 'provinsi'=>$request->provinsi,
                 'kota'=>$request->kota,
                 'alamat'=>$request->alamat,
@@ -106,6 +108,7 @@ class tokosayacontroller extends Controller
                 'deskripsi'=>$request->deskripsi,
                 'provinsi'=>$request->provinsi,
                 'kota'=>$request->kota,
+                'telp'=>$request->telp,
                 'alamat'=>$request->alamat,
                 'jam_buka'=>$request->jambuka,
                 'jam_tutup'=>$request->jamtutup,
@@ -155,6 +158,28 @@ class tokosayacontroller extends Controller
     public function destroy(Request $request)
     {
         $id = Crypt::decrypt($request->kode);
+        $datatoko = DB::table('toko')->where('id',$id)->first();
+        $databarang = DB::table('barang')->where('id_toko',$datatoko->id)->get();
+        
+        foreach ($databarang as $row) {
+            $datafoto = DB::table('fotobarang')
+            ->where('kode_barang',$row->kode)->get();
+            
+            foreach ($datafoto as $rowfoto){
+                File::delete('image/barang/'.$rowfoto->nama);
+                File::delete('image/barang/thumbnail/'.$rowfoto->nama);
+            }
+
+            DB::table('fotobarang')
+            ->where('kode_barang',$row->kode)->delete();
+            DB::table('detail_barang')
+            ->where('kode_barang',$row->kode)->delete();
+        }
+        
+        File::delete('image/toko/'.$datatoko->logo);
+        File::delete('image/toko/thumbnail/'.$datatoko->logo);
+        
+        DB::table('barang')->where('id_toko',$id)->delete();
         DB::table('toko')->where('id',$id)->delete();
         return redirect('detail-akun')->with('msgtoko','Berhasil Menghapus Toko');
     }

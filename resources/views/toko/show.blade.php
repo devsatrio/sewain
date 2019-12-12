@@ -33,6 +33,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">No.Telp</label>
+                    <div class="col-sm-10">
+                        <p>&nbsp;:&nbsp;{{$row->telp}}</p>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Pemilik Toko</label>
                     <div class="col-sm-10">
                         <p>&nbsp;:&nbsp;{{$row->namapengguna}}</p>

@@ -40,6 +40,10 @@
                                 <input type="text" class="form-control" name="nama" value="{{$row->nama}}" required>
                             </div>
                             <div class="form-group">
+                                <label for="c_country" class="text-black">No.Telpon</label>
+                                <input type="number" min="0" class="form-control" name="telp" value="{{$row->telp}}" required>
+                            </div>
+                            <div class="form-group">
                                 <label for="c_country" class="text-black">Deskripsi</label>
                                 <textarea name="deskripsi" class="form-control">{!!$row->deskripsi!!}</textarea>
                             </div>
@@ -193,13 +197,19 @@
                             </div>
                             <div class="form-group">
                                 <label for="c_country" class="text-black">*Logo Toko Baru</label>
+                                <div id="tempatfoto">
                                 @if($row->logo!='')
                                 <br>
                                 <img src="{{asset('image/toko/'.$row->logo)}}" style="max-width: 100%;">
                                 <br><br>
                                 @endif
-                                <input type="file" class="form-control" name="foto" accept="image/*" id="photo">
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="document.getElementById('photo').click();">
+                                <i class="icon icon-upload"></i> Upload Logo
+                                </button>
+                                <input type="file" class="form-control" name="foto" accept="image/*" id="photo" style="display: none;" onchange="photouploaded(this)">
                                 <input type="hidden" name="oldlogo" value="{{$row->logo}}">
+                                <br>
                                 <span class="help-block" id="errorfoto">*Isi apabila ingin mengganti logo foto</span>
                             </div>
                             <br>

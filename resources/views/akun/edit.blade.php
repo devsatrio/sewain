@@ -33,6 +33,7 @@
                             <div class="form-group">
                                 <label for="c_country" class="text-black">Username</label>
                                 <input type="text" class="form-control" value="{{Auth::guard('pengguna')->user()->username}}" name="usern" minlength="6" pattern="[a-zA-Z0-9]+" required>
+                                <span class="help-block">*minimal 6 karakter & alphanumerik</span>
                             </div>
                             <div class="form-group">
                                 <label for="c_country" class="text-black">Email</label>
@@ -53,33 +54,44 @@
                             <div class="form-group">
                                 <label for="c_country" class="text-black">Jenis Kelamin</label><br>
                                 <label>
-                                    <input type="radio" name="gender" value="Pria" @if(Auth::guard('pengguna')->user()->gender=='Pria')checked @endif> Pria
+                                    <input type="radio" name="gender" value="Pria" @if(Auth::guard('pengguna')->user()->gender=='Pria')checked @endif>  <i class="icon icon-male"></i> Pria
                                 </label>&nbsp;&nbsp;&nbsp;
                                 <label>
-                                    <input type="radio" name="gender" value="Wanita" @if(Auth::guard('pengguna')->user()->gender=='Wanita')checked @endif> Wanita
+                                    <input type="radio" name="gender" value="Wanita" @if(Auth::guard('pengguna')->user()->gender=='Wanita')checked @endif> <i class="icon icon-female"></i> Wanita
                                 </label>
                             </div>
                             <div class="form-group">
-                                <label for="c_country" class="text-black">Foto Profile</label>
-                                @if(Auth::guard('pengguna')->user()->foto!='')
-                                <br>
-                                <img src="{{asset('image/pengguna/'.Auth::guard('pengguna')->user()->foto)}}" style="max-width: 100%;">
-                                <br><br>
-                                @endif
-                                <input type="file" id="photo" name="foto" class="form-control" accept="image/*">
+                                <label class="text-black">*Foto Profile</label><br>
+                                <div id="tempatfoto">
+                                    @if(Auth::guard('pengguna')->user()->foto!='')
+                                    <br>
+                                    <img src="{{asset('image/pengguna/'.Auth::guard('pengguna')->user()->foto)}}" style="max-width: 100%;">
+                                    <br><br>
+                                    @endif
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="document.getElementById('photo').click();">
+                                <i class="icon icon-upload"></i> Upload Gambar
+                                </button>
+                                <input type="file" id="photo" name="foto" class="form-control" accept="image/*" onchange="photouploaded(this)" style="display: none;">
                                 <input type="hidden" name="fotolama" value="{{Auth::guard('pengguna')->user()->foto}}">
+                                <br>
                                 <span class="help-block" id="errorfoto">*Isi apabila ingin mengganti foto profile</span>
                             </div>
                             <div class="form-group">
-                                <label for="c_country" class="text-black">*Foto KTP</label>
+                                <label class="text-black">*Foto KTP</label>
+                                <div id="tempatfotoktp">
                                 @if(Auth::guard('pengguna')->user()->foto_ktp!='')
                                 <br>
                                 <img src="{{asset('image/ktp/'.Auth::guard('pengguna')->user()->foto_ktp)}}" style="max-width: 100%;">
                                 <br><br>
                                 @endif
-                                <input type="file" id="ktpphoto" class="form-control" accept="image/*" name="ktpfoto">
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="document.getElementById('ktpphoto').click();">
+                                <i class="icon icon-upload"></i> Upload Gambar KTP
+                                </button>
+                                <input type="file" id="ktpphoto" class="form-control" accept="image/*" name="ktpfoto" style="display: none;" onchange="photoktpuploaded(this)">
                                 <input type="hidden" name="ktpfotolama" value="{{Auth::guard('pengguna')->user()->foto_ktp}}">
-                                <span class="help-block" id="errorktpfoto">*Isi apabila ingin mengganti</span>
+                                <br><span class="help-block" id="errorktpfoto">*Isi apabila ingin mengganti foto KTP</span>
                             </div>
                             <br>
                             <div class="form-group">

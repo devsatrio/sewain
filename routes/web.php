@@ -85,7 +85,8 @@ Route::post('editprofile/{id}','backend\dashboardcontroller@aksieditprofile');
 Route::get('/home', 'frontend\homecontroller@index');
 
 //semua produk
-Route::get('/semua-produk', 'frontend\semuaprodukcontroller@index');
+Route::get('/semua-produk','frontend\semuaprodukcontroller@index');
+Route::get('detail-produk/{kode}','frontend\semuaprodukcontroller@show');
 
 //semua toko
 Route::get('/semua-toko', 'frontend\semuatokocontroller@index');
@@ -98,10 +99,19 @@ Route::get('/list-artikel', 'frontend\halamanlaincontroller@artikel');
 
 //produk saya
 Route::get('/produk-saya', 'frontend\produksayacontroller@index');
-Route::get('/detail-produk/{kode}', 'frontend\produksayacontroller@show');
+Route::get('/detail-produk-saya/{kode}', 'frontend\produksayacontroller@show');
+Route::get('/edit-produk/{kode}', 'frontend\produksayacontroller@edit');
 Route::get('/buat-produk', 'frontend\produksayacontroller@create');
 Route::post('buat-produk', 'frontend\produksayacontroller@store');
 Route::get('carisubkategoriuser/{id}', 'frontend\produksayacontroller@carisubkategori');
+Route::post('hapus-barang', 'frontend\produksayacontroller@destroy');
+Route::post('edit-detail-produk/{kode}', 'frontend\produksayacontroller@updatedetail');
+Route::post('tambah-detail-produk/{kode}','frontend\produksayacontroller@tambahharga');
+Route::post('ubah-detail-produk','frontend\produksayacontroller@ubahharga');
+Route::post('hapus-detail-produk','frontend\produksayacontroller@hapusharga');
+Route::post('tambah-foto-produk/{kode}','frontend\produksayacontroller@tambahfoto');
+Route::post('hapus-foto-produk','frontend\produksayacontroller@hapusfoto');
+Route::post('ubah-foto-produk','frontend\produksayacontroller@ubahfoto');
 
 //Toko saya
 Route::get('/edit-toko', 'frontend\tokosayacontroller@edittoko');

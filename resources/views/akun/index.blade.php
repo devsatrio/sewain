@@ -43,7 +43,7 @@
                     </div>
                     <br>
                     <div class="form-group">
-                        <a class="btn btn-primary btn-lg py-3 btn-block" href="{{url('edit-akun')}}">Edit Profile</a>
+                        <a class="btn btn-primary btn-lg py-3 btn-block" href="{{url('edit-akun')}}">Lengkapi Identitas</a>
                     </div>
                     @else
                     <div class="block-38 text-center">
@@ -137,6 +137,10 @@
                             <div class="form-group">
                                 <label for="c_country" class="text-black">Nama Toko</label>
                                 <input type="text" class="form-control" value="{{$tky->nama}}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="c_country" class="text-black">No.Telpon</label>
+                                <input type="text" class="form-control" value="{{$tky->telp}}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="c_country" class="text-black">Provinsi</label>

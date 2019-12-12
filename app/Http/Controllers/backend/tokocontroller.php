@@ -83,6 +83,7 @@ class tokocontroller extends Controller
                 'deskripsi'=>$request->deskripsi,
                 'provinsi'=>$request->provinsi,
                 'kota'=>$request->kota,
+                'telp'=>$request->telp,
                 'alamat'=>$request->alamat,
                 'status'=>$request->status,
                 'verivikasi_status'=>$request->verivikasi,
@@ -172,6 +173,7 @@ class tokocontroller extends Controller
             ->update([
                 'id_pengguna'=>$request->pemilik,
                 'nama'=>$request->nama,
+                'telp'=>$request->telp,
                 'deskripsi'=>$request->deskripsi,
                 'provinsi'=>$request->provinsi,
                 'kota'=>$request->kota,
@@ -191,6 +193,7 @@ class tokocontroller extends Controller
             ->update([
                 'id_pengguna'=>$request->pemilik,
                 'nama'=>$request->nama,
+                'telp'=>$request->telp,
                 'deskripsi'=>$request->deskripsi,
                 'provinsi'=>$request->provinsi,
                 'kota'=>$request->kota,

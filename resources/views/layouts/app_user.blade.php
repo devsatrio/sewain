@@ -80,7 +80,7 @@
                                 <a href="#">Toko Saya</a>
                                 <ul class="dropdown">
                                     <li><a href="{{url('produk-saya')}}">Produk Saya</a></li>
-                                    <li><a href="#">Iklan</a></li>
+                                    <!-- <li><a href="#">Iklan</a></li> -->
                                 </ul>
                             </li>
                             @endif

@@ -48,6 +48,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">No.Telpon</label>
+                            <div class="col-sm-10">
+                                <input type="number" min="0" class="form-control" name="telp" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="inputEmail3" class="col-sm-2 control-label">Deskripsi</label>
                             <div class="col-sm-10">
                                 <textarea name="deskripsi" class="form-control"></textarea>

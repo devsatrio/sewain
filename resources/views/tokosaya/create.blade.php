@@ -39,6 +39,10 @@
                                 <input type="text" class="form-control" name="nama" required>
                             </div>
                             <div class="form-group">
+                                <label for="c_country" class="text-black">No.Telpon</label>
+                                <input type="number" min="0" class="form-control" name="telp" required>
+                            </div>
+                            <div class="form-group">
                                 <label for="c_country" class="text-black">Deskripsi</label>
                                 <textarea name="deskripsi" class="form-control"></textarea>
                             </div>
@@ -107,8 +111,12 @@
                                 <input type="time" class="form-control" name="jamtutup" required>
                             </div>
                             <div class="form-group">
-                                <label for="c_country" class="text-black">Logo Toko</label>
-                                <input type="file" class="form-control" name="foto" accept="image/*" id="photo" required>
+                                <label for="c_country" class="text-black">Logo Toko (wajib diisi)</label><br>
+                                <div id="tempatfoto"></div>
+                                <button type="button" class="btn btn-success" onclick="document.getElementById('photo').click();">
+                                <i class="icon icon-upload"></i> Upload Logo
+                                </button>
+                                <input type="file" class="form-control" name="foto" accept="image/*" id="photo" required style="display: none;" onchange="photouploaded(this)"><br>
                                 <span class="help-block text-danger" id="errorfoto"></span>
                             </div>
                             <br>

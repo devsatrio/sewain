@@ -105,7 +105,7 @@
                                 @endforeach
                             </figure>
                             <div class="block-4-text p-4">
-                                <h3><a href="#">{{$brg->nama}}</a></h3>
+                                <h3><a href="{{url('/detail-produk/'.$brg->kode)}}">{{$brg->nama}}</a></h3>
                                 <p class="mb-0">{{$brg->namakategori}} - {{$brg->namasubkategori}}</p>
                                 @foreach($detailbarang as $dbrg)
                                 <p class="text-primary font-weight-bold">{{"Rp ".number_format($dbrg->harga,0,',','.')}} / {{$dbrg->durasi." ".$dbrg->satuan}}</p>

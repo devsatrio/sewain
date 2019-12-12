@@ -51,7 +51,7 @@ class produksayacontroller extends Controller
                     }
                    
                 }
-        $kategori = DB::table('kategori')->get();
+        $kategori = DB::table('kategori')->where('status','Aktif')->get();
         $websetting = DB::table('setting')->limit(1)->get();
         return view('produksaya.create',['websetting'=>$websetting,'kategori'=>$kategori,'kode'=>$finalkode]);
         }else{
@@ -62,7 +62,7 @@ class produksayacontroller extends Controller
     //==================================================================
     public function carisubkategori($id){
         $data = DB::table('subkategori')
-        ->where('id_kategori',$id)
+        ->where([['id_kategori',$id],['status','Aktif']])
         ->get();
         return response()->json($data);
     }
@@ -150,46 +150,172 @@ class produksayacontroller extends Controller
     //==================================================================
     public function show($kode)
     {
-        if(Auth::guard('pengguna')->check()){
-        $databarang = DB::table('barang')->where('kode',$kode)->first();
+        $databarang = DB::table('barang')
+        ->select(DB::raw('barang.*,kategori.nama as namakategori,subkategori.nama as namasubkategori'))
+        ->leftjoin('kategori','kategori.id','=','barang.kategori')
+        ->leftjoin('subkategori','subkategori.id','=','barang.sub_kategori')->where('kode',$kode)->first();
+        $detailbarang = DB::table('detail_barang')->where('kode_barang',$databarang->kode)->orderby('harga','asc')->get();
+        $fotobrg = DB::table('fotobarang')->where('kode_barang',$databarang->kode)->get();
+        $toko = DB::table('toko')->select(DB::raw('toko.*,provinsi.nama as namaprovinsi,kota.nama as namakota'))
+        ->leftjoin('provinsi','provinsi.id','=','toko.provinsi')
+        ->leftjoin('kota','kota.id','=','toko.kota')
+        ->where('toko.id',$databarang->id_toko)->first();
         $websetting = DB::table('setting')->limit(1)->get();
-        return view('produksaya.show',['websetting'=>$websetting,'databarang'=>$databarang]);
+        return view('produksaya.show',['websetting'=>$websetting,'databarang'=>$databarang,'detailbarang'=>$detailbarang,'fotobrg'=>$fotobrg,'toko'=>$toko]);
+        
+    }
+
+    //==================================================================
+    public function edit($kode)
+    {
+        if(Auth::guard('pengguna')->check()){
+        $idkat ='';
+        $websetting = DB::table('setting')->limit(1)->first();
+        $databarang = DB::table('barang')->where('kode',$kode)->first();
+        $idkat=$databarang->kategori;
+        $datasubkategori = DB::table('subkategori')->where([['id_kategori',$idkat],['status','Aktif']])->get();
+        $toko = DB::table('toko')->get();
+        $kategori = DB::table('kategori')->where('status','Aktif')->get();
+        $datadetail = DB::table('detail_barang')
+        ->where('kode_barang',$kode)->get();
+        $jumlahdetail = DB::table('detail_barang')
+        ->where('kode_barang',$kode)->count();
+        $datafoto = DB::table('fotobarang')->where('kode_barang',$kode)->get();
+        $jumlahfoto = DB::table('fotobarang')->where('kode_barang',$kode)->count();
+        return view('produksaya.edit',['websetting'=>$websetting,'kategori'=>$kategori,'toko'=>$toko,'databarang'=>$databarang,'datasubkategori'=>$datasubkategori,'datadetail'=>$datadetail,'datafoto'=>$datafoto,'jumlahfoto'=>$jumlahfoto,'jumlahdetail'=>$jumlahdetail]);
         }else{
             return view('error.user404');
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    //==================================================================
+    public function updatedetail(Request $request, $kode)
     {
-        //
+        DB::table('barang')
+        ->where('kode',$kode)
+        ->update([
+            'nama'=>$request->nama,
+            'kategori'=>$request->kategori,
+            'sub_kategori'=>$request->subkategori,
+            'deskripsi'=>$request->deskripsi,
+            'jaminan'=>$request->jaminan
+        ]);
+        return back()->with('msg','Data Produk Berhasil Diperbarui');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+    //==================================================================
+    public function tambahharga(Request $request,$kode){
+        DB::table('detail_barang')
+        ->insert([
+            'kode_barang'=>$kode,
+            'nama'=>$request->namapaket,
+            'durasi'=>$request->durasipaket,
+            'satuan'=>$request->satuanpaket,
+            'harga'=>$request->hargapaket,
+            'diskon'=>$request->diskonpaket
+        ]);
+        return back()->with('msgdetail','Data Paket Produk Berhasil Disimpan'); 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    //==================================================================
+    public function ubahharga(Request $request){
+       DB::table('detail_barang')
+       ->where('id',$request->kodepaket)
+        ->update([
+            'nama'=>$request->namapaket,
+            'durasi'=>$request->durasipaket,
+            'satuan'=>$request->satuanpaket,
+            'harga'=>$request->hargapaket,
+            'diskon'=>$request->diskonpaket
+        ]);
+        return back()->with('msgdetail','Data Paket Produk Berhasil Diubah'); 
+    }
+    
+    //==================================================================
+    public function hapusharga(Request $request){
+        DB::table('detail_barang')
+        ->where('id',$request->kodepaket)
+        ->delete();
+        return back()->with('msgdetail','Data Paket Produk Berhasil Dihapus');
+    }
+    public function ubahfoto(Request $request){
+        if($request->hasFile('photo')) {
+            File::delete('image/barang/'.$request->oldfoto);
+            File::delete('image/barang/thumbnail/'.$request->oldfoto);
+            $image = $request->file('photo');
+            $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+         
+            $destinationPath = public_path('image/barang/thumbnail');
+            $img = Image::make($image->getRealPath());
+            $img->resize(100,null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.'/'.$input['imagename']);
+       
+            $destinationPath = public_path('image/barang');
+            $image->move($destinationPath, $input['imagename']);
+
+        DB::table('fotobarang')
+        ->where('id',$request->kode)
+        ->update([
+            'nama'=>$input['imagename'],
+            'default'=>$request->status
+        ]);
+        }
+        return back()->with('msgfoto','Foto Berhasil Diubah');
+    }
+
+    //==================================================================
+    public function tambahfoto(Request $request,$kode){
+        if($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+         
+            $destinationPath = public_path('image/barang/thumbnail');
+            $img = Image::make($image->getRealPath());
+            $img->resize(100,null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($destinationPath.'/'.$input['imagename']);
+       
+            $destinationPath = public_path('image/barang');
+            $image->move($destinationPath, $input['imagename']);
+
+        DB::table('fotobarang')
+        ->insert([
+            'kode_barang'=>$kode,
+            'nama'=>$input['imagename'],
+            'default'=>'N'
+        ]);
+        }
+        return back()->with('msgfoto','Foto Berhasil Disimpan');
+
+    }
+    
+    //==================================================================
+    public function hapusfoto(Request $request){
+        $datafoto = DB::table('fotobarang')->where('id',$request->kodefoto)->first();
+        if($datafoto->nama !='' ){
+            File::delete('image/barang/'.$datafoto->nama);
+            File::delete('image/barang/thumbnail/'.$datafoto->nama);
+        }
+        DB::table('fotobarang')->where('id',$request->kodefoto)->delete();
+        return back()->with('msgfoto','Foto Berhasil Dihapus');
+    }
+    
+    //==================================================================
+    public function destroy(Request $request)
     {
-        //
+       $datafoto = DB::table('fotobarang')
+            ->where('kode_barang',$request->kode)->get();
+            
+            foreach ($datafoto as $rowfoto){
+                File::delete('image/barang/'.$rowfoto->nama);
+                File::delete('image/barang/thumbnail/'.$rowfoto->nama);
+            }
+        
+        
+        DB::table('barang')->where('kode',$request->kode)->delete();
+        DB::table('fotobarang')->where('kode_barang',$request->kode)->delete();
+        DB::table('detail_barang')->where('kode_barang',$request->kode)->delete();
+        return redirect('produk-saya')->with('msg','Data Barang Berhasil Dihapus');
     }
 }

@@ -31,28 +31,34 @@ function addoption(data){
 }
 
 //====================================================================
-$('#photo').change(function(){
-    var imageSizeArr = 0;
-    var imageSize = document.getElementById('photo');
-    var imageCount = imageSize.files.length;
-    var jumlah = 0;
-    for (var i = 0; i < imageSize.files.length; i++)
-    {
-        jumlah +=1;
-         var imageSiz = imageSize.files[i].size;
-         var imagename = imageSize.files[i].name;
-         if (imageSiz > 3000000) {
-             var imageSizeArr = 1;
-         }
-         if (imageSizeArr == 1){
+function photouploaded(input){
+
+     var imageSiz = input.files[0].size;
+     if (imageSiz > 3000000){
             $('#errorfoto').html('Maaf, gambar terlalu besar / memiliki ukuran lebih dari 3MB');
             $('#photo').val('');
-         }else{
+            $('#tempatfoto').html('');
+     }else{
+            $('#tempatfoto').html('');
             $('#errorfoto').html('');
-            
-         }
+        if (input.files) {
+            var length = input.files.length;
+            $.each(input.files, function(i, v) {
+                var n = i + 1;
+                var File = new FileReader();
+                var datafoto ='';
+                File.onload = function(event) {
+                  datafoto = datafoto + '<br><img src="'+event.target.result+'" width="30%"><br><br>';
+                  $('#tempatfoto').append(datafoto);
+                };
+                File.readAsDataURL(input.files[i]);
+            });
+        }
      }
- });
+}
+window.photouploaded = photouploaded;
+
+//====================================================================
 function validasiform() {
          
            $('#panelnya').loading('toggle');

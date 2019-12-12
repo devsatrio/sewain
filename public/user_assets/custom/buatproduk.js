@@ -64,11 +64,21 @@ function addInput(divName){
                                     '</div>'+
                         '<div class="form-group">'+
                             '<label for="inputEmail3">Harga</label>'+
-                            '<input type="number" min="0" class="form-control" name="hargapaket[]" required>'+
+                            '<div class="input-group">'+
+                                            '<div class="input-group-append">'+
+                                                '<span class="input-group-text">Rp. </span>'+
+                                            '</div>'+
+                                            '<input type="number" min="0" class="form-control" name="hargapaket[]" required>'+
+                                        '</div>'+
                         '</div>'+
                         '<div class="form-group">'+
                             '<label for="inputEmail3">Diskon</label>'+
-                                '<input type="number" min="0" max="99" class="form-control" name="diskonpaket[]" required>'+
+                                '<div class="input-group">'+
+                                            '<input type="number" min="0" max="99" class="form-control" value="0" name="diskonpaket[]" required>'+
+                                            '<div class="input-group-append">'+
+                                                '<span class="input-group-text">%</span>'+
+                                            '</div>'+
+                                        '</div>'+
                                 '<br><button type="button" onclick="del('+counter+')" class="btn btn-danger btn-sm"><i class="fa fa-remove"></i> Hapus Paket Ini</button>'+
                         '</div>';
 
@@ -86,6 +96,7 @@ function del(no) {
     $('#tempatfoto'+no).html('');
      var imageSiz = input.files[0].size;
      if (imageSiz > 3000000){
+        $('#tempatfoto'+no).html('');
        		$('#fotoutama'+no).val('');
             $('#errorfoto'+no).html('Maaf, gambar terlalu besar / memiliki ukuran lebih dari 3MB');
      }else{
@@ -120,11 +131,15 @@ function addInputfoto(divName){
     newdiv.setAttribute('id','inputanfoto'+kodefoto);
     newdiv.innerHTML ='<hr>'+
                             '<div class="form-group">'+
-                            '<label for="inputEmail3">Foto Lain</label>'+
-                            '<div id="tempatfoto'+kodefoto+'"></div>'+
-                                '<input type="file" id="foto'+kodefoto+'" class="form-control" onchange="imgToDatabarang(this,'+kodefoto+')" accept="image/*" name="foto[]" required>'+
-                                '<span class="help-block text-danger" id="errorfoto'+kodefoto+'"></span>'+
-                        		'<br><button type="button" onclick="delfoto('+kodefoto+')" class="btn btn-danger btn-sm"><i class="fa fa-remove"></i> Hapus Foto</button>'+
+                            '<label for="inputEmail3">Foto Lain (wajib diisi)</label>'+
+                            '<div id="tempatfoto'+kodefoto+'"></div><br>'+
+                            
+                                '<input type="file" id="foto'+kodefoto+'" class="form-control" onchange="imgToDatabarang(this,'+kodefoto+')" accept="image/*" name="foto[]" required style="display:none;">'+
+                                '<span class="help-block text-danger" id="errorfoto'+kodefoto+'"></span><br>'+
+                        		'<button type="button" class="btn btn-primary" onclick="carifoto('+kodefoto+')">'+
+                                        '<i class="icon icon-upload"></i> Upload Gambar'+    
+                                        '</button>'+
+                            '&nbsp;&nbsp;<button type="button" onclick="delfoto('+kodefoto+')" class="btn btn-danger"><i class="icon icon-times"></i> Hapus Foto</button>'+
                         '</div>';
 
     document.getElementById(divName).appendChild(newdiv);
@@ -138,9 +153,12 @@ function delfoto(no) {
   document.getElementById('inputanfoto'+no).remove();
   counterfoto -= 1;
 }
+function carifoto(no) {
+  document.getElementById('foto'+no).click();
 
+}
 function validasiform() {
-         
+          
            $('#panelnya').loading('toggle');
            $('#submitbutton').attr('disabled',true);
            $('#submitbutton').html('Loading...');

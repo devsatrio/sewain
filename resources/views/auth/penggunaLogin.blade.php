@@ -88,7 +88,8 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label for="c_subject" class="text-black">Password </label>
-                                <input type="password" class="form-control" id="pass" autocomplete="new-password" name="password" required>
+                                <input type="password" class="form-control" id="pass" autocomplete="new-password" minlength="8" name="password" required>
+                                <span class="help-block">*minimal 8 karakter</span>
                             </div>
                         </div>
                         <div class="form-group row" id="grubkpass">
@@ -100,7 +101,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12">
-                                <input type="submit" class="btn btn-primary btn-lg btn-block" value="Daftar">
+                                <button type="submit" id="submitbutton" class="btn btn-primary btn-lg btn-block">Daftar</button>
                             </div>
                         </div>
                     </div>
@@ -111,5 +112,5 @@
 </div>
 @endsection
 @section('customjs')
- <script src="{{asset('admin_assets/custom/admin.js')}}"></script>
+ <script src="{{asset('user_assets/custom/login.js')}}"></script>
 @endsection
