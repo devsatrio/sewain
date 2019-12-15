@@ -19,6 +19,10 @@ class tokosayacontroller extends Controller
         foreach ($request->haribuka as $hr){
             $hari = $hari.''.$hr.',';
         }
+
+        $linktoko = strtolower($request->nama);
+        $final_linktoko=str_replace(' ', '-', $linktoko);
+
         if ($request->hasFile('foto')) {
             File::delete('image/toko/'.$request->oldlogo);
             File::delete('image/toko/thumbnail/'.$request->oldlogo);
@@ -39,6 +43,7 @@ class tokosayacontroller extends Controller
             ->where('id',$id)
             ->update([
                 'nama'=>$request->nama,
+                'link'=>$final_linktoko,
                 'deskripsi'=>$request->deskripsi,
                 'telp'=>$request->telp,
                 'provinsi'=>$request->provinsi,
@@ -55,6 +60,7 @@ class tokosayacontroller extends Controller
             ->where('id',$id)
             ->update([
                 'nama'=>$request->nama,
+                'link'=>$final_linktoko,
                 'deskripsi'=>$request->deskripsi,
                 'telp'=>$request->telp,
                 'provinsi'=>$request->provinsi,
@@ -101,10 +107,14 @@ class tokosayacontroller extends Controller
             $destinationPath = public_path('image/toko');
             $image->move($destinationPath, $input['imagename']);
 
+            $linktoko = strtolower($request->nama);
+            $final_linktoko=str_replace(' ', '-', $linktoko);
+
             DB::table('toko')
             ->insert([
                 'id_pengguna'=>Auth::guard('pengguna')->user()->id,
                 'nama'=>$request->nama,
+                'link'=>$final_linktoko,
                 'deskripsi'=>$request->deskripsi,
                 'provinsi'=>$request->provinsi,
                 'kota'=>$request->kota,

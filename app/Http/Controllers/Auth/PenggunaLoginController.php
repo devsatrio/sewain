@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\Auth;
-use App\pengguna;
+use App\models\pengguna;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;

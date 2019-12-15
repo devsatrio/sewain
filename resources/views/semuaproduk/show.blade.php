@@ -1,14 +1,11 @@
 @extends('layouts.app_user')
-
 @section('title')
 <title>{{$websetting->nama}}</title>
 <link href="{{asset('image/setting/thumbnail/'.$websetting->icon)}}" rel="icon" type="image/png">
 @endsection
-
 @section('head')
 <a href="{{url('/')}}" class="js-logo-clone">{{$websetting->nama}}</a>
 @endsection
-
 @section('content')
 <div class="site-section">
   <div class="container">
@@ -39,46 +36,44 @@
           </div>
           <br>
         </div>
-        <div class="col-md-6">
-          <div class="col-md-12">
-            <div class="p-3 p-lg-5 border">
-              <h2 class="text-black">{{$databarang->nama}}</h2>
-              <p><span class="badge badge-primary">{{$databarang->namakategori}}</span> - <span class="badge badge-primary">{{$databarang->namasubkategori}}</span></p>
-              <p>{{$databarang->deskripsi}}</p>
-              <p class="mb-4"><strong class="text-primary">Jaminan : </strong>{{$databarang->jaminan}} <br>
-              <strong class="text-primary">Tanggal Posting : </strong>{{$databarang->tgl_post}}</p>
-              <p>
-                <ul>
-                  @foreach($detailbarang as $dbrg)
-                  @if($dbrg->diskon>0)
-                  <li>
-                    <strong class="text-primary h4">
-                    <strike class="text-muted">{{"Rp ".number_format($dbrg->harga,0,',','.')}}</strike> {{"Rp ".number_format($dbrg->harga-($dbrg->harga*$dbrg->diskon/100),0,',','.')}} / {{$dbrg->durasi." ".$dbrg->satuan}}
-                    </strong> <br>{{$dbrg->nama}} <span class="badge badge-pill badge-success">Diskon {{$dbrg->diskon}}%</span>
-                  </li>
-                  @else
-                  <li>
-                    <strong class="text-primary h4">
-                    {{"Rp ".number_format($dbrg->harga,0,',','.')}} / {{$dbrg->durasi." ".$dbrg->satuan}}
-                    </strong> <br>{{$dbrg->nama}}
-                  </li>
-                  @endif
-                  @endforeach
-                </ul>
-              </p>
-              <hr>
-              <p class="text-center">
-                <a href="#" class="btn btn-sm btn-primary"><span class="icon-share-alt"></span></a>
-                <a href="#" class="btn btn-sm btn-primary text-white"><span class="icon-thumb_up"></span></a>
-                <a href="#" class="btn btn-sm btn-primary text-white"><span class="icon-bookmark"></span></a>
-                <a href="#" class="btn btn-sm btn-primary text-white"><span class="icon-chat"></span></a>
-              </p>
-            </div>
+      <div class="col-md-6">
+        <div class="col-md-12">
+          <div class="p-3 p-lg-5 border">
+            <h2 class="text-black">{{$databarang->nama}}</h2>
+            <p><span class="badge badge-primary">{{$databarang->namakategori}}</span> - <span class="badge badge-primary">{{$databarang->namasubkategori}}</span></p>
+            <p>{{$databarang->deskripsi}}</p>
+            <p class="mb-4"><strong class="text-primary">Jaminan : </strong>{{$databarang->jaminan}} <br>
+            <strong class="text-primary">Tanggal Posting : </strong>{{$databarang->tgl_post}}</p>
+            <p>
+              <ul>
+                @foreach($detailbarang as $dbrg)
+                @if($dbrg->diskon>0)
+                <li>
+                  <strong class="text-primary h4">
+                  <strike class="text-muted">{{"Rp ".number_format($dbrg->harga,0,',','.')}}</strike> {{"Rp ".number_format($dbrg->harga-($dbrg->harga*$dbrg->diskon/100),0,',','.')}} / {{$dbrg->durasi." ".$dbrg->satuan}}
+                  </strong> <br>{{$dbrg->nama}} <span class="badge badge-pill badge-success">Diskon {{$dbrg->diskon}}%</span>
+                </li>
+                @else
+                <li>
+                  <strong class="text-primary h4">
+                  {{"Rp ".number_format($dbrg->harga,0,',','.')}} / {{$dbrg->durasi." ".$dbrg->satuan}}
+                  </strong> <br>{{$dbrg->nama}}
+                </li>
+                @endif
+                @endforeach
+              </ul>
+            </p>
+            <hr>
+            <p class="text-center">
+              <a href="#" class="btn btn-sm btn-primary"><span class="icon-share-alt"></span> Bagikan</a>
+              <a href="#" class="btn btn-sm btn-primary text-white"><span class="icon-bookmark"></span> Tandai</a>
+            </p>
           </div>
-          <br>
-          <div class="col-md-12">
-            <div class="p-3 p-lg-5 border">
-             <div class="block-38 text-center">
+        </div>
+        <br>
+        <div class="col-md-12">
+          <div class="p-3 p-lg-5 border">
+            <div class="block-38 text-center">
               <div class="block-38-img">
                 <div class="block-38-header">
                   <img src="{{asset('image/toko/'.$toko->logo)}}" alt="Image placeholder" class="mb-4">
@@ -86,19 +81,21 @@
                   <p class="block-38-subheading">{{$toko->namakota}}-{{$toko->namaprovinsi}}</p>
                 </div>
                 <div class="block-38-body">
+                  <p><b><span class="icon-phone"></span> {{$toko->telp}}</b></p>
                   <p>{{$toko->deskripsi}}</p>
                   <hr>
-                    <p class="text-center">
-                      <a href="#" class="btn btn-block btn-sm btn-primary">Lihat Toko</a>
-                      <button class="btn btn-block btn-danger btn-sm" type="button" onclick="history.go(-1)">Kembali</button>
-                    </p>
+                  <p class="text-center">
+                    <a href="{{url('semua-toko/'.$toko->link)}}" class="btn btn-block btn-sm btn-primary">Lihat Toko</a>
+                    <button class="btn btn-block btn-danger btn-sm" type="button" onclick="history.go(-1)">Kembali</button>
+                  </p>
                 </div>
               </div>
-            </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  @endsection
+</div>
+</div>
+@endsection

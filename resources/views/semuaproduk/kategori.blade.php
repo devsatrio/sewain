@@ -10,20 +10,10 @@
 <div class="site-section">
     <div class="container">
         <div class="row mb-5">
-            <div class="col-md-9 order-1">
+            <div class="col-md-12 order-1">
                 <div class="row">
                     <div class="col-md-12 mb-5">
-                        <div class="float-md-left mb-4"><h2 class="text-black h5">Semua Produk</h2></div>
-                        <div class="d-flex">
-                            <div class="dropdown mr-1 ml-md-auto">
-                                <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Saring Berdasarkan
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                                    <a class="dropdown-item" href="{{url('/semua-produk-diskon')}}">Lagi Diskon</a>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="text-center mb-4"><h2 class="text-black h5">Semua Produk Berkategori {{ucwords($kategori)}}</h2></div>
                     </div>
                 </div>
                 <div class="row mb-5">
@@ -39,10 +29,9 @@
                     ->where([['kode_barang',$brg->kode],['diskon','>',0]])
                     ->count();
                     @endphp
-                    <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                    <div class="col-sm-6 col-lg-3 mb-3" data-aos="fade-up">
                         <div class="block-4 text-center border">
                             <figure class="block-4-image">
-                                
                                 <a href="{{url('/detail-produk/'.$brg->kode)}}">
                                     <img src="{{asset('image/barang/'.$fotobrg->nama)}}" alt="Image placeholder" class="img-fluid">
                                 </a>
@@ -61,27 +50,11 @@
                 </div>
                 <div class="row" data-aos="fade-up">
                     <div class="col-md-12 text-center">
-                        {{ $barang->links() }}
+                       {{ $barang->links() }}
+                       <br>
+                       <button type="button" class="btn btn-danger" onclick="history.go(-1)">Kembali</button>
                     </div>
-                </div>
-                <br>
-            </div>
-            <div class="col-md-3 order-2 mb-5 mb-md-0">
-                <div class="border p-4 rounded mb-4">
-                    <h3 class="mb-3 h6 text-uppercase text-black d-block">Kategori</h3>
-                    <ul class="list-unstyled mb-0">
-                        @foreach($kategori as $ktg)
-                        <li class="mb-1"><a href="{{url('/semua-produk/'.$ktg->nama)}}" class="d-flex"><span>{{ucfirst($ktg->nama)}}</span></a></li>
-                        @endforeach
-                    </ul>
-                </div>
-                <div class="border p-4 rounded mb-4">
-                    <h3 class="mb-3 h6 text-uppercase text-black d-block">Berdasarkan Kota</h3>
-                    <ul class="list-unstyled mb-0">
-                        @foreach($kota as $kot)
-                        <li class="mb-1"><a href="{{url('/semua-produk/kota/'.$kot->nama)}}" class="d-flex"><span>{{ ucfirst($kot->nama)}}</span></a></li>
-                        @endforeach
-                    </ul>
+                    
                 </div>
             </div>
         </div>

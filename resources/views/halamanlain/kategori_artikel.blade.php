@@ -10,15 +10,15 @@
 <div class="site-section">
     <div class="container">
         <div class="row mb-5">
-            <div class="col-md-9 order-1">
+            <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12 mb-5">
-                        <div class="float-md-left mb-4"><h2 class="text-black h5">Artikel</h2></div>
+                        <div class="float-md-left mb-4"><h2 class="text-black h5">Artikel Berkategori {{ucwords($kategori)}}</h2></div>
                     </div>
                 </div>
                 <div class="row mb-5">
                     @foreach($artikel as $row)
-                    <div class="col-sm-6 col-lg-6 mb-6" data-aos="fade-up">
+                    <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
                         <div class="card">
                             <img class="card-img-top" src="{{asset('image/artikel/thumbnail/'.$row->gambar)}}" alt="Artikel image">
                             <div class="card-body">
@@ -41,19 +41,11 @@
                 <div class="row" data-aos="fade-up">
                     <div class="col-md-12 text-center">
                         {{ $artikel->links() }}
+                        <br>
+                        <button class="btn btn-danger btn-sm" type="button" onclick="history.go(-1)">Kembali</button>
                     </div>
                 </div>
                 <br>
-            </div>
-            <div class="col-md-3 order-2 mb-5 mb-md-0">
-                <div class="border p-4 rounded mb-4">
-                    <h3 class="mb-3 h6 text-uppercase text-black d-block">Kategori</h3>
-                    <ul class="list-unstyled mb-0">
-                        @foreach($kategori as $ktg)
-                        <li class="mb-1"><a href="{{url('list-artikel/'.$ktg->nama)}}" class="d-flex"><span>{{$ktg->nama}}</span></a></li>
-                        @endforeach
-                    </ul>
-                </div>
             </div>
         </div>
         

@@ -73,10 +73,14 @@ class artikelcontroller extends Controller
         $destinationPath = public_path('image/artikel');
         $image->move($destinationPath, $input['imagename']);
         
+        $linkartikel  = strtolower($request->judul);
+        $final_link =str_replace(' ', '-', $linkartikel);
+
         DB::table('artikel')
         ->insert([
             'id_kategori'=>$request->kategori,
             'judul'=>$request->judul,
+            'link'=>$final_link,
             'isi'=>$request->isi,
             'penulis'=>Auth::user()->id,
             'tgl'=>date('Y-m-d'),
@@ -135,6 +139,9 @@ class artikelcontroller extends Controller
     public function update(Request $request, $kode)
     {
         $id = Crypt::decrypt($kode);
+        $linkartikel  = strtolower($request->judul);
+        $final_link =str_replace(' ', '-', $linkartikel);
+
         if ($request->hasFile('foto')) {
             File::delete('image/artikel/'.$request->gambarlama);
             File::delete('image/artikel/thumbnail/'.$request->gambarlama);
@@ -156,6 +163,7 @@ class artikelcontroller extends Controller
             ->update([
                 'id_kategori'=>$request->kategori,
                 'judul'=>$request->judul,
+                'link'=>$final_link,
                 'isi'=>$request->isi,
                 'gambar'=>$input['imagename']
             ]);
@@ -166,6 +174,7 @@ class artikelcontroller extends Controller
             ->update([
                 'id_kategori'=>$request->kategori,
                 'judul'=>$request->judul,
+                'link'=>$final_link,
                 'isi'=>$request->isi
             ]);
             return redirect('artikel')->with('msg','Perubahan Data Berhasil Disimpan');

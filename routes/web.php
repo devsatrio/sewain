@@ -87,15 +87,22 @@ Route::get('/home', 'frontend\homecontroller@index');
 //semua produk
 Route::get('/semua-produk','frontend\semuaprodukcontroller@index');
 Route::get('detail-produk/{kode}','frontend\semuaprodukcontroller@show');
+Route::get('/semua-produk/{kategori}','frontend\semuaprodukcontroller@kategori');
+Route::get('/semua-produk/kota/{kota}','frontend\semuaprodukcontroller@kota');
+Route::get('/semua-produk-diskon','frontend\semuaprodukcontroller@diskon');
 
 //semua toko
 Route::get('/semua-toko', 'frontend\semuatokocontroller@index');
+Route::get('/semua-toko/{toko}', 'frontend\semuatokocontroller@show');
+Route::get('/semua-toko/kota/{kota}', 'frontend\semuatokocontroller@kota');
 
 //Tips menyewa
 Route::get('/tips-menyewa', 'frontend\halamanlaincontroller@tipssewa');
 
 //List Artikel
 Route::get('/list-artikel', 'frontend\halamanlaincontroller@artikel');
+Route::get('/list-artikel/{kategori}', 'frontend\halamanlaincontroller@kategoriartikel');
+Route::get('/detail-artikel/{judul}', 'frontend\halamanlaincontroller@detailartikel');
 
 //produk saya
 Route::get('/produk-saya', 'frontend\produksayacontroller@index');
@@ -112,6 +119,7 @@ Route::post('hapus-detail-produk','frontend\produksayacontroller@hapusharga');
 Route::post('tambah-foto-produk/{kode}','frontend\produksayacontroller@tambahfoto');
 Route::post('hapus-foto-produk','frontend\produksayacontroller@hapusfoto');
 Route::post('ubah-foto-produk','frontend\produksayacontroller@ubahfoto');
+
 
 //Toko saya
 Route::get('/edit-toko', 'frontend\tokosayacontroller@edittoko');

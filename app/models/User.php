@@ -1,21 +1,19 @@
 <?php
 
-namespace App;
+namespace App\models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class pengguna extends Authenticatable
+class User extends Authenticatable
 {
     use Notifiable;
-
     public $timestamps = false;
-    protected $table = "pengguna";
     protected $fillable = [
-        'name', 'email', 'password','username'
+        'name', 'email', 'password','username','level'
     ];
     protected $hidden = [
-        'password',
+        'password', 'remember_token',
     ];
 }

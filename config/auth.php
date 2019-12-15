@@ -26,12 +26,12 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\models\User::class,
         ],
 
         'pengguna' => [
             'driver' => 'eloquent',
-            'model' => App\pengguna::class,
+            'model' => App\models\pengguna::class,
         ],
         // 'users' => [
         //     'driver' => 'database',

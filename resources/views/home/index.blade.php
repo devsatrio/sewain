@@ -5,13 +5,11 @@
 <link href="{{asset('image/setting/thumbnail/'.$ws->icon)}}" rel="icon" type="image/png">
 @endforeach
 @endsection
-
 @section('head')
 @foreach($websetting as $ws)
- <a href="{{url('/')}}" class="js-logo-clone">{{$ws->nama}}</a>
- @endforeach
+<a href="{{url('/')}}" class="js-logo-clone">{{$ws->nama}}</a>
+@endforeach
 @endsection
-
 @section('content')
 @foreach($slider as $sld)
 <div class="site-blocks-cover" style="background-image: url({{asset('image/slider/'.$sld->nama)}});" data-aos="fade">
@@ -68,7 +66,7 @@
         <div class="row">
             @foreach($kategori as $ktg)
             <div class="col-sm-3 col-md-3 col-lg-3 mb-3 mb-lg-3" data-aos="fade" data-aos-delay="">
-                <a class="block-2-item" href="#">
+                <a class="block-2-item" href="{{url('/semua-produk/'.$ktg->nama)}}">
                     <figure class="image">
                         <img src="{{asset('image/kategori/'.$ktg->gambar)}}" alt="" class="img-fluid" width="100%">
                     </figure>
@@ -101,7 +99,9 @@
                         <div class="block-4 text-center">
                             <figure class="block-4-image">
                                 @foreach($fotobrg as $ft)
-                                <img src="{{asset('image/barang/'.$ft->nama)}}" alt="Image placeholder" class="img-fluid">
+                                <a href="{{url('/detail-produk/'.$brg->kode)}}">
+                                    <img src="{{asset('image/barang/'.$ft->nama)}}" alt="Image placeholder" class="img-fluid">
+                                </a>
                                 @endforeach
                             </figure>
                             <div class="block-4-text p-4">
