@@ -19,8 +19,11 @@ class produksayacontroller extends Controller
         $datatoko = DB::table('toko')->where('id_pengguna',Auth::guard('pengguna')->user()->id)->first();
         $kodetoko=$datatoko->id;
         $jumlahbarang = DB::table('barang')->where('id_toko',$kodetoko)->count();
-        $databarang = DB::table('barang')->where('id_toko',$kodetoko)->orderby('id','desc')->get();
-        $websetting = DB::table('setting')->limit(1)->get();
+        $databarang = DB::table('barang')
+        ->where('id_toko',$kodetoko)
+        ->orderby('id','desc')
+        ->paginate(8);
+        $websetting = DB::table('setting')->first();
         return view('produksaya.index',['websetting'=>$websetting,'jumlahbarang'=>$jumlahbarang,'databarang'=>$databarang]);
         }else{
             return view('error.user404');

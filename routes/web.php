@@ -95,6 +95,7 @@ Route::get('/semua-produk-diskon','frontend\semuaprodukcontroller@diskon');
 Route::get('/semua-toko', 'frontend\semuatokocontroller@index');
 Route::get('/semua-toko/{toko}', 'frontend\semuatokocontroller@show');
 Route::get('/semua-toko/kota/{kota}', 'frontend\semuatokocontroller@kota');
+Route::get('/semua-toko-terverivikasi', 'frontend\semuatokocontroller@terverikasi');
 
 //Tips menyewa
 Route::get('/tips-menyewa', 'frontend\halamanlaincontroller@tipssewa');

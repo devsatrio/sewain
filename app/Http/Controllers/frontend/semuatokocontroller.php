@@ -2,22 +2,23 @@
 namespace App\Http\Controllers\frontend;
 ini_set('max_execution_time', 180);
 use Illuminate\Http\Request;
+use App\models\websetting;
+use App\models\toko;
+use App\models\kota;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
+use DB;
 class semuatokocontroller extends Controller
 {
     public function index()
     {
-        $websetting = DB::table('setting')->limit(1)->first();
+        $websetting = websetting::first();
         
-        $kota = DB::table('kota')
-        ->where('aktif','Y')
+        $kota = kota::where('aktif','Y')
         ->orderby('id','desc')
         ->get();
 
         $toko = 
-        DB::table('toko')
-        ->select(DB::raw('toko.*,provinsi.nama as namaprovinsi,kota.nama as namakota'))
+        toko::select(DB::raw('toko.*,provinsi.nama as namaprovinsi,kota.nama as namakota'))
         ->leftjoin('provinsi','provinsi.id','=','toko.provinsi')
         ->leftjoin('kota','kota.id','=','toko.kota')
         ->where('toko.status','Aktif')
@@ -29,9 +30,9 @@ class semuatokocontroller extends Controller
     //========================================================================
     public function show($toko)
     {
-        $websetting = DB::table('setting')->limit(1)->first();
-        $toko = DB::table('toko')
-        ->select(DB::raw('toko.*,provinsi.nama as namaprovinsi,kota.nama as namakota'))
+        $websetting = websetting::first();
+        $toko = 
+        toko::select(DB::raw('toko.*,provinsi.nama as namaprovinsi,kota.nama as namakota'))
         ->leftjoin('provinsi','provinsi.id','=','toko.provinsi')
         ->leftjoin('kota','kota.id','=','toko.kota')
         ->where([['toko.status','Aktif'],['toko.link',$toko]])
@@ -49,16 +50,28 @@ class semuatokocontroller extends Controller
 
     //========================================================================
     public function kota($kota){
-        $websetting = DB::table('setting')->limit(1)->first();
+        $websetting = websetting::first();
         
         $toko = 
-        DB::table('toko')
-        ->select(DB::raw('toko.*,provinsi.nama as namaprovinsi,kota.nama as namakota'))
+        toko::select(DB::raw('toko.*,provinsi.nama as namaprovinsi,kota.nama as namakota'))
         ->leftjoin('provinsi','provinsi.id','=','toko.provinsi')
         ->leftjoin('kota','kota.id','=','toko.kota')
         ->where([['toko.status','Aktif'],['kota.nama',$kota]])
         ->orderby('toko.id','desc')
         ->paginate(12);
         return view('semuatoko.kota',['websetting'=>$websetting,'toko'=>$toko,'kota'=>$kota]);
+    }
+
+    public function terverikasi(){
+        $websetting = websetting::first();
+        
+        $toko = 
+        toko::select(DB::raw('toko.*,provinsi.nama as namaprovinsi,kota.nama as namakota'))
+        ->leftjoin('provinsi','provinsi.id','=','toko.provinsi')
+        ->leftjoin('kota','kota.id','=','toko.kota')
+        ->where([['toko.status','Aktif'],['toko.verivikasi_status','Ya']])
+        ->orderby('toko.id','desc')
+        ->paginate(12);
+        return view('semuatoko.terverivikasi',['websetting'=>$websetting,'toko'=>$toko]);
     }
 }

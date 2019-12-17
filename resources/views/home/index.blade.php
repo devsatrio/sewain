@@ -1,15 +1,14 @@
 @extends('layouts.app_user')
+
 @section('title')
-@foreach($websetting as $ws)
-<title>{{$ws->nama}}</title>
-<link href="{{asset('image/setting/thumbnail/'.$ws->icon)}}" rel="icon" type="image/png">
-@endforeach
+<title>{{$websetting->nama}}</title>
+<link href="{{asset('image/setting/thumbnail/'.$websetting->icon)}}" rel="icon" type="image/png">
 @endsection
+
 @section('head')
-@foreach($websetting as $ws)
-<a href="{{url('/')}}" class="js-logo-clone">{{$ws->nama}}</a>
-@endforeach
+<a href="{{url('/')}}" class="js-logo-clone">{{$websetting->nama}}</a>
 @endsection
+
 @section('content')
 @foreach($slider as $sld)
 <div class="site-blocks-cover" style="background-image: url({{asset('image/slider/'.$sld->nama)}});" data-aos="fade">
@@ -123,22 +122,20 @@
     <div class="container">
         <div class="row justify-content-center  mb-5">
             <div class="col-md-7 site-section-heading text-center pt-4">
-                <h2>Info Terbaru</h2>
+                <h2>Artikel Terbaru</h2>
             </div>
         </div>
-        @foreach($artikel as $art)
         <div class="row align-items-center">
             <div class="col-md-12 col-lg-7 mb-5">
-                <a href="#"><img src="{{asset('image/artikel/'.$art->gambar)}}" alt="Image placeholder" class="img-fluid rounded"></a>
+                <a href="#"><img src="{{asset('image/artikel/'.$artikel->gambar)}}" alt="Image placeholder" class="img-fluid rounded"></a>
             </div>
             <div class="col-md-12 col-lg-5 text-center pl-md-5">
-                <h2><a href="#">{{$art->judul}}</a></h2>
-                <p class="post-meta mb-4">By <a href="#">Carl Smith</a> <span class="block-8-sep">&bullet;</span>{{$art->tgl}}</p>
-                {!!$art->isi!!}
-                <p><a href="#" class="btn btn-primary btn-sm">Lanjut Baca</a></p>
+                <h2><a href="#">{{ucwords($artikel->judul)}}</a></h2>
+                <p class="post-meta mb-4">{{$artikel->username}} <span class="block-8-sep">&bullet;</span>{{$artikel->tgl}}</p>
+                {!!$artikel->isi!!}
+                <p><a href="{{url('detail-artikel/'.$artikel->link)}}" class="btn btn-primary btn-sm">Lanjut Baca</a></p>
             </div>
         </div>
-        @endforeach
     </div>
 </div>
 @endsection

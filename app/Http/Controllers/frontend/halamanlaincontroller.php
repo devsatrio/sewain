@@ -3,22 +3,24 @@ namespace App\Http\Controllers\frontend;
 ini_set('max_execution_time', 180);
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
+use App\models\websetting;
+use App\models\kategori_artikel;
+use App\models\artikel;
+use DB;
 class halamanlaincontroller extends Controller
 {
     public function tipssewa()
     {
-        $websetting = DB::table('setting')->limit(1)->get();
+        $websetting = websetting::first();
         return view('halamanlain.tipssewa',['websetting'=>$websetting]);
     }
 
     //================================================================
     public function artikel()
     {
-        $websetting = DB::table('setting')->limit(1)->first();
-        $kategori = DB::table('kategori_artikel')->get();
-        $artikel = DB::table('artikel')
-        ->select(DB::raw('artikel.*,users.username,kategori_artikel.nama as namakategori'))
+        $websetting = websetting::first();
+        $kategori   = kategori_artikel::all();
+        $artikel    = artikel::select(DB::raw('artikel.*,users.username,kategori_artikel.nama as namakategori'))
         ->leftjoin('users','users.id','=','artikel.penulis')
         ->leftjoin('kategori_artikel','kategori_artikel.id','=','artikel.id_kategori')
         ->orderby('artikel.id','desc')
@@ -28,9 +30,8 @@ class halamanlaincontroller extends Controller
 
     //================================================================
     public function detailartikel($judul){
-        $websetting = DB::table('setting')->limit(1)->first();
-        $artikel = DB::table('artikel')
-        ->select(DB::raw('artikel.*,users.username,kategori_artikel.nama as namakategori'))
+        $websetting = websetting::first();
+        $artikel    = artikel::select(DB::raw('artikel.*,users.username,kategori_artikel.nama as namakategori'))
         ->leftjoin('users','users.id','=','artikel.penulis')
         ->leftjoin('kategori_artikel','kategori_artikel.id','=','artikel.id_kategori')
         ->where('artikel.link',$judul)
@@ -40,9 +41,8 @@ class halamanlaincontroller extends Controller
 
     //==================================================================
     public function kategoriartikel($kategori){
-        $websetting = DB::table('setting')->limit(1)->first();
-        $artikel = DB::table('artikel')
-        ->select(DB::raw('artikel.*,users.username,kategori_artikel.nama as namakategori'))
+        $websetting = websetting::first();
+        $artikel    = artikel::select(DB::raw('artikel.*,users.username,kategori_artikel.nama as namakategori'))
         ->leftjoin('users','users.id','=','artikel.penulis')
         ->leftjoin('kategori_artikel','kategori_artikel.id','=','artikel.id_kategori')
         ->where('kategori_artikel.nama',$kategori)

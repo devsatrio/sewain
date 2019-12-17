@@ -1,15 +1,14 @@
 @extends('layouts.app_user')
+
 @section('title')
-@foreach($websetting as $ws)
-<title>{{$ws->nama}}</title>
-<link href="{{asset('image/setting/thumbnail/'.$ws->icon)}}" rel="icon" type="image/png">
-@endforeach
+<title>{{$websetting->nama}}</title>
+<link href="{{asset('image/setting/thumbnail/'.$websetting->icon)}}" rel="icon" type="image/png">
 @endsection
+
 @section('head')
-@foreach($websetting as $ws)
-<a href="{{url('/')}}" class="js-logo-clone">{{$ws->nama}}</a>
-@endforeach
+<a href="{{url('/')}}" class="js-logo-clone">{{$websetting->nama}}</a>
 @endsection
+
 @section('content')
 <div class="site-section border-bottom" data-aos="fade">
     <div class="container">

@@ -23,7 +23,7 @@
                                 Saring Berdasarkan
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                                    <a class="dropdown-item" href="#">Toko Terverivikasi</a>
+                                    <a class="dropdown-item" href="{{url('/semua-toko-terverivikasi')}}">Toko Terverivikasi</a>
                                 </div>
                             </div>
                         </div>

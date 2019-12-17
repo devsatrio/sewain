@@ -16,7 +16,7 @@
             <div class="col-md-12 order">
                 <div class="row">
                     <div class="col-md-12 mb-5">
-                        <div class="float-md-left mb-4"><h2 class="text-black h5">Semua Toko Dari Kota {{$kota}}</h2></div>
+                        <div class="float-md-left mb-4"><h2 class="text-black h5">Semua Toko Terverivikasi</h2></div>
                     </div>
                 </div>
                 <div class="row mb-5">
