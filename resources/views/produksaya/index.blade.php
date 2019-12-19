@@ -1,14 +1,11 @@
 @extends('layouts.app_user')
-
 @section('title')
 <title>{{$websetting->nama}}</title>
 <link href="{{asset('image/setting/thumbnail/'.$websetting->icon)}}" rel="icon" type="image/png">
 @endsection
-
 @section('head')
 <a href="{{url('/')}}" class="js-logo-clone">{{$websetting->nama}}</a>
 @endsection
-
 @section('content')
 <div class="site-section">
     <div class="container">
